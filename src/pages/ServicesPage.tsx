@@ -50,7 +50,7 @@ const PINK_RED = '#FF2992';
 const PageWrapper = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
-  minHeight: '100vh',
+  minHeight: '20vh',
   width: '100%',
   position: 'relative',
   backgroundColor: DARKER_BG,

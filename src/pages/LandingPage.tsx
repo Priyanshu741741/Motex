@@ -596,7 +596,7 @@ const LandingPage = () => {
             display: 'flex', 
             alignItems: 'center', 
             justifyContent: 'center',
-            minHeight: '50vh'
+            minHeight: '20vh'
           }}>
             <Typography variant="h1" sx={{ 
               fontSize: { xs: '40px', md: '80px' }, 

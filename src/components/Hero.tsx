@@ -2,7 +2,7 @@ import { styled } from '@mui/material/styles';
 
 const HeroImage = styled('img')(({ theme }) => ({
   width: '100%',
-  height: '100%',
+  height: '70vh',
   objectFit: 'cover',
   position: 'absolute',
   top: 0,
@@ -12,8 +12,10 @@ const HeroImage = styled('img')(({ theme }) => ({
   filter: 'none',
   zIndex: 0,
   [theme.breakpoints.down('md')]: {
-    height: '50vh',
-    position: 'relative'
+    height: '40vh',
+    position: 'relative',
+    top: 'auto',
+    left: 'auto'
   }
 }));
 
