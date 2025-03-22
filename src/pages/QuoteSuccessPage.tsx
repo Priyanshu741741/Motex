@@ -100,14 +100,21 @@ const QuoteSuccessPage = () => {
         <Toolbar>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Box 
-              component="img" 
-              src="/MOTEX+Logo.png" 
-              alt="MOTEX Logo" 
-              sx={{ height: 32 }} 
-            />
-            <LogoText>
-              motex
-            </LogoText>
+              component={RouterLink}
+              to="/"
+              sx={{ 
+                display: 'flex', 
+                alignItems: 'center',
+                textDecoration: 'none'
+              }}
+            >
+              <Box 
+                component="img" 
+                src="/MOTEX+Logo.png" 
+                alt="MOTEX Logo" 
+                sx={{ height: 32 }} 
+              />
+            </Box>
           </Box>
           
           <Box sx={{ flexGrow: 1 }} />

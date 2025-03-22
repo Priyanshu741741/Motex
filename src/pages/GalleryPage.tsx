@@ -282,11 +282,21 @@ const GalleryPage = () => {
         <Toolbar>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Box 
-              component="img" 
-              src="/MOTEX+Logo.png" 
-              alt="MOTEX Logo" 
-              sx={{ height: 36 }} 
-            />
+              component={RouterLink}
+              to="/"
+              sx={{ 
+                display: 'flex', 
+                alignItems: 'center',
+                textDecoration: 'none'
+              }}
+            >
+              <Box 
+                component="img" 
+                src="/MOTEX+Logo.png" 
+                alt="MOTEX Logo" 
+                sx={{ height: 36 }} 
+              />
+            </Box>
           </Box>
           
           {/* Desktop menu */}
@@ -397,7 +407,7 @@ const GalleryPage = () => {
               </MenuItem>
               <MenuItem 
                 component={RouterLink} 
-                to="#" 
+                to="/services" 
                 onClick={handleMenuClose}
                 sx={{ 
                   py: 1.5, 
@@ -442,7 +452,7 @@ const GalleryPage = () => {
               </MenuItem>
               <MenuItem 
                 component={RouterLink} 
-                to="#" 
+                to="/contact-us" 
                 onClick={handleMenuClose}
                 sx={{ 
                   py: 1.5, 

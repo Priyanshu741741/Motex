@@ -347,11 +347,21 @@ const InstantQuotePage = () => {
           <Toolbar>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Box 
-                component="img" 
-                src="/MOTEX+Logo.png" 
-                alt="MOTEX Logo" 
-                sx={{ height: 36 }} 
-              />
+                component={RouterLink}
+                to="/"
+                sx={{ 
+                  display: 'flex', 
+                  alignItems: 'center',
+                  textDecoration: 'none'
+                }}
+              >
+                <Box 
+                  component="img" 
+                  src="/MOTEX+Logo.png" 
+                  alt="MOTEX Logo" 
+                  sx={{ height: 36 }} 
+                />
+              </Box>
             </Box>
             
             {/* Desktop menu */}
