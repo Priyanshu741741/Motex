@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import SplashScreen from '../components/SplashScreen';
 import { keyframes } from '@mui/material/styles';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import { 
@@ -27,6 +28,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { 
   LocalShipping as TruckIcon, 
+  LocalShipping as LocalShippingIcon,
   Flight as PlaneIcon,
   DirectionsBoat as ShipIcon,
   Train as TrainIcon,
@@ -38,7 +40,12 @@ import {
   Instagram as InstagramIcon,
   LinkedIn as LinkedInIcon,
   WhatsApp as WhatsAppIcon,
-  Menu as MenuIcon
+  Menu as MenuIcon,
+  Speed as SpeedIcon,
+  Public as PublicIcon,
+  Inventory as InventoryIcon,
+  Apartment as ApartmentIcon,
+  EventAvailable as EventAvailableIcon
 } from '@mui/icons-material';
 
 import emailjs from '@emailjs/browser';
@@ -227,6 +234,18 @@ const TestimonialCard = styled(Box)(({ theme }) => ({
   marginBottom: theme.spacing(6),
 }));
 
+// Add styled component for the service icon box
+const IconBox = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: 60,
+  height: 60,
+  borderRadius: '50%',
+  backgroundColor: 'rgba(222, 31, 39, 0.1)',
+  marginBottom: theme.spacing(2),
+}));
+
 // Add this new styled component for the decorative line
 const DecorativeLine = styled(Box)(({ theme }) => ({
   position: 'relative',
@@ -280,11 +299,27 @@ const rippleAnimation = keyframes`
 `;
 
 const LandingPage = () => {
+  const [showSplash, setShowSplash] = useState(true);
+
+  const handleSplashFinish = () => {
+    setShowSplash(false);
+  };
   const [trackingNumber, setTrackingNumber] = useState('');
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const servicesSection = document.getElementById('services-section');
+      if (servicesSection) {
+        servicesSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -294,6 +329,8 @@ const LandingPage = () => {
   };
 
   return (
+    <>
+      {showSplash && <SplashScreen onFinish={handleSplashFinish} />}
     <GradientBackground className="gradient-bg">
       {/* Add GlobalStyles for animations */}
       <GlobalStyles
@@ -362,7 +399,7 @@ const LandingPage = () => {
               <Link href="/" color="inherit" underline="none" sx={{ color: RED_COLOR }}>
                 Home
               </Link>
-              <Link href="#" color="inherit" underline="none">
+              <Link href="/services" color="inherit" underline="none">
                 Services
               </Link>
               <Link href="/about-us" color="inherit" underline="none">
@@ -374,7 +411,7 @@ const LandingPage = () => {
               <Link href="/gallery" color="inherit" underline="none">
                 Gallery
               </Link>
-              <Link href="#" color="inherit" underline="none">
+              <Link href="/contact-us" color="inherit" underline="none">
                 Contact
               </Link>
             </Stack>
@@ -456,7 +493,7 @@ const LandingPage = () => {
               </MenuItem>
               <MenuItem 
                 component={RouterLink} 
-                to="#" 
+                to="/services" 
                 onClick={handleMenuClose}
                 sx={{ 
                   py: 1.5, 
@@ -576,6 +613,186 @@ const LandingPage = () => {
         </Container>
       </Box>
 
+      {/* Services Section */}
+      <Box id="services-section" sx={{ py: 8 }}>
+        <Container maxWidth="lg">
+          <Typography variant="h2" align="center" sx={{ 
+            fontSize: { xs: '2.5rem', md: '3.5rem' },
+            fontWeight: 700,
+            mb: 2,
+            color: 'white',
+            fontFamily: '"Circular Std Bold", sans-serif',
+          }}>
+            Our Services
+          </Typography>
+          
+          <Typography variant="body1" align="center" sx={{ 
+            maxWidth: 700,
+            mx: 'auto',
+            mb: 6,
+            color: 'rgba(255, 255, 255, 0.8)',
+            fontFamily: '"Circular Std Book", sans-serif',
+            fontSize: '1.1rem',
+          }}>
+            From local deliveries to interstate transport, our comprehensive range of services is designed to meet all your logistics needs with efficiency and reliability.
+          </Typography>
+          
+          <Grid container spacing={4}>
+            {/* Distribution Services */}
+            <Grid item xs={12} sm={6} md={4}>
+              <ServiceCard>
+                <CardMedia
+                  component="img"
+                  height="200"
+                  image="/gallery 1.jpg"
+                  alt="Distribution Services"
+                  sx={{ opacity: 0.8 }}
+                />
+                <CardContent sx={{ p: 3 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                    <IconBox>
+                      <LocalShippingIcon sx={{ fontSize: 32, color: RED_COLOR }} />
+                    </IconBox>
+                    <Typography 
+                      variant="h5" 
+                      sx={{ 
+                        ml: 2,
+                        fontWeight: 600,
+                        color: 'white',
+                        fontFamily: '"Circular Std Book", sans-serif',
+                      }}
+                    >
+                      Distribution Services
+                    </Typography>
+                  </Box>
+                  <Typography 
+                    variant="body2" 
+                    sx={{ 
+                      color: 'rgba(255,255,255,0.7)',
+                      fontFamily: '"Circular Std Book", sans-serif',
+                      lineHeight: 1.6
+                    }}
+                  >
+                    Comprehensive distribution solutions for businesses of all sizes. We handle everything from warehousing to last-mile delivery with precision and care.
+                  </Typography>
+                </CardContent>
+              </ServiceCard>
+            </Grid>
+            
+            {/* Same-Day Delivery */}
+            <Grid item xs={12} sm={6} md={4}>
+              <ServiceCard>
+                <CardMedia
+                  component="img"
+                  height="200"
+                  image="/gallery 2.jpg"
+                  alt="Same-Day Delivery"
+                  sx={{ opacity: 0.8 }}
+                />
+                <CardContent sx={{ p: 3 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                    <IconBox>
+                      <SpeedIcon sx={{ fontSize: 32, color: RED_COLOR }} />
+                    </IconBox>
+                    <Typography 
+                      variant="h5" 
+                      sx={{ 
+                        ml: 2,
+                        fontWeight: 600,
+                        color: 'white',
+                        fontFamily: '"Circular Std Book", sans-serif',
+                      }}
+                    >
+                      Same-Day Delivery
+                    </Typography>
+                  </Box>
+                  <Typography 
+                    variant="body2" 
+                    sx={{ 
+                      color: 'rgba(255,255,255,0.7)',
+                      fontFamily: '"Circular Std Book", sans-serif',
+                      lineHeight: 1.6
+                    }}
+                  >
+                    Urgent deliveries handled with speed and reliability. Our same-day service ensures your time-sensitive packages reach their destination promptly.
+                  </Typography>
+                </CardContent>
+              </ServiceCard>
+            </Grid>
+            
+            {/* Interstate Transport */}
+            <Grid item xs={12} sm={6} md={4}>
+              <ServiceCard>
+                <CardMedia
+                  component="img"
+                  height="200"
+                  image="/gallery 3.jpg"
+                  alt="Interstate Transport"
+                  sx={{ opacity: 0.8 }}
+                />
+                <CardContent sx={{ p: 3 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                    <IconBox>
+                      <PublicIcon sx={{ fontSize: 32, color: RED_COLOR }} />
+                    </IconBox>
+                    <Typography 
+                      variant="h5" 
+                      sx={{ 
+                        ml: 2,
+                        fontWeight: 600,
+                        color: 'white',
+                        fontFamily: '"Circular Std Book", sans-serif',
+                      }}
+                    >
+                      Interstate Transport
+                    </Typography>
+                  </Box>
+                  <Typography 
+                    variant="body2" 
+                    sx={{ 
+                      color: 'rgba(255,255,255,0.7)',
+                      fontFamily: '"Circular Std Book", sans-serif',
+                      lineHeight: 1.6
+                    }}
+                  >
+                    Seamless interstate logistics solutions connecting businesses across Australia. Our fleet ensures safe and timely delivery across state lines.
+                  </Typography>
+                </CardContent>
+              </ServiceCard>
+            </Grid>
+          </Grid>
+          
+          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+            <Button 
+              component={RouterLink}
+              to="/services"
+              variant="outlined" 
+              endIcon={<ArrowForwardIcon />}
+              sx={{ 
+                color: 'white',
+                borderColor: 'rgba(255, 255, 255, 0.3)',
+                textTransform: 'none',
+                fontFamily: '"Circular Std Book", sans-serif',
+                fontWeight: 400,
+                fontSize: '15px',
+                borderRadius: '50px',
+                px: 3,
+                py: 1,
+                '&:hover': {
+                  borderColor: RED_COLOR,
+                  bgcolor: 'rgba(222, 31, 39, 0.1)'
+                }
+              }}
+            >
+              View All Services
+            </Button>
+          </Box>
+        </Container>
+      </Box>
+
+      {/* Decorative Line */}
+      <DecorativeLine />
+
       <LogoContainer>
         <Container maxWidth="lg" sx={{ textAlign: 'center' }}>
           <Typography variant="h6" sx={{ 
@@ -654,7 +871,7 @@ const LandingPage = () => {
               <Card sx={{ 
                 height: '100%', 
                 borderRadius: '12px',
-                backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
                 border: '1px solid rgba(255, 255, 255, 0.1)',
                 boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
                 transition: 'transform 0.3s ease, box-shadow 0.3s ease',
@@ -771,7 +988,7 @@ const LandingPage = () => {
               <Card sx={{ 
                 height: '100%', 
                 borderRadius: '12px',
-                backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
                 border: '1px solid rgba(255, 255, 255, 0.1)',
                 boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
                 transition: 'transform 0.3s ease, box-shadow 0.3s ease',
@@ -888,7 +1105,7 @@ const LandingPage = () => {
               <Card sx={{ 
                 height: '100%', 
                 borderRadius: '12px',
-                backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
                 border: '1px solid rgba(255, 255, 255, 0.1)',
                 boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
                 transition: 'transform 0.3s ease, box-shadow 0.3s ease',
@@ -1436,56 +1653,8 @@ const LandingPage = () => {
         </Container>
       </Box>
     </GradientBackground>
+    </>
   );
 };
 
 export default LandingPage;
-
-
-// Add this interface before the LandingPage component
-interface QuoteFormData {
-  name: string;
-  email: string;
-  phone: string;
-  pickup: string;
-  delivery: string;
-  details: string;
-}
-
-// Update the handleQuoteSubmit function with proper typing
-const handleQuoteSubmit = async (formData: QuoteFormData) => {
-  try {
-    // Send email to customer
-    await emailjs.send(
-      'YOUR_SERVICE_ID',
-      'YOUR_TEMPLATE_ID',
-      {
-        to_email: formData.email,
-        to_name: formData.name,
-        message: 'Thank you for your quote request. We will get back to you shortly.',
-      },
-      'YOUR_PUBLIC_KEY'
-    );
-
-    // Send email to admin (you)
-    await emailjs.send(
-      'YOUR_SERVICE_ID',
-      'YOUR_ADMIN_TEMPLATE_ID',
-      {
-        from_name: formData.name,
-        from_email: formData.email,
-        phone: formData.phone,
-        pickup: formData.pickup,
-        delivery: formData.delivery,
-        details: formData.details,
-      },
-      'YOUR_PUBLIC_KEY'
-    );
-
-    // Show success message
-    alert('Quote request submitted successfully!');
-  } catch (error) {
-    console.error('Error sending email:', error);
-    alert('Error submitting quote request. Please try again.');
-  }
-};

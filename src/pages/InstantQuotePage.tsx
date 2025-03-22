@@ -371,7 +371,7 @@ const InstantQuotePage = () => {
                 <Link href="/" color="inherit" underline="none">
                   Home
                 </Link>
-                <Link href="#" color="inherit" underline="none">
+                <Link href="/services" color="inherit" underline="none">
                   Services
                 </Link>
                 <Link href="/about-us" color="inherit" underline="none">
@@ -383,7 +383,7 @@ const InstantQuotePage = () => {
                 <Link href="/gallery" color="inherit" underline="none">
                   Gallery
                 </Link>
-                <Link href="#" color="inherit" underline="none">
+                <Link href="/contact-us" color="inherit" underline="none">
                   Contact
                 </Link>
               </Stack>
@@ -462,7 +462,7 @@ const InstantQuotePage = () => {
                 </MenuItem>
                 <MenuItem 
                   component={RouterLink} 
-                  to="#" 
+                  to="/services" 
                   onClick={handleMenuClose}
                   sx={{ 
                     py: 1.5, 

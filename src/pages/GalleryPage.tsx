@@ -306,7 +306,7 @@ const GalleryPage = () => {
               <Link href="/" color="inherit" underline="none">
                 Home
               </Link>
-              <Link href="#" color="inherit" underline="none">
+              <Link href="/services" color="inherit" underline="none">
                 Services
               </Link>
               <Link href="/about-us" color="inherit" underline="none">
@@ -318,7 +318,7 @@ const GalleryPage = () => {
               <Link href="/gallery" color="inherit" underline="none" sx={{ color: RED_COLOR }}>
                 Gallery
               </Link>
-              <Link href="#" color="inherit" underline="none">
+              <Link href="/contact-us" color="inherit" underline="none">
                 Contact
               </Link>
             </Stack>
@@ -728,4 +728,4 @@ const GalleryPage = () => {
   );
 };
 
-export default GalleryPage; 
+export default GalleryPage;

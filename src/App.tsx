@@ -12,6 +12,8 @@ import InstantQuotePage from './pages/InstantQuotePage';
 import QuoteSuccessPage from './pages/QuoteSuccessPage';
 import GalleryPage from './pages/GalleryPage';
 import AboutUsPage from './pages/AboutUsPage';
+import ContactUsPage from './pages/ContactUsPage';
+import ServicesPage from './pages/ServicesPage';
 
 function App() {
   return (
@@ -27,6 +29,8 @@ function App() {
           <Route path="/quote-success" element={<QuoteSuccessPage />} />
           <Route path="/gallery" element={<GalleryPage />} />
           <Route path="/about-us" element={<AboutUsPage />} />
+          <Route path="/contact-us" element={<ContactUsPage />} />
+          <Route path="/services" element={<ServicesPage />} />
           <Route path="*" element={<LandingPage />} />
         </Routes>
       </Router>
