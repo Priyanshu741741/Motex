@@ -16,7 +16,9 @@ import {
   useMediaQuery,
   useTheme,
   Paper,
-  IconButton
+  IconButton,
+  Menu,
+  MenuItem
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { motion } from 'framer-motion';
@@ -27,7 +29,8 @@ import {
   Email as EmailIcon,
   Instagram as InstagramIcon,
   LinkedIn as LinkedInIcon,
-  WhatsApp as WhatsAppIcon
+  WhatsApp as WhatsAppIcon,
+  Menu as MenuIcon
 } from '@mui/icons-material';
 
 // Define colors
@@ -111,6 +114,15 @@ const AboutUsPage = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [isLoaded, setIsLoaded] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
 
   useEffect(() => {
     // Set loaded after a short delay to trigger animations
@@ -182,44 +194,184 @@ const AboutUsPage = () => {
             />
           </Box>
           
-          <Stack direction="row" spacing={3} sx={{ mx: 'auto', color: 'white', fontFamily: '"Circular Std Book", sans-serif', fontWeight: 300 }}>
-            <Link href="/" color="inherit" underline="none">
-              Home
-            </Link>
-            <Link href="#" color="inherit" underline="none">
-              Services
-            </Link>
-            <Link href="/about-us" color="inherit" underline="none" sx={{ color: RED_COLOR }}>
-              About Us
-            </Link>
-            <Link href="/instant-quote" color="inherit" underline="none">
-              Instant Quote
-            </Link>
-            <Link href="/gallery" color="inherit" underline="none">
-              Gallery
-            </Link>
-            <Link href="#" color="inherit" underline="none">
-              Contact
-            </Link>
-          </Stack>
+          {/* Desktop menu */}
+          {!isMobile && (
+            <Stack 
+              direction="row" 
+              spacing={3} 
+              sx={{ 
+                mx: 'auto', 
+                color: 'white', 
+                fontFamily: '"Circular Std Book", sans-serif', 
+                fontWeight: 300,
+                width: '100%',
+                justifyContent: 'center'
+              }}
+            >
+              <Link href="/" color="inherit" underline="none">
+                Home
+              </Link>
+              <Link href="#" color="inherit" underline="none">
+                Services
+              </Link>
+              <Link href="/about-us" color="inherit" underline="none" sx={{ color: RED_COLOR }}>
+                About Us
+              </Link>
+              <Link href="/instant-quote" color="inherit" underline="none">
+                Instant Quote
+              </Link>
+              <Link href="/gallery" color="inherit" underline="none">
+                Gallery
+              </Link>
+              <Link href="#" color="inherit" underline="none">
+                Contact
+              </Link>
+            </Stack>
+          )}
           
-          <Button 
-            component={RouterLink}
-            to="/instant-quote"
-            variant="contained" 
-            sx={{ 
-              bgcolor: 'white', 
-              color: '#13111C',
-              textTransform: 'none',
-              fontFamily: '"Circular Std Book", sans-serif',
-              fontWeight: 300,
-              '&:hover': {
-                bgcolor: 'rgba(255, 255, 255, 0.9)'
-              }
-            }}
-          >
-            Get a Quote
-          </Button>
+          <Box sx={{ display: 'flex', ml: 'auto' }}>
+            {!isMobile && (
+              <Button 
+                component={RouterLink}
+                to="/instant-quote"
+                variant="contained" 
+                sx={{ 
+                  bgcolor: RED_COLOR, 
+                  color: 'white',
+                  textTransform: 'none',
+                  fontFamily: '"Circular Std Book", sans-serif',
+                  fontWeight: 400,
+                  fontSize: '15px',
+                  borderRadius: '50px',
+                  px: 3,
+                  py: 1,
+                  minWidth: '130px',
+                  whiteSpace: 'nowrap',
+                  boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)',
+                  '&:hover': {
+                    bgcolor: '#c41922',
+                    boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.25)'
+                  }
+                }}
+              >
+                Get&nbsp;a&nbsp;Quote
+              </Button>
+            )}
+            
+            {/* Mobile menu icon */}
+            {isMobile && (
+              <IconButton
+                size="large"
+                edge="end"
+                color="inherit"
+                aria-label="menu"
+                onClick={handleMenuOpen}
+                sx={{ ml: 'auto' }}
+              >
+                <MenuIcon sx={{ color: 'white' }} />
+              </IconButton>
+            )}
+            
+            {/* Mobile menu */}
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={handleMenuClose}
+              PaperProps={{
+                sx: {
+                  backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                  color: 'white',
+                  width: '200px',
+                  mt: 2,
+                  borderRadius: '8px',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+                }
+              }}
+            >
+              <MenuItem 
+                component={RouterLink} 
+                to="/" 
+                onClick={handleMenuClose}
+                sx={{ 
+                  py: 1.5, 
+                  fontFamily: '"Circular Std Book", sans-serif'
+                }}
+              >
+                Home
+              </MenuItem>
+              <MenuItem 
+                component={RouterLink} 
+                to="#" 
+                onClick={handleMenuClose}
+                sx={{ 
+                  py: 1.5, 
+                  fontFamily: '"Circular Std Book", sans-serif'
+                }}
+              >
+                Services
+              </MenuItem>
+              <MenuItem 
+                component={RouterLink} 
+                to="/about-us" 
+                onClick={handleMenuClose}
+                sx={{ 
+                  py: 1.5, 
+                  fontFamily: '"Circular Std Book", sans-serif',
+                  color: RED_COLOR
+                }}
+              >
+                About Us
+              </MenuItem>
+              <MenuItem 
+                component={RouterLink} 
+                to="/instant-quote" 
+                onClick={handleMenuClose}
+                sx={{ 
+                  py: 1.5, 
+                  fontFamily: '"Circular Std Book", sans-serif'
+                }}
+              >
+                Instant Quote
+              </MenuItem>
+              <MenuItem 
+                component={RouterLink} 
+                to="/gallery" 
+                onClick={handleMenuClose}
+                sx={{ 
+                  py: 1.5, 
+                  fontFamily: '"Circular Std Book", sans-serif'
+                }}
+              >
+                Gallery
+              </MenuItem>
+              <MenuItem 
+                component={RouterLink} 
+                to="#" 
+                onClick={handleMenuClose}
+                sx={{ 
+                  py: 1.5, 
+                  fontFamily: '"Circular Std Book", sans-serif'
+                }}
+              >
+                Contact
+              </MenuItem>
+              <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.1)' }} />
+              <MenuItem 
+                component={RouterLink} 
+                to="/instant-quote" 
+                onClick={handleMenuClose}
+                sx={{ 
+                  py: 1.5, 
+                  fontFamily: '"Circular Std Book", sans-serif',
+                  color: RED_COLOR,
+                  fontWeight: 'bold'
+                }}
+              >
+                Get a Quote
+              </MenuItem>
+            </Menu>
+          </Box>
         </Toolbar>
       </AppBar>
       
@@ -626,40 +778,42 @@ const AboutUsPage = () => {
                     py: 1.5,
                     textTransform: 'none',
                     fontFamily: '"Circular Std Book", sans-serif',
-                    fontWeight: 600,
-                    fontSize: '1.1rem',
-                    borderRadius: '8px',
+                    fontWeight: 400,
+                    fontSize: '15px',
+                    borderRadius: '50px',
+                    whiteSpace: 'nowrap',
+                    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)',
                     '&:hover': {
-                      bgcolor: PINK_RED,
-                      transform: 'scale(1.05)',
-                      transition: 'all 0.3s ease'
+                      bgcolor: '#c41922',
+                      boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.25)'
                     }
                   }}
                 >
-                  Get a Quote
+                  Get&nbsp;a&nbsp;Quote
                 </Button>
                 
                 <Button 
-                  variant="outlined" 
+                  variant="contained" 
                   href="#"
                   sx={{ 
-                    borderColor: WHITE_TEXT,
-                    color: WHITE_TEXT,
+                    bgcolor: RED_COLOR,
+                    color: 'white',
                     px: 4,
                     py: 1.5,
                     textTransform: 'none',
                     fontFamily: '"Circular Std Book", sans-serif',
-                    fontWeight: 600,
-                    fontSize: '1.1rem',
-                    borderRadius: '8px',
+                    fontWeight: 400,
+                    fontSize: '15px',
+                    borderRadius: '50px',
+                    whiteSpace: 'nowrap',
+                    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)',
                     '&:hover': {
-                      borderColor: RED_COLOR,
-                      color: RED_COLOR,
-                      bgcolor: 'transparent',
+                      bgcolor: '#c41922',
+                      boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.25)'
                     }
                   }}
                 >
-                  Contact Us
+                  Contact&nbsp;Us
                 </Button>
               </Box>
             </motion.div>

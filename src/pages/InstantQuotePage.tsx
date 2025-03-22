@@ -18,6 +18,8 @@ import {
   AppBar,
   Toolbar,
   IconButton,
+  Menu,
+  MenuItem
 } from '@mui/material';
 import emailjs from '@emailjs/browser';
 import { styled } from '@mui/material/styles';
@@ -31,6 +33,7 @@ import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import LocationIcon from '@mui/icons-material/LocationOn';
 import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
+import MenuIcon from '@mui/icons-material/Menu';
 
 // Define colors
 const DARK_BG = '#0A0A0A';
@@ -112,17 +115,19 @@ const StyledDateTimePicker = styled(Box)(({ theme }) => ({
 
 const SubmitButton = styled(Button)(({ theme }) => ({
   backgroundColor: RED_COLOR,
-  color: WHITE_TEXT,
-  padding: '12px 40px',
-  borderRadius: '8px',
-  textTransform: 'uppercase',
-  letterSpacing: '1px',
-  fontSize: '14px',
-  fontWeight: 600,
+  color: 'white',
+  padding: '12px 24px',
+  borderRadius: '50px',
+  textTransform: 'none',
+  fontSize: '15px',
+  fontWeight: 400,
+  fontFamily: '"Circular Std Book", sans-serif',
+  whiteSpace: 'nowrap',
+  boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)',
   transition: 'all 0.3s ease',
   '&:hover': {
-    backgroundColor: PINK_RED,
-    transform: 'scale(1.05)',
+    backgroundColor: '#c41922',
+    boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.25)'
   },
   '&.Mui-disabled': {
     backgroundColor: 'rgba(222, 31, 39, 0.5)',
@@ -160,6 +165,15 @@ const InstantQuotePage = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [loading, setLoading] = useState(false);
   const [darkMode, setDarkMode] = useState(true);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
   
   // Form state matching Supabase table
   const [formData, setFormData] = useState({
@@ -328,7 +342,7 @@ const InstantQuotePage = () => {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <PageWrapper>
-        {/* Header - Updated to match landing page */}
+        {/* Header - Updated with responsive menu */}
         <AppBar position="static" color="transparent" elevation={0} sx={{ py: 3, backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
           <Toolbar>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -340,44 +354,170 @@ const InstantQuotePage = () => {
               />
             </Box>
             
-            <Stack direction="row" spacing={3} sx={{ mx: 'auto', color: 'white', fontFamily: '"Circular Std Book", sans-serif', fontWeight: 300 }}>
-              <Link href="/" color="inherit" underline="none">
-                Home
-              </Link>
-              <Link href="#" color="inherit" underline="none">
-                Services
-              </Link>
-              <Link href="/about-us" color="inherit" underline="none">
-                About Us
-              </Link>
-              <Link href="/instant-quote" color="inherit" underline="none" sx={{ color: RED_COLOR }}>
-                Instant Quote
-              </Link>
-              <Link href="/gallery" color="inherit" underline="none">
-                Gallery
-              </Link>
-              <Link href="#" color="inherit" underline="none">
-                Contact
-              </Link>
-            </Stack>
+            {/* Desktop menu */}
+            {!isMobile && (
+              <Stack 
+                direction="row" 
+                spacing={3} 
+                sx={{ 
+                  mx: 'auto', 
+                  color: 'white', 
+                  fontFamily: '"Circular Std Book", sans-serif', 
+                  fontWeight: 300,
+                  width: '100%',
+                  justifyContent: 'center'
+                }}
+              >
+                <Link href="/" color="inherit" underline="none">
+                  Home
+                </Link>
+                <Link href="#" color="inherit" underline="none">
+                  Services
+                </Link>
+                <Link href="/about-us" color="inherit" underline="none">
+                  About Us
+                </Link>
+                <Link href="/instant-quote" color="inherit" underline="none" sx={{ color: RED_COLOR }}>
+                  Instant Quote
+                </Link>
+                <Link href="/gallery" color="inherit" underline="none">
+                  Gallery
+                </Link>
+                <Link href="#" color="inherit" underline="none">
+                  Contact
+                </Link>
+              </Stack>
+            )}
             
-            <Button 
-              component={RouterLink}
-              to="/instant-quote"
-              variant="contained" 
-              sx={{ 
-                bgcolor: 'white', 
-                color: '#13111C',
-                textTransform: 'none',
-                fontFamily: '"Circular Std Book", sans-serif',
-                fontWeight: 300,
-                '&:hover': {
-                  bgcolor: 'rgba(255, 255, 255, 0.9)'
-                }
-              }}
-            >
-              Get a Quote
-            </Button>
+            <Box sx={{ display: 'flex', ml: 'auto' }}>
+              {!isMobile && (
+                <Button 
+                  component={RouterLink}
+                  to="/instant-quote"
+                  variant="contained" 
+                  sx={{ 
+                    bgcolor: RED_COLOR, 
+                    color: 'white',
+                    textTransform: 'none',
+                    fontFamily: '"Circular Std Book", sans-serif',
+                    fontWeight: 400,
+                    fontSize: '15px',
+                    borderRadius: '50px',
+                    px: 3,
+                    py: 1,
+                    minWidth: '130px',
+                    whiteSpace: 'nowrap',
+                    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)',
+                    '&:hover': {
+                      bgcolor: '#c41922',
+                      boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.25)'
+                    }
+                  }}
+                >
+                  Get&nbsp;a&nbsp;Quote
+                </Button>
+              )}
+              
+              {/* Mobile menu icon */}
+              {isMobile && (
+                <IconButton
+                  size="large"
+                  edge="end"
+                  color="inherit"
+                  aria-label="menu"
+                  onClick={handleMenuOpen}
+                  sx={{ ml: 'auto' }}
+                >
+                  <MenuIcon sx={{ color: 'white' }} />
+                </IconButton>
+              )}
+              
+              {/* Mobile menu */}
+              <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleMenuClose}
+                PaperProps={{
+                  sx: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                    color: 'white',
+                    width: '200px',
+                    mt: 2,
+                    borderRadius: '8px',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+                  }
+                }}
+              >
+                <MenuItem 
+                  component={RouterLink} 
+                  to="/" 
+                  onClick={handleMenuClose}
+                  sx={{ 
+                    py: 1.5, 
+                    fontFamily: '"Circular Std Book", sans-serif'
+                  }}
+                >
+                  Home
+                </MenuItem>
+                <MenuItem 
+                  component={RouterLink} 
+                  to="#" 
+                  onClick={handleMenuClose}
+                  sx={{ 
+                    py: 1.5, 
+                    fontFamily: '"Circular Std Book", sans-serif'
+                  }}
+                >
+                  Services
+                </MenuItem>
+                <MenuItem 
+                  component={RouterLink} 
+                  to="/about-us" 
+                  onClick={handleMenuClose}
+                  sx={{ 
+                    py: 1.5, 
+                    fontFamily: '"Circular Std Book", sans-serif'
+                  }}
+                >
+                  About Us
+                </MenuItem>
+                <MenuItem 
+                  component={RouterLink} 
+                  to="/instant-quote" 
+                  onClick={handleMenuClose}
+                  sx={{ 
+                    py: 1.5, 
+                    fontFamily: '"Circular Std Book", sans-serif',
+                    color: RED_COLOR
+                  }}
+                >
+                  Instant Quote
+                </MenuItem>
+                <MenuItem 
+                  component={RouterLink} 
+                  to="/gallery" 
+                  onClick={handleMenuClose}
+                  sx={{ 
+                    py: 1.5, 
+                    fontFamily: '"Circular Std Book", sans-serif'
+                  }}
+                >
+                  Gallery
+                </MenuItem>
+                <MenuItem 
+                  component={RouterLink} 
+                  to="#" 
+                  onClick={handleMenuClose}
+                  sx={{ 
+                    py: 1.5, 
+                    fontFamily: '"Circular Std Book", sans-serif'
+                  }}
+                >
+                  Contact
+                </MenuItem>
+              </Menu>
+            </Box>
           </Toolbar>
         </AppBar>
         
@@ -640,7 +780,7 @@ const InstantQuotePage = () => {
                     })
                   }}
                 >
-                  {loading ? 'SUBMITTING...' : 'GET QUOTE'}
+                  {loading ? 'Submitting...' : 'Get Quote'}
                 </SubmitButton>
               </Box>
             </form>
@@ -721,7 +861,7 @@ const InstantQuotePage = () => {
                       })
                     }}
                   >
-                    {loading ? 'SUBMITTING...' : 'SEND INQUIRY'}
+                    {loading ? 'Submitting...' : 'Send Inquiry'}
                   </SubmitButton>
                 </Box>
               </form>
