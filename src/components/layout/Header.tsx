@@ -30,10 +30,11 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
         zIndex: (theme) => theme.zIndex.drawer + 1,
         borderBottom: '1px solid rgba(0, 0, 0, 0.08)',
         backgroundColor: 'background.paper',
-        height: '80px',
+        height: '60px',
         '& .MuiToolbar-root': {
           height: '100%',
-          padding: '0 24px'
+          padding: '0 24px',
+          minHeight: '60px'
         }
       }}
     >

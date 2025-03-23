@@ -343,7 +343,7 @@ const InstantQuotePage = () => {
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <PageWrapper>
         {/* Header - Updated with responsive menu */}
-        <AppBar position="static" color="transparent" elevation={0} sx={{ py: 3, backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+        <AppBar position="static" color="transparent" elevation={0} sx={{ py: 1.5, backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
           <Toolbar>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Box 
@@ -359,7 +359,7 @@ const InstantQuotePage = () => {
                   component="img" 
                   src="/MOTEX+Logo.png" 
                   alt="MOTEX Logo" 
-                  sx={{ height: 36 }} 
+                  sx={{ height: 32 }} 
                 />
               </Box>
             </Box>

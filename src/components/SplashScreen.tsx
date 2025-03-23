@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Box, styled } from '@mui/material';
+import { Box, styled, Typography } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';
+import FloatingPaths from './FloatingPaths';
 
 const SplashContainer = styled(motion.div)(({ theme }) => ({
   position: 'fixed',
@@ -13,6 +14,7 @@ const SplashContainer = styled(motion.div)(({ theme }) => ({
   justifyContent: 'center',
   backgroundColor: '#000000',
   zIndex: 9999,
+  overflow: 'hidden'
 }));
 
 const LogoContainer = styled(motion.div)({
@@ -21,16 +23,20 @@ const LogoContainer = styled(motion.div)({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
+  position: 'relative',
+  zIndex: 2
 });
 
 const SplashScreen: React.FC<{ onFinish: () => void }> = ({ onFinish }) => {
   const [isVisible, setIsVisible] = useState(true);
+  const title = '';
+  const words = title.split(' ');
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsVisible(false);
       setTimeout(onFinish, 500); // Call onFinish after exit animation
-    }, 2000); // Show splash screen for 2 seconds
+    }, 3000); // Show splash screen for 3 seconds
 
     return () => clearTimeout(timer);
   }, [onFinish]);
@@ -43,26 +49,66 @@ const SplashScreen: React.FC<{ onFinish: () => void }> = ({ onFinish }) => {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <LogoContainer
-            initial={{ scale: 0.5, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{
-              duration: 0.8,
-              ease: 'easeOut',
-            }}
+          <div style={{ position: 'absolute', inset: 0 }}>
+            <FloatingPaths position={1} />
+            <FloatingPaths position={-1} />
+          </div>
+          
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1 }}
+            style={{ position: 'relative', zIndex: 2, textAlign: 'center' }}
           >
-            <Box
-              component="img"
-              src="/MOTEX+Logo.png"
-              alt="MOTEX Logo"
-              sx={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'contain',
-                filter: 'drop-shadow(0 0 20px rgba(255, 255, 255, 0.3))',
+            <LogoContainer
+              initial={{ scale: 0.5, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{
+                duration: 0.8,
+                ease: 'easeOut',
               }}
-            />
-          </LogoContainer>
+            >
+              <Box
+                component="img"
+                src="/MOTEX+Logo.png"
+                alt="MOTEX Logo"
+                sx={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'contain',
+                  filter: 'drop-shadow(0 0 20px rgba(255, 255, 255, 0.3))',
+                }}
+              />
+            </LogoContainer>
+
+            <Box sx={{ mt: 4 }}>
+              {words.map((word, wordIndex) => (
+                <Box key={wordIndex} component="span" sx={{ display: 'inline-block', mr: 2 }}>
+                  {word.split('').map((letter, letterIndex) => (
+                    <motion.span
+                      key={`${wordIndex}-${letterIndex}`}
+                      initial={{ y: 50, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      transition={{
+                        delay: 0.5 + wordIndex * 0.1 + letterIndex * 0.05,
+                        type: 'spring',
+                        stiffness: 150,
+                        damping: 20,
+                      }}
+                      style={{
+                        display: 'inline-block',
+                        color: 'white',
+                        fontSize: '2rem',
+                        fontWeight: 'bold',
+                      }}
+                    >
+                      {letter}
+                    </motion.span>
+                  ))}
+                </Box>
+              ))}
+            </Box>
+          </motion.div>
         </SplashContainer>
       )}
     </AnimatePresence>

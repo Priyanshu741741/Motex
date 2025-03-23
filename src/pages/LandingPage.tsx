@@ -50,6 +50,8 @@ import {
 
 import emailjs from '@emailjs/browser';
 
+import { motion } from 'framer-motion';
+
 // Define color constants at the top of the file
 const RED_COLOR = '#DE1F27';
 const PINK_RED = '#FF2992'; 
@@ -139,10 +141,10 @@ const ServiceCard = styled(Card)(({ theme }) => ({
     transition: 'opacity 0.3s',
   },
   '&:hover': {
-    transform: 'translateY(-8px) scale(1.02)',
-    boxShadow: '0 15px 30px rgba(0, 0, 0, 0.3)',
+    transform: 'translateY(-4px)',
+    boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
     '&::before': {
-      opacity: 1,
+      opacity: 0,
     }
   }
 }));
@@ -309,17 +311,6 @@ const LandingPage = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      const servicesSection = document.getElementById('services-section');
-      if (servicesSection) {
-        servicesSection.scrollIntoView({ behavior: 'smooth' });
-      }
-    }, 3000);
-
-    return () => clearTimeout(timer);
-  }, []);
-
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -371,14 +362,14 @@ const LandingPage = () => {
           },
         }}
       />
-      <AppBar position="static" color="transparent" elevation={0} sx={{ py: 3, backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+      <AppBar position="static" color="transparent" elevation={0} sx={{ py: 1.5, backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
         <Toolbar>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Box 
               component="img" 
               src="/MOTEX+Logo.png" 
               alt="MOTEX Logo" 
-              sx={{ height: 36 }} 
+              sx={{ height: 32 }} 
             />
           </Box>
           
@@ -616,6 +607,11 @@ const LandingPage = () => {
       {/* Services Section */}
       <Box id="services-section" sx={{ py: 8 }}>
         <Container maxWidth="lg">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
           <Typography variant="h2" align="center" sx={{ 
             fontSize: { xs: '2.5rem', md: '3.5rem' },
             fontWeight: 700,
@@ -625,7 +621,7 @@ const LandingPage = () => {
           }}>
             Our Services
           </Typography>
-          
+        </motion.div>
           <Typography variant="body1" align="center" sx={{ 
             maxWidth: 700,
             mx: 'auto',

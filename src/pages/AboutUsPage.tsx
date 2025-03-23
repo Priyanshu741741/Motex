@@ -183,7 +183,7 @@ const AboutUsPage = () => {
   return (
     <PageWrapper>
       {/* Header - Updated to match landing page */}
-      <AppBar position="static" color="transparent" elevation={0} sx={{ py: 3, backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+      <AppBar position="static" color="transparent" elevation={0} sx={{ py: 1.5, backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
         <Toolbar>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Box 
