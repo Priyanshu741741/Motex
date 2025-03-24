@@ -117,7 +117,7 @@ const AboutUsPage = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    event.preventDefault();
+    event.stopPropagation();
     setAnchorEl(event.currentTarget);
   };
   
@@ -126,9 +126,18 @@ const AboutUsPage = () => {
   };
 
   useEffect(() => {
-    // Reset menu state when component mounts/unmounts
-    return () => setAnchorEl(null);
-  }, []);
+    const handleClickOutside = (event: MouseEvent) => {
+      if (anchorEl && !(event.target as Node).contains(anchorEl)) {
+        setAnchorEl(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      setAnchorEl(null);
+    };
+  }, [anchorEl]);
 
   useEffect(() => {
     // Set loaded after a short delay to trigger animations
