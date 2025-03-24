@@ -117,7 +117,6 @@ const AboutUsPage = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    event.stopPropagation();
     setAnchorEl(event.currentTarget);
   };
   
@@ -125,19 +124,7 @@ const AboutUsPage = () => {
     setAnchorEl(null);
   };
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (anchorEl && !(event.target as Node).contains(anchorEl)) {
-        setAnchorEl(null);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      setAnchorEl(null);
-    };
-  }, [anchorEl]);
+  // No need for click outside handler as the Menu component handles this automatically
 
   useEffect(() => {
     // Set loaded after a short delay to trigger animations
@@ -681,7 +668,11 @@ const AboutUsPage = () => {
                             sx={{ 
                               fontFamily: '"Circular Std Bold", sans-serif',
                               fontWeight: 700,
-                              color: RED_COLOR
+                              color: WHITE_TEXT,
+                              transition: 'color 0.3s ease',
+                              '&:hover': {
+                                color: RED_COLOR
+                              }
                             }}
                           >
                             {value.title}
@@ -689,7 +680,7 @@ const AboutUsPage = () => {
                           <Typography 
                             variant="body2" 
                             sx={{ 
-                              opacity: 0.9,
+                              color: WHITE_TEXT,
                               fontFamily: '"Circular Std Book", sans-serif',
                               fontSize: '0.95rem',
                               lineHeight: 1.6

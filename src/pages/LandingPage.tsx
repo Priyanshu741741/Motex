@@ -145,6 +145,9 @@ const ServiceCard = styled(Card)(({ theme }) => ({
     boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
     '&::before': {
       opacity: 0,
+    },
+    '& .service-title': {
+      color: RED_COLOR,
     }
   }
 }));
@@ -651,11 +654,16 @@ const LandingPage = () => {
                     </IconBox>
                     <Typography 
                       variant="h5" 
+                      className="service-title"
                       sx={{ 
                         ml: 2,
                         fontWeight: 600,
                         color: 'white',
                         fontFamily: '"Circular Std Book", sans-serif',
+                        transition: 'color 0.3s ease',
+                        '&:hover': {
+                          color: RED_COLOR,
+                        }
                       }}
                     >
                       Distribution Services
@@ -692,11 +700,16 @@ const LandingPage = () => {
                     </IconBox>
                     <Typography 
                       variant="h5" 
+                      className="service-title"
                       sx={{ 
                         ml: 2,
                         fontWeight: 600,
                         color: 'white',
                         fontFamily: '"Circular Std Book", sans-serif',
+                        transition: 'color 0.3s ease',
+                        '&:hover': {
+                          color: RED_COLOR,
+                        }
                       }}
                     >
                       Same-Day Delivery
@@ -733,11 +746,16 @@ const LandingPage = () => {
                     </IconBox>
                     <Typography 
                       variant="h5" 
+                      className="service-title"
                       sx={{ 
                         ml: 2,
                         fontWeight: 600,
                         color: 'white',
                         fontFamily: '"Circular Std Book", sans-serif',
+                        transition: 'color 0.3s ease',
+                        '&:hover': {
+                          color: RED_COLOR,
+                        }
                       }}
                     >
                       Interstate Transport
