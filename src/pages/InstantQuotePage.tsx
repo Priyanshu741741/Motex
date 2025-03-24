@@ -5,21 +5,19 @@ import {
   Button, 
   Grid, 
   FormControlLabel, 
-  Switch,
+  Radio,
   useTheme,
   useMediaQuery,
-  Radio,
   RadioGroup,
   Stack,
   Link,
-  InputBase,
-  Divider,
   Container,
   AppBar,
   Toolbar,
   IconButton,
   Menu,
-  MenuItem
+  MenuItem,
+  Divider
 } from '@mui/material';
 import emailjs from '@emailjs/browser';
 import { styled } from '@mui/material/styles';
@@ -44,6 +42,7 @@ const INPUT_BG = 'rgba(255, 255, 255, 0.05)';
 const BUTTON_BG = 'rgba(255, 255, 255, 0.1)';
 const RED_COLOR = '#DE1F27';
 const PINK_RED = '#FF2992';
+const BLUE_COLOR = '#0078ff';
 
 // Styled components
 const PageWrapper = styled(Box)(({ theme }) => ({
@@ -52,16 +51,7 @@ const PageWrapper = styled(Box)(({ theme }) => ({
   minHeight: '100vh',
   width: '100%',
   position: 'relative',
-  backgroundColor: DARKER_BG,
-}));
-
-const LogoText = styled(Typography)(({ theme }) => ({
-  fontFamily: '"Circular Std Bold", sans-serif',
-  fontSize: '22px',
-  fontWeight: 700,
-  letterSpacing: '-0.01em',
-  marginLeft: '8px',
-  color: 'white'
+  backgroundColor: DARK_BG,
 }));
 
 const ContentSection = styled(Box)(({ theme }) => ({
@@ -72,57 +62,69 @@ const ContentSection = styled(Box)(({ theme }) => ({
   justifyContent: 'flex-start',
   color: WHITE_TEXT,
   overflowY: 'auto',
+  paddingTop: theme.spacing(4),
+  paddingBottom: theme.spacing(4),
 }));
 
-const StyledTextField = styled(InputBase)(({ theme }) => ({
-  backgroundColor: INPUT_BG,
-  borderRadius: 0,
+// New styled components for the updated design
+const StyledInput = styled('input')(({ theme }) => ({
+  width: '100%',
   padding: '12px 16px',
-  width: '100%',
+  backgroundColor: INPUT_BG,
+  border: 'none',
+  borderRadius: '4px',
   color: WHITE_TEXT,
-  marginBottom: theme.spacing(3),
-  transition: 'all 0.3s ease',
-  '&:focus-within': {
-    borderBottom: `2px solid ${ACCENT_COLOR}`,
+  fontSize: '14px',
+  fontFamily: '"Circular Std Book", sans-serif',
+  outline: 'none',
+  transition: 'all 0.2s ease',
+  '&:focus': {
+    boxShadow: `0 0 0 2px ${ACCENT_COLOR}`,
   },
-  '& .MuiInputBase-input': {
-    padding: 0,
-  },
-  borderBottom: '2px solid rgba(255,255,255,0.1)',
+  '&::placeholder': {
+    color: 'rgba(255, 255, 255, 0.4)',
+  }
 }));
 
-const StyledDateTimePicker = styled(Box)(({ theme }) => ({
-  backgroundColor: INPUT_BG,
-  borderRadius: 0,
-  marginBottom: theme.spacing(3),
+const StyledTextarea = styled('textarea')(({ theme }) => ({
   width: '100%',
-  borderBottom: '2px solid rgba(255,255,255,0.1)',
-  '& .MuiInputBase-root': {
-    color: WHITE_TEXT,
-    backgroundColor: 'transparent',
-    width: '100%',
+  padding: '12px 16px',
+  backgroundColor: INPUT_BG,
+  border: 'none',
+  borderRadius: '4px',
+  color: WHITE_TEXT,
+  fontSize: '14px',
+  fontFamily: '"Circular Std Book", sans-serif',
+  outline: 'none',
+  minHeight: '100px',
+  resize: 'vertical',
+  transition: 'all 0.2s ease',
+  '&:focus': {
+    boxShadow: `0 0 0 2px ${ACCENT_COLOR}`,
   },
-  '& .MuiOutlinedInput-notchedOutline': {
-    border: 'none',
-  },
-  '& .MuiInputBase-input': {
-    padding: '12px 16px',
-  },
-  '& .MuiIconButton-root': {
-    color: WHITE_TEXT,
-  },
+  '&::placeholder': {
+    color: 'rgba(255, 255, 255, 0.4)',
+  }
+}));
+
+const FormLabel = styled(Typography)(({ theme }) => ({
+  color: 'rgba(255, 255, 255, 0.8)',
+  fontSize: '14px',
+  marginBottom: theme.spacing(1),
+  fontFamily: '"Circular Std Book", sans-serif',
+  fontWeight: 500,
 }));
 
 const SubmitButton = styled(Button)(({ theme }) => ({
   backgroundColor: RED_COLOR,
   color: 'white',
   padding: '12px 24px',
-  borderRadius: '50px',
+  borderRadius: '4px',
   textTransform: 'none',
   fontSize: '15px',
-  fontWeight: 400,
+  fontWeight: 500,
   fontFamily: '"Circular Std Book", sans-serif',
-  whiteSpace: 'nowrap',
+  width: '100%',
   boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)',
   transition: 'all 0.3s ease',
   '&:hover': {
@@ -135,36 +137,43 @@ const SubmitButton = styled(Button)(({ theme }) => ({
   }
 }));
 
-const FormLabel = styled(Typography)(({ theme }) => ({
-  color: 'rgba(255, 255, 255, 0.6)',
-  fontSize: '12px',
-  marginBottom: theme.spacing(1),
-  textTransform: 'uppercase',
-  letterSpacing: '1px',
-  fontFamily: '"Circular Std Book", sans-serif',
+const CalendarWrapper = styled(Box)(({ theme }) => ({
+  '& .MuiPickersDay-root': {
+    color: WHITE_TEXT,
+  },
+  '& .MuiPickersDay-today': {
+    borderColor: ACCENT_COLOR,
+  },
+  '& .MuiPickersDay-daySelected': {
+    backgroundColor: ACCENT_COLOR,
+    color: WHITE_TEXT,
+  },
+  '& .MuiPickersCalendarHeader-switchHeader': {
+    color: WHITE_TEXT,
+  },
+  '& .MuiDayCalendar-weekDayLabel': {
+    color: 'rgba(255, 255, 255, 0.7)',
+  },
+  '& .MuiPickersCalendarHeader-label': {
+    color: WHITE_TEXT,
+  },
+  '& .MuiPickersArrowSwitcher-button': {
+    color: WHITE_TEXT,
+  },
+  '& .MuiPaper-root': {
+    backgroundColor: DARK_BG,
+    border: '1px solid rgba(255, 255, 255, 0.1)',
+  },
 }));
 
-const StyledRadioGroup = styled(RadioGroup)(({ theme }) => ({
-  flexDirection: 'row',
-  gap: theme.spacing(2),
-  marginBottom: theme.spacing(3),
-  '& .MuiFormControlLabel-root': {
-    marginRight: 0,
-    fontFamily: '"Circular Std Book", sans-serif',
-  },
-  '& .MuiRadio-root': {
-    color: 'rgba(255, 255, 255, 0.6)',
-    '&.Mui-checked': {
-      color: RED_COLOR,
-    },
-  },
+const FormSection = styled(Box)(({ theme }) => ({
+  marginBottom: theme.spacing(6),
 }));
 
 const InstantQuotePage = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [loading, setLoading] = useState(false);
-  const [darkMode, setDarkMode] = useState(true);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -342,7 +351,7 @@ const InstantQuotePage = () => {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <PageWrapper>
-        {/* Header - Updated with responsive menu */}
+        {/* Header - Kept as is */}
         <AppBar position="static" color="transparent" elevation={0} sx={{ py: 1.5, backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
           <Toolbar>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -532,325 +541,260 @@ const InstantQuotePage = () => {
         </AppBar>
         
         <ContentSection>
-          <Container maxWidth="lg" sx={{ py: 6 }}>
-            <Typography variant="h2" component="h1" sx={{ 
-              fontSize: { xs: '2.5rem', md: '3.5rem' },
-              fontWeight: 700,
-              mb: 2,
-              letterSpacing: '-0.5px',
-              fontFamily: '"Circular Std Bold", sans-serif',
-            }}>
-              GET A QUOTE
-            </Typography>
-            
-            <Typography variant="body1" sx={{ 
-              opacity: 0.7,
-              mb: 6,
-              maxWidth: 500,
-              fontFamily: '"Circular Std Book", sans-serif',
-            }}>
-              Fill out the form below to receive a custom quote for your transport needs. We'll get back to you within 24 hours.
-            </Typography>
-            
-            <form onSubmit={handleSubmit}>
-              <Grid container spacing={3}>
-                {/* Name Fields */}
-                <Grid item xs={12} sm={6}>
-                  <FormLabel>First Name</FormLabel>
-                  <StyledTextField
-                    name="first_name"
-                    value={formData.first_name}
-                    onChange={handleChange}
-                    placeholder="First name"
-                    fullWidth
-                    required
-                  />
-                </Grid>
-                
-                <Grid item xs={12} sm={6}>
-                  <FormLabel>Last Name</FormLabel>
-                  <StyledTextField
-                    name="last_name"
-                    value={formData.last_name}
-                    onChange={handleChange}
-                    placeholder="Last name"
-                    fullWidth
-                    required
-                  />
-                </Grid>
-                
-                {/* Email */}
-                <Grid item xs={12}>
-                  <FormLabel>Email</FormLabel>
-                  <StyledTextField
-                    name="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    placeholder="you@example.com"
-                    fullWidth
-                    required
-                  />
-                </Grid>
-                
-                {/* Description of Goods */}
-                <Grid item xs={12}>
-                  <FormLabel>Description of Goods</FormLabel>
-                  <StyledTextField
-                    name="goods_description"
-                    value={formData.goods_description}
-                    onChange={handleChange}
-                    placeholder="Describe the items you need to transport"
-                    multiline
-                    minRows={3}
-                    fullWidth
-                    required
-                  />
-                </Grid>
-                
-                {/* Size & Weight */}
-                <Grid item xs={12}>
-                  <FormLabel>Size & Weight</FormLabel>
-                  <StyledTextField
-                    name="size"
-                    value={formData.size}
-                    onChange={handleChange}
-                    placeholder="e.g., 2m x 1m x 1m, 200kg"
-                    fullWidth
-                    required
-                  />
-                </Grid>
-                
-                {/* Pickup Suburb */}
-                <Grid item xs={12}>
-                  <FormLabel>Pickup Suburb</FormLabel>
-                  <StyledTextField
-                    name="pickup_suburb"
-                    value={formData.pickup_suburb}
-                    onChange={handleChange}
-                    placeholder="e.g., Melbourne CBD"
-                    fullWidth
-                    required
-                  />
-                </Grid>
-                
-                {/* Pickup Access */}
-                <Grid item xs={12}>
-                  <FormLabel>Pickup Access</FormLabel>
-                  <StyledRadioGroup
-                    name="pickup_access"
-                    value={formData.pickup_access}
-                    onChange={handleChange}
-                  >
-                    <FormControlLabel 
-                      value="Ground Floor" 
-                      control={<Radio />} 
-                      label="Ground floor" 
-                    />
-                    <FormControlLabel 
-                      value="Stairs" 
-                      control={<Radio />} 
-                      label="Stairs" 
-                    />
-                  </StyledRadioGroup>
-                </Grid>
-                
-                {/* Delivery Suburb */}
-                <Grid item xs={12}>
-                  <FormLabel>Delivery Suburb</FormLabel>
-                  <StyledTextField
-                    name="delivery_suburb"
-                    value={formData.delivery_suburb}
-                    onChange={handleChange}
-                    placeholder="e.g., Sydney CBD"
-                    fullWidth
-                    required
-                  />
-                </Grid>
-                
-                {/* Delivery Access */}
-                <Grid item xs={12}>
-                  <FormLabel>Delivery Access</FormLabel>
-                  <StyledRadioGroup
-                    name="delivery_access"
-                    value={formData.delivery_access}
-                    onChange={handleChange}
-                  >
-                    <FormControlLabel 
-                      value="Ground Floor" 
-                      control={<Radio />} 
-                      label="Ground floor" 
-                    />
-                    <FormControlLabel 
-                      value="Stairs" 
-                      control={<Radio />} 
-                      label="Stairs" 
-                    />
-                  </StyledRadioGroup>
-                </Grid>
-                
-                {/* Date */}
-                <Grid item xs={12} sm={6}>
-                  <FormLabel>Date</FormLabel>
-                  <StyledDateTimePicker>
-                    <DatePicker
-                      value={formData.date ? dayjs(formData.date) : null}
-                      onChange={(date) => handleDateChange(date)}
-                      slotProps={{
-                        textField: {
-                          placeholder: "Select date",
-                          fullWidth: true,
-                          required: true,
-                        }
-                      }}
-                    />
-                  </StyledDateTimePicker>
-                </Grid>
-                
-                {/* Time */}
-                <Grid item xs={12} sm={6}>
-                  <FormLabel>Time</FormLabel>
-                  <StyledDateTimePicker>
-                    <TimePicker
-                      value={formData.time ? dayjs(`2023-01-01T${formData.time}`) : null}
-                      onChange={(time) => handleTimeChange(time)}
-                      slotProps={{
-                        textField: {
-                          placeholder: "Select time",
-                          fullWidth: true,
-                          required: true,
-                        }
-                      }}
-                    />
-                  </StyledDateTimePicker>
-                </Grid>
-                
-                {/* Fragile */}
-                <Grid item xs={12}>
-                  <FormLabel>Fragile</FormLabel>
-                  <StyledRadioGroup
-                    name="is_fragile"
-                    value={formData.is_fragile.toString()}
-                    onChange={(e) => setFormData({...formData, is_fragile: e.target.value === 'true'})}
-                  >
-                    <FormControlLabel 
-                      value="true" 
-                      control={<Radio />} 
-                      label="Yes" 
-                    />
-                    <FormControlLabel 
-                      value="false" 
-                      control={<Radio />} 
-                      label="No" 
-                    />
-                  </StyledRadioGroup>
-                </Grid>
-                
-                {/* Other Info */}
-                <Grid item xs={12}>
-                  <FormLabel>Other Info</FormLabel>
-                  <StyledTextField
-                    name="other_info"
-                    value={formData.other_info}
-                    onChange={handleChange}
-                    placeholder="Any other details we should know..."
-                    multiline
-                    minRows={3}
-                    fullWidth
-                  />
-                </Grid>
-              </Grid>
-              
-              <Box sx={{ display: 'flex', justifyContent: 'flex-start', mt: 4 }}>
-                <SubmitButton 
-                  type="submit"
-                  disabled={loading}
-                  sx={{
-                    position: 'relative',
-                    overflow: 'hidden',
-                    ...(loading && {
-                      '&::after': {
-                        content: '""',
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        width: '30%',
-                        height: '100%',
-                        backgroundColor: 'rgba(255, 255, 255, 0.3)',
-                        animation: 'loading 1.5s infinite',
-                      },
-                      '@keyframes loading': {
-                        '0%': {
-                          transform: 'skewX(-30deg) translateX(-100%)',
-                        },
-                        '100%': {
-                          transform: 'skewX(-30deg) translateX(300%)',
-                        },
-                      },
-                    })
-                  }}
-                >
-                  {loading ? 'Submitting...' : 'Get Quote'}
-                </SubmitButton>
-              </Box>
-            </form>
-            
-            {/* Other Inquiries Section */}
-            <Box sx={{ mt: 8, mb: 4 }}>
-              <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.1)', mb: 4 }} />
-              
-              <Typography variant="h4" sx={{ 
-                fontSize: '2rem',
+          {/* Main content with full-width layout */}
+          <Box sx={{ width: '100%', maxWidth: '1400px', mx: 'auto', px: { xs: 2, sm: 4 } }}>
+            <Box sx={{ textAlign: 'center', mb: 6 }}>
+              <Typography variant="h2" component="h1" sx={{ 
+                fontSize: { xs: '2.5rem', md: '3rem' },
                 fontWeight: 700,
-                mb: 4,
-                letterSpacing: '-0.5px'
+                mb: 2,
+                letterSpacing: '-0.5px',
+                fontFamily: '"Circular Std Bold", sans-serif',
               }}>
-                OTHER INQUIRIES
+                Get a Quote
               </Typography>
               
-              <form onSubmit={handleInquirySubmit}>
+              <Typography variant="body1" sx={{ 
+                opacity: 0.7,
+                maxWidth: 600,
+                mx: 'auto',
+                fontFamily: '"Circular Std Book", sans-serif',
+              }}>
+                Fill out the form below to receive a custom quote for your transport needs. We'll get back to you within 24 hours.
+              </Typography>
+            </Box>
+            
+            <FormSection>
+              <form onSubmit={handleSubmit}>
                 <Grid container spacing={3}>
+                  {/* Name Fields */}
                   <Grid item xs={12} sm={6}>
-                    <FormLabel>Name</FormLabel>
-                    <StyledTextField
-                      name="inquiry_name"
-                      value={formData.inquiry_name}
+                    <FormLabel>First Name</FormLabel>
+                    <StyledInput
+                      name="first_name"
+                      value={formData.first_name}
                       onChange={handleChange}
-                      placeholder="Your name"
-                      fullWidth
+                      placeholder="First name"
                       required
                     />
                   </Grid>
                   
                   <Grid item xs={12} sm={6}>
-                    <FormLabel>Email</FormLabel>
-                    <StyledTextField
-                      name="inquiry_email"
-                      type="email"
-                      value={formData.inquiry_email}
+                    <FormLabel>Last Name</FormLabel>
+                    <StyledInput
+                      name="last_name"
+                      value={formData.last_name}
                       onChange={handleChange}
-                      placeholder="Your email"
-                      fullWidth
+                      placeholder="Last name"
                       required
                     />
                   </Grid>
                   
+                  {/* Email */}
                   <Grid item xs={12}>
-                    <FormLabel>Message</FormLabel>
-                    <StyledTextField
-                      name="inquiry_message"
-                      value={formData.inquiry_message}
+                    <FormLabel>Email</FormLabel>
+                    <StyledInput
+                      name="email"
+                      type="email"
+                      value={formData.email}
                       onChange={handleChange}
-                      placeholder="Your message"
-                      multiline
-                      minRows={3}
-                      fullWidth
+                      placeholder="you@example.com"
                       required
+                    />
+                  </Grid>
+                  
+                  {/* Description of Goods */}
+                  <Grid item xs={12}>
+                    <FormLabel>Description of Goods</FormLabel>
+                    <StyledInput
+                      name="goods_description"
+                      value={formData.goods_description}
+                      onChange={handleChange}
+                      placeholder="Describe the items you need to transport"
+                      required
+                    />
+                  </Grid>
+                  
+                  {/* Size & Weight */}
+                  <Grid item xs={12}>
+                    <FormLabel>Size & Weight</FormLabel>
+                    <StyledInput
+                      name="size"
+                      value={formData.size}
+                      onChange={handleChange}
+                      placeholder="e.g. Small, Medium, Large"
+                      required
+                    />
+                  </Grid>
+                  
+                  {/* Pickup Suburb */}
+                  <Grid item xs={12} sm={6}>
+                    <FormLabel>Pickup Suburb</FormLabel>
+                    <StyledInput
+                      name="pickup_suburb"
+                      value={formData.pickup_suburb}
+                      onChange={handleChange}
+                      placeholder="e.g. Melbourne CBD"
+                      required
+                    />
+                  </Grid>
+                  
+                  {/* Delivery Suburb */}
+                  <Grid item xs={12} sm={6}>
+                    <FormLabel>Delivery Suburb</FormLabel>
+                    <StyledInput
+                      name="delivery_suburb"
+                      value={formData.delivery_suburb}
+                      onChange={handleChange}
+                      placeholder="e.g. Sydney CBD"
+                      required
+                    />
+                  </Grid>
+                  
+                  {/* Pickup Access */}
+                  <Grid item xs={12} sm={6}>
+                    <FormLabel>Pickup Access</FormLabel>
+                    <RadioGroup
+                      name="pickup_access"
+                      value={formData.pickup_access}
+                      onChange={handleChange}
+                      row
+                    >
+                      <FormControlLabel 
+                        value="Ground Floor" 
+                        control={<Radio size="small" />} 
+                        label="Ground floor" 
+                        sx={{ color: 'rgba(255, 255, 255, 0.8)', mr: 3 }}
+                      />
+                      <FormControlLabel 
+                        value="Stairs" 
+                        control={<Radio size="small" />} 
+                        label="Stairs" 
+                        sx={{ color: 'rgba(255, 255, 255, 0.8)' }}
+                      />
+                    </RadioGroup>
+                  </Grid>
+                  
+                  {/* Delivery Access */}
+                  <Grid item xs={12} sm={6}>
+                    <FormLabel>Delivery Access</FormLabel>
+                    <RadioGroup
+                      name="delivery_access"
+                      value={formData.delivery_access}
+                      onChange={handleChange}
+                      row
+                    >
+                      <FormControlLabel 
+                        value="Ground Floor" 
+                        control={<Radio size="small" />} 
+                        label="Ground floor" 
+                        sx={{ color: 'rgba(255, 255, 255, 0.8)', mr: 3 }}
+                      />
+                      <FormControlLabel 
+                        value="Stairs" 
+                        control={<Radio size="small" />} 
+                        label="Stairs" 
+                        sx={{ color: 'rgba(255, 255, 255, 0.8)' }}
+                      />
+                    </RadioGroup>
+                  </Grid>
+                  
+                  {/* Date */}
+                  <Grid item xs={12} sm={6}>
+                    <FormLabel>Date</FormLabel>
+                    <CalendarWrapper sx={{ 
+                      backgroundColor: INPUT_BG,
+                      borderRadius: '4px',
+                      '& .MuiInputBase-root': { color: WHITE_TEXT },
+                      '& .MuiOutlinedInput-notchedOutline': { border: 'none' }
+                    }}>
+                      <DatePicker
+                        value={formData.date ? dayjs(formData.date) : null}
+                        onChange={(date) => handleDateChange(date)}
+                        slotProps={{
+                          textField: {
+                            placeholder: "Select date",
+                            fullWidth: true,
+                            required: true,
+                            variant: "outlined",
+                            sx: {
+                              '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
+                              '& .MuiInputBase-input': { color: WHITE_TEXT, py: 1.5 },
+                              '& .MuiSvgIcon-root': { color: WHITE_TEXT }
+                            }
+                          }
+                        }}
+                      />
+                    </CalendarWrapper>
+                  </Grid>
+                  
+                  {/* Time - Simplified version */}
+                  <Grid item xs={12} sm={6}>
+                    <FormLabel>Time</FormLabel>
+                    <Box sx={{ 
+                      backgroundColor: INPUT_BG,
+                      borderRadius: '4px',
+                      '& .MuiInputBase-root': { color: WHITE_TEXT },
+                      '& .MuiOutlinedInput-notchedOutline': { border: 'none' }
+                    }}>
+                      <TimePicker
+                        value={formData.time ? dayjs(`2023-01-01T${formData.time}`) : null}
+                        onChange={(time) => handleTimeChange(time)}
+                        ampm={true}
+                        slotProps={{
+                          textField: {
+                            placeholder: "Select time",
+                            fullWidth: true,
+                            required: true,
+                            variant: "outlined",
+                            sx: {
+                              '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
+                              '& .MuiInputBase-input': { color: WHITE_TEXT, py: 1.5 },
+                              '& .MuiSvgIcon-root': { color: WHITE_TEXT }
+                            }
+                          }
+                        }}
+                      />
+                    </Box>
+                  </Grid>
+                  
+                  {/* Fragile */}
+                  <Grid item xs={12} sm={6}>
+                    <FormLabel>Fragile</FormLabel>
+                    <RadioGroup
+                      name="is_fragile"
+                      value={formData.is_fragile.toString()}
+                      onChange={(e) => setFormData({...formData, is_fragile: e.target.value === 'true'})}
+                      row
+                    >
+                      <FormControlLabel 
+                        value="true" 
+                        control={<Radio size="small" />} 
+                        label="Yes" 
+                        sx={{ color: 'rgba(255, 255, 255, 0.8)', mr: 3 }}
+                      />
+                      <FormControlLabel 
+                        value="false" 
+                        control={<Radio size="small" />} 
+                        label="No" 
+                        sx={{ color: 'rgba(255, 255, 255, 0.8)' }}
+                      />
+                    </RadioGroup>
+                  </Grid>
+                  
+                  {/* Other Info */}
+                  <Grid item xs={12}>
+                    <FormLabel>Other Info</FormLabel>
+                    <StyledTextarea
+                      name="other_info"
+                      value={formData.other_info}
+                      onChange={handleChange}
+                      placeholder="Any other details we should know..."
                     />
                   </Grid>
                 </Grid>
                 
-                <Box sx={{ display: 'flex', justifyContent: 'flex-start', mt: 4 }}>
+                <Box sx={{ mt: 4, maxWidth: '400px', mx: 'auto' }}>
                   <SubmitButton 
                     type="submit"
                     disabled={loading}
@@ -867,19 +811,104 @@ const InstantQuotePage = () => {
                           height: '100%',
                           backgroundColor: 'rgba(255, 255, 255, 0.3)',
                           animation: 'loading 1.5s infinite',
-                        }
+                        },
+                        '@keyframes loading': {
+                          '0%': {
+                            transform: 'skewX(-30deg) translateX(-100%)',
+                          },
+                          '100%': {
+                            transform: 'skewX(-30deg) translateX(300%)',
+                          },
+                        },
                       })
                     }}
                   >
-                    {loading ? 'Submitting...' : 'Send Inquiry'}
+                    {loading ? 'Submitting...' : 'Submit Quote Request'}
                   </SubmitButton>
                 </Box>
               </form>
+            </FormSection>
+            
+            {/* Other Inquiries Section */}
+            <Box sx={{ mt: 8, mb: 4 }}>
+              <Typography variant="h4" align="center" sx={{ 
+                fontSize: '2rem',
+                fontWeight: 700,
+                mb: 4,
+                letterSpacing: '-0.5px'
+              }}>
+                Other Inquiries
+              </Typography>
+              
+              <FormSection sx={{ maxWidth: '800px', mx: 'auto' }}>
+                <form onSubmit={handleInquirySubmit}>
+                  <Grid container spacing={3}>
+                    <Grid item xs={12} md={6}>
+                      <FormLabel>Name</FormLabel>
+                      <StyledInput
+                        name="inquiry_name"
+                        value={formData.inquiry_name}
+                        onChange={handleChange}
+                        placeholder="Your name"
+                        required
+                      />
+                    </Grid>
+                    
+                    <Grid item xs={12} md={6}>
+                      <FormLabel>Email</FormLabel>
+                      <StyledInput
+                        name="inquiry_email"
+                        type="email"
+                        value={formData.inquiry_email}
+                        onChange={handleChange}
+                        placeholder="Your email"
+                        required
+                      />
+                    </Grid>
+                    
+                    <Grid item xs={12}>
+                      <FormLabel>Message</FormLabel>
+                      <StyledTextarea
+                        name="inquiry_message"
+                        value={formData.inquiry_message}
+                        onChange={handleChange}
+                        placeholder="Your message"
+                        required
+                      />
+                    </Grid>
+                  </Grid>
+                  
+                  <Box sx={{ mt: 4, maxWidth: '400px', mx: 'auto' }}>
+                    <SubmitButton 
+                      type="submit"
+                      disabled={loading}
+                      sx={{
+                        position: 'relative',
+                        overflow: 'hidden',
+                        ...(loading && {
+                          '&::after': {
+                            content: '""',
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            width: '30%',
+                            height: '100%',
+                            backgroundColor: 'rgba(255, 255, 255, 0.3)',
+                            animation: 'loading 1.5s infinite',
+                          }
+                        })
+                      }}
+                    >
+                      {loading ? 'Submitting...' : 'Send Message'}
+                    </SubmitButton>
+                  </Box>
+                </form>
+              </FormSection>
             </Box>
-          </Container>
+          </Box>
         </ContentSection>
           
-        {/* Footer - Updated to match landing page */}
+        {/* Footer - Kept as is */}
         <Box sx={{ bgcolor: '#000000', py: 6 }}>
           <Container maxWidth="lg">
             <Grid container spacing={4}>

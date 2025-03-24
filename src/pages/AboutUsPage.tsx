@@ -117,12 +117,18 @@ const AboutUsPage = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    event.preventDefault();
     setAnchorEl(event.currentTarget);
   };
   
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
+
+  useEffect(() => {
+    // Reset menu state when component mounts/unmounts
+    return () => setAnchorEl(null);
+  }, []);
 
   useEffect(() => {
     // Set loaded after a short delay to trigger animations
