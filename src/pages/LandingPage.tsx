@@ -304,28 +304,32 @@ const rippleAnimation = keyframes`
 `;
 
 const LandingPage = () => {
-  const [showSplash, setShowSplash] = useState(true);
-
-  const handleSplashFinish = () => {
-    setShowSplash(false);
-  };
-  const [trackingNumber, setTrackingNumber] = useState('');
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
-  
+
   const handleMenuClose = () => {
     setAnchorEl(null);
+  };
+  const [showSplash, setShowSplash] = useState(() => {
+    // Check if this is the first visit in the current session
+    return !sessionStorage.getItem('hasVisited');
+  });
+
+  const handleSplashFinish = () => {
+    setShowSplash(false);
+    // Mark that the user has visited in this session
+    sessionStorage.setItem('hasVisited', 'true');
   };
 
   return (
     <>
       {showSplash && <SplashScreen onFinish={handleSplashFinish} />}
-    <GradientBackground className="gradient-bg">
+      <GradientBackground>
       {/* Add GlobalStyles for animations */}
       <GlobalStyles
         styles={{

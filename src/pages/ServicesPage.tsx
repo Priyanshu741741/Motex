@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Box, 
   Typography, 
@@ -20,6 +20,7 @@ import {
   Menu,
   MenuItem
 } from '@mui/material';
+import PageTransition from '../components/PageTransition';
 import { styled } from '@mui/material/styles';
 import { motion } from 'framer-motion';
 import { Link as RouterLink } from 'react-router-dom';
@@ -234,7 +235,8 @@ const ServicesPage = () => {
   };
 
   return (
-    <PageWrapper>
+    <PageTransition>
+      <PageWrapper>
       {/* Header - Updated to match landing page */}
       <AppBar position="static" color="transparent" elevation={0} sx={{ py: 1.5, backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
         <Toolbar>
@@ -916,6 +918,7 @@ const ServicesPage = () => {
         </Box>
       </ContentSection>
     </PageWrapper>
+    </PageTransition>
   );
 };
 

@@ -23,7 +23,7 @@ const theme = createTheme({
     }
   },
   typography: {
-    fontFamily: '"Montserrat", sans-serif',
+    fontFamily: '"Arial", "Helvetica", sans-serif',
     h1: {
       fontFamily: '"Montserrat", sans-serif',
       fontWeight: 700,

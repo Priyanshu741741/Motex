@@ -20,6 +20,7 @@ import {
   Menu,
   MenuItem
 } from '@mui/material';
+import PageTransition from '../components/PageTransition';
 import { styled } from '@mui/material/styles';
 import { motion } from 'framer-motion';
 import { Link as RouterLink } from 'react-router-dom';
@@ -183,7 +184,8 @@ const AboutUsPage = () => {
   };
 
   return (
-    <PageWrapper>
+    <PageTransition>
+      <PageWrapper>
       {/* Header - Updated to match landing page */}
       <AppBar position="static" color="transparent" elevation={0} sx={{ py: 1.5, backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
         <Toolbar>
@@ -952,7 +954,8 @@ const AboutUsPage = () => {
           </Typography>
         </Container>
       </Box>
-    </PageWrapper>
+      </PageWrapper>
+    </PageTransition>
   );
 };
 
