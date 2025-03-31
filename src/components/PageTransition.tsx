@@ -61,7 +61,9 @@ const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
         style={{
           width: '100%',
           height: '100%',
-          position: 'relative'
+          position: 'relative',
+          minHeight: '100vh',
+          overflow: 'hidden auto'
         }}
       >
         {children}

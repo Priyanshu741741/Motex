@@ -51,10 +51,13 @@ const PINK_RED = '#FF2992';
 const PageWrapper = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
-  minHeight: '20vh',
+  minHeight: '100vh',
   width: '100%',
   position: 'relative',
   backgroundColor: DARKER_BG,
+  [theme.breakpoints.down('md')]: {
+    minHeight: '-webkit-fill-available'
+  }
 }));
 
 const ContentSection = styled(Box)(({ theme }) => ({
@@ -335,6 +338,81 @@ const ServicesPage = () => {
               >
                 <MenuIcon sx={{ color: 'white' }} />
               </IconButton>
+            )}
+            
+            {/* Mobile menu */}
+            {isMobile && (
+              <Box sx={{ display: 'flex', ml: 'auto' }}>
+                <IconButton
+                  onClick={handleMenuOpen}
+                  sx={{ color: 'white' }}
+                >
+                  <MenuIcon />
+                </IconButton>
+                <Menu
+                  anchorEl={anchorEl}
+                  open={Boolean(anchorEl)}
+                  onClose={handleMenuClose}
+                  sx={{
+                    '& .MuiPaper-root': {
+                      backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                      border: '1px solid rgba(255, 255, 255, 0.1)',
+                      borderRadius: '8px',
+                      mt: 1,
+                      minWidth: '200px'
+                    }
+                  }}
+                >
+                  <MenuItem
+                    component={RouterLink}
+                    to="/"
+                    onClick={handleMenuClose}
+                    sx={{ color: 'white' }}
+                  >
+                    Home
+                  </MenuItem>
+                  <MenuItem
+                    component={RouterLink}
+                    to="/services"
+                    onClick={handleMenuClose}
+                    sx={{ color: RED_COLOR }}
+                  >
+                    Services
+                  </MenuItem>
+                  <MenuItem
+                    component={RouterLink}
+                    to="/about-us"
+                    onClick={handleMenuClose}
+                    sx={{ color: 'white' }}
+                  >
+                    About Us
+                  </MenuItem>
+                  <MenuItem
+                    component={RouterLink}
+                    to="/instant-quote"
+                    onClick={handleMenuClose}
+                    sx={{ color: 'white' }}
+                  >
+                    Instant Quote
+                  </MenuItem>
+                  <MenuItem
+                    component={RouterLink}
+                    to="/gallery"
+                    onClick={handleMenuClose}
+                    sx={{ color: 'white' }}
+                  >
+                    Gallery
+                  </MenuItem>
+                  <MenuItem
+                    component={RouterLink}
+                    to="/contact-us"
+                    onClick={handleMenuClose}
+                    sx={{ color: 'white' }}
+                  >
+                    Contact
+                  </MenuItem>
+                </Menu>
+              )}
             )}
             
             {/* Mobile menu */}
