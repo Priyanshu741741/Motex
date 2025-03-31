@@ -18,7 +18,8 @@ import AddToHomeScreen from './components/AddToHomeScreen';
 
 function App() {
   return (
-    <>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
       <Router>
         <Routes>
           <Route path="/" element={<LandingPage />} />
@@ -29,9 +30,9 @@ function App() {
           <Route path="/contact-us" element={<ContactUsPage />} />
           <Route path="/quote-success" element={<QuoteSuccessPage />} />
         </Routes>
+        <AddToHomeScreen />
       </Router>
-      <AddToHomeScreen />
-    </>
+    </ThemeProvider>
   );
 }
 

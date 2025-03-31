@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import SplashScreen from '../components/SplashScreen';
+import AddToHomeScreen from '../components/AddToHomeScreen';
 import { keyframes } from '@mui/material/styles';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import { 
@@ -415,7 +416,8 @@ const LandingPage = () => {
             </Stack>
           )}
           
-          <Box sx={{ display: 'flex', ml: 'auto' }}>
+          <Box sx={{ display: 'flex', ml: 'auto', alignItems: 'center' }}>
+            <AddToHomeScreen />
             {!isMobile && (
               <Button 
                 component={RouterLink}
@@ -429,8 +431,8 @@ const LandingPage = () => {
                   fontWeight: 400,
                   fontSize: '15px',
                   borderRadius: '50px',
-                  px: 4,
-                  py: 1.5,
+                  px: 3,
+                  py: 1,
                   minWidth: '130px',
                   whiteSpace: 'nowrap',
                   boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)',
