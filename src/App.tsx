@@ -14,27 +14,24 @@ import GalleryPage from './pages/GalleryPage';
 import AboutUsPage from './pages/AboutUsPage';
 import ContactUsPage from './pages/ContactUsPage';
 import ServicesPage from './pages/ServicesPage';
+import AddToHomeScreen from './components/AddToHomeScreen';
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
+    <>
       <Router>
         <Routes>
           <Route path="/" element={<LandingPage />} />
-          <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/tables" element={<TableListPage />} />
-          <Route path="/tables/:id" element={<TableDetailPage />} />
-          <Route path="/instant-quote" element={<InstantQuotePage />} />
-          <Route path="/quote-success" element={<QuoteSuccessPage />} />
-          <Route path="/gallery" element={<GalleryPage />} />
-          <Route path="/about-us" element={<AboutUsPage />} />
-          <Route path="/contact-us" element={<ContactUsPage />} />
           <Route path="/services" element={<ServicesPage />} />
-          <Route path="*" element={<LandingPage />} />
+          <Route path="/about-us" element={<AboutUsPage />} />
+          <Route path="/instant-quote" element={<InstantQuotePage />} />
+          <Route path="/gallery" element={<GalleryPage />} />
+          <Route path="/contact-us" element={<ContactUsPage />} />
+          <Route path="/quote-success" element={<QuoteSuccessPage />} />
         </Routes>
       </Router>
-    </ThemeProvider>
+      <AddToHomeScreen />
+    </>
   );
 }
 
