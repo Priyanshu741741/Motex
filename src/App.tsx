@@ -14,7 +14,7 @@ import GalleryPage from './pages/GalleryPage';
 import AboutUsPage from './pages/AboutUsPage';
 import ContactUsPage from './pages/ContactUsPage';
 import ServicesPage from './pages/ServicesPage';
-import AddToHomeScreen from './components/AddToHomeScreen';
+// Removed AddToHomeScreen import
 
 function App() {
   return (
@@ -30,7 +30,7 @@ function App() {
           <Route path="/contact-us" element={<ContactUsPage />} />
           <Route path="/quote-success" element={<QuoteSuccessPage />} />
         </Routes>
-        <AddToHomeScreen />
+        {/* Removed AddToHomeScreen component */}
       </Router>
     </ThemeProvider>
   );

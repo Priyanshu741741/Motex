@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import SplashScreen from '../components/SplashScreen';
-import AddToHomeScreen from '../components/AddToHomeScreen';
 import { keyframes } from '@mui/material/styles';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import { 
@@ -392,32 +391,32 @@ const LandingPage = () => {
                 fontFamily: '"Circular Std Book", sans-serif', 
                 fontWeight: 300,
                 width: '100%',
-                justifyContent: 'center'
+                justifyContent: 'center',
+                fontSize: '1.1rem' // Increased font size in header
               }}
             >
-              <Link href="/" color="inherit" underline="none" sx={{ color: RED_COLOR }}>
+              <Link href="/" color="inherit" underline="none" sx={{ color: RED_COLOR, '&:hover': { color: RED_COLOR } }}>
                 Home
               </Link>
-              <Link href="/services" color="inherit" underline="none">
+              <Link href="/services" color="inherit" underline="none" sx={{ '&:hover': { color: RED_COLOR } }}>
                 Services
               </Link>
-              <Link href="/about-us" color="inherit" underline="none">
+              <Link href="/about-us" color="inherit" underline="none" sx={{ '&:hover': { color: RED_COLOR } }}>
                 About Us
               </Link>
-              <Link href="/instant-quote" color="inherit" underline="none">
+              <Link href="/instant-quote" color="inherit" underline="none" sx={{ '&:hover': { color: RED_COLOR } }}>
                 Instant Quote
               </Link>
-              <Link href="/gallery" color="inherit" underline="none">
+              <Link href="/gallery" color="inherit" underline="none" sx={{ '&:hover': { color: RED_COLOR } }}>
                 Gallery
               </Link>
-              <Link href="/contact-us" color="inherit" underline="none">
+              <Link href="/contact-us" color="inherit" underline="none" sx={{ '&:hover': { color: RED_COLOR } }}>
                 Contact
               </Link>
             </Stack>
           )}
           
           <Box sx={{ display: 'flex', ml: 'auto', alignItems: 'center' }}>
-            <AddToHomeScreen />
             {!isMobile && (
               <Button 
                 component={RouterLink}
@@ -569,7 +568,6 @@ const LandingPage = () => {
         sx={{ 
           py: { xs: 20, md: 10 },
           position: 'relative',
-          minHeight: { xs: '50vh', md: '60vh' },
           backgroundImage: 'url("/MotexFeb3.jpg")',
           backgroundSize: { xs: 'cover', md: '100% 100%' }, // Cover for mobile, stretch for desktop
           backgroundPosition: 'center',
@@ -579,6 +577,7 @@ const LandingPage = () => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
+          minHeight: { xs: '40vh', md: '50vh' }, // Reduced height from 50vh/60vh to 40vh/50vh
           '&::before': {
             content: '""',
             position: 'absolute',
@@ -1352,9 +1351,9 @@ const LandingPage = () => {
                 <Button
                   component={RouterLink}
                   to="/instant-quote"
-                  variant="contained"
-                  sx={{
-                    bgcolor: RED_COLOR,
+                  variant="contained" 
+                  sx={{ 
+                    bgcolor: RED_COLOR, 
                     color: 'white',
                     textTransform: 'none',
                     fontFamily: '"Circular Std Book", sans-serif',
