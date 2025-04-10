@@ -1,9 +1,9 @@
-import React, { useState, useEffect, memo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, styled, Typography } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';
 import FloatingPaths from './FloatingPaths';
 
-const SplashContainer = styled(motion.div)({
+const SplashContainer = styled(motion.div)(({ theme }) => ({
   position: 'fixed',
   top: 0,
   left: 0,
@@ -14,9 +14,8 @@ const SplashContainer = styled(motion.div)({
   justifyContent: 'center',
   backgroundColor: '#000000',
   zIndex: 9999,
-  overflow: 'hidden',
-  willChange: 'opacity'
-});
+  overflow: 'hidden'
+}));
 
 const LogoContainer = styled(motion.div)({
   width: '200px',
@@ -25,8 +24,7 @@ const LogoContainer = styled(motion.div)({
   alignItems: 'center',
   justifyContent: 'center',
   position: 'relative',
-  zIndex: 2,
-  willChange: 'transform, opacity'
+  zIndex: 2
 });
 
 const SplashScreen: React.FC<{ onFinish: () => void }> = ({ onFinish }) => {
@@ -37,8 +35,8 @@ const SplashScreen: React.FC<{ onFinish: () => void }> = ({ onFinish }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsVisible(false);
-      setTimeout(onFinish, 300); // Call onFinish after exit animation
-    }, 2000); // Show splash screen for 2 seconds instead of 3
+      setTimeout(onFinish, 500); // Call onFinish after exit animation
+    }, 3000); // Show splash screen for 3 seconds
 
     return () => clearTimeout(timer);
   }, [onFinish]);
@@ -49,23 +47,24 @@ const SplashScreen: React.FC<{ onFinish: () => void }> = ({ onFinish }) => {
         <SplashContainer
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}
+          transition={{ duration: 0.5 }}
         >
           <div style={{ position: 'absolute', inset: 0 }}>
             <FloatingPaths position={1} />
+            <FloatingPaths position={-1} />
           </div>
           
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 1 }}
             style={{ position: 'relative', zIndex: 2, textAlign: 'center' }}
           >
             <LogoContainer
-              initial={{ scale: 0.8, opacity: 0 }}
+              initial={{ scale: 0.5, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{
-                duration: 0.5,
+                duration: 0.8,
                 ease: 'easeOut',
               }}
             >
@@ -77,7 +76,7 @@ const SplashScreen: React.FC<{ onFinish: () => void }> = ({ onFinish }) => {
                   width: '100%',
                   height: '100%',
                   objectFit: 'contain',
-                  filter: 'drop-shadow(0 0 10px rgba(255, 255, 255, 0.3))',
+                  filter: 'drop-shadow(0 0 20px rgba(255, 255, 255, 0.3))',
                 }}
               />
             </LogoContainer>
@@ -116,4 +115,4 @@ const SplashScreen: React.FC<{ onFinish: () => void }> = ({ onFinish }) => {
   );
 };
 
-export default memo(SplashScreen);
+export default SplashScreen;

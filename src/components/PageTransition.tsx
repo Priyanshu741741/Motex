@@ -1,4 +1,4 @@
-import React, { useState, useEffect, memo } from 'react';
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
 
@@ -28,21 +28,21 @@ interface PageTransitionProps {
 
 const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
   const location = useLocation();
-  const [previousPath, setPreviousPath] = useState(location.pathname);
+  const [previousPath, setPreviousPath] = React.useState(location.pathname);
   const direction = getDirection(location.pathname, previousPath);
 
-  useEffect(() => {
+  React.useEffect(() => {
     setPreviousPath(location.pathname);
   }, [location]);
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
+    <AnimatePresence mode="wait">
       <motion.div
         key={location.pathname}
         initial={{ 
           opacity: 0,
-          y: direction * 30, // Reduced movement for smoother transitions
-          scale: 0.98
+          y: direction * 50,
+          scale: 0.97
         }}
         animate={{ 
           opacity: 1,
@@ -51,20 +51,19 @@ const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
         }}
         exit={{ 
           opacity: 0,
-          y: direction * -30, // Reduced movement for smoother transitions
-          scale: 0.98
+          y: direction * -50,
+          scale: 0.97
         }}
         transition={{
-          duration: 0.3, // Reduced duration for faster transitions
-          ease: "easeInOut"
+          duration: 0.4,
+          ease: [0.4, 0, 0.2, 1]
         }}
         style={{
           width: '100%',
           height: '100%',
           position: 'relative',
           minHeight: '100vh',
-          overflow: 'hidden auto',
-          willChange: 'transform, opacity' // Optimize browser rendering
+          overflow: 'hidden auto'
         }}
       >
         {children}
@@ -73,5 +72,4 @@ const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
   );
 };
 
-// Memoize the component to prevent unnecessary re-renders
-export default memo(PageTransition);
+export default PageTransition;

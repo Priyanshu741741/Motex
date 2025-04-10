@@ -11,37 +11,25 @@
     <!-- Removed manifest link -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    
-    <!-- Preload Primetime font with higher priority -->
-    <link rel="preload" href="%PUBLIC_URL%/primetime/PRIMETIME + PERSONAL USE ONLY.ttf" as="font" type="font/ttf" crossorigin>
-    
-    <!-- Optimize loading of Google fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Open+Sans:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&family=Nunito+Sans:wght@400;500;600;700&family=Bebas+Neue&family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
-    
-    <!-- Load only the necessary weights for Circular -->
+    <!-- Preload Primetime font -->
+    <link rel="preload" href="%PUBLIC_URL%/primetime/PRIMETIME + PERSONAL USE ONLY.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Boldonse&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Circular Std Book:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap" rel="stylesheet">
     <link href="https://db.onlinewebfonts.com/c/860c3ec7bbc5da3e97233ccecafe512e?family=Circular+Std+Book" rel="stylesheet" type="text/css"/>
     <link href="https://db.onlinewebfonts.com/c/9475d6a0b79c164f9f605673714e75d9?family=Circular+Std+Bold" rel="stylesheet" type="text/css"/>
-    
-    <!-- Primetime Font with direct path -->
+    <!-- Primetime Font -->
     <link href="%PUBLIC_URL%/primetime/primetime.css" rel="stylesheet" type="text/css" />
-    
     <style>
-      /* Inline Primetime font to ensure it loads even if external CSS fails */
+      /* Inline Primetime font as backup */
       @font-face {
         font-family: 'Primtime';
         src: url('%PUBLIC_URL%/primetime/PRIMETIME + PERSONAL USE ONLY.ttf') format('truetype');
         font-weight: normal;
         font-style: normal;
         font-display: swap;
-      }
-      
-      /* Optimize page loading */
-      html, body {
-        margin: 0;
-        padding: 0;
-        min-height: 100vh;
-        width: 100%;
-        overflow-x: hidden;
       }
     </style>
     <title>Motex Transport</title>

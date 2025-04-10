@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 
 interface FloatingPathsProps {
@@ -6,7 +6,7 @@ interface FloatingPathsProps {
 }
 
 const FloatingPaths: React.FC<FloatingPathsProps> = ({ position }) => {
-  const paths = Array.from({ length: 20 }, (_, i) => ({
+  const paths = Array.from({ length: 36 }, (_, i) => ({
     id: i,
     d: `M-${380 - i * 5 * position} -${189 + i * 6}C-${380 - i * 5 * position} -${189 + i * 6} -${312 - i * 5 * position} ${216 - i * 6} ${152 - i * 5 * position} ${343 - i * 6}C${616 - i * 5 * position} ${470 - i * 6} ${684 - i * 5 * position} ${875 - i * 6} ${684 - i * 5 * position} ${875 - i * 6}`,
     width: 0.5 + i * 0.03,
@@ -15,11 +15,7 @@ const FloatingPaths: React.FC<FloatingPathsProps> = ({ position }) => {
   return (
     <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
       <svg
-        style={{ 
-          width: '100%', 
-          height: '100%',
-          willChange: 'transform'
-        }}
+        style={{ width: '100%', height: '100%' }}
         viewBox="0 0 696 316"
         fill="none"
       >
@@ -38,10 +34,9 @@ const FloatingPaths: React.FC<FloatingPathsProps> = ({ position }) => {
               pathOffset: [0, 1, 0],
             }}
             transition={{
-              duration: 15 + Math.random() * 10,
+              duration: 20 + Math.random() * 10,
               repeat: Number.POSITIVE_INFINITY,
               ease: 'linear',
-              repeatType: 'loop'
             }}
           />
         ))}
@@ -50,4 +45,4 @@ const FloatingPaths: React.FC<FloatingPathsProps> = ({ position }) => {
   );
 };
 
-export default memo(FloatingPaths);
+export default FloatingPaths;

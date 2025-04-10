@@ -280,14 +280,6 @@ const GradualSpacingText = ({ text }: { text: string }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "0px 0px -100px 0px" });
   
-  // Process text in chunks instead of individual characters for better performance
-  const chunks = [];
-  const chunkSize = 3; // Process 3 characters at a time
-  
-  for (let i = 0; i < text.length; i += chunkSize) {
-    chunks.push(text.slice(i, i + chunkSize));
-  }
-  
   return (
     <Box ref={ref} sx={{ 
       display: 'flex', 
@@ -296,15 +288,15 @@ const GradualSpacingText = ({ text }: { text: string }) => {
       gap: { xs: '2px', md: '4px' }
     }}>
       <AnimatePresence>
-        {chunks.map((chunk, index) => (
+        {text.split('').map((char, index) => (
           <motion.div
-            key={`chunk-${index}`}
-            initial={{ opacity: 0, x: -5, y: 10 }}
+            key={`${char}-${index}-${Math.random().toString(36).substr(2, 9)}`}
+            initial={{ opacity: 0, x: -10, y: 20 }}
             animate={isInView ? { opacity: 1, x: 0, y: 0 } : {}}
             exit={{ opacity: 0 }}
             transition={{ 
-              duration: 0.5, 
-              delay: index * 0.02,
+              duration: 0.7, 
+              delay: index * 0.04,
               type: "spring",
               stiffness: 100
             }}
@@ -322,7 +314,7 @@ const GradualSpacingText = ({ text }: { text: string }) => {
               letterSpacing: '2px'
             }}
           >
-            {chunk.replace(/ /g, '\u00A0')}
+            {char === ' ' ? '\u00A0' : char}
           </motion.div>
         ))}
       </AnimatePresence>
@@ -988,12 +980,6 @@ const LandingPage = () => {
                 color="inherit"
                 aria-label="menu"
                 onClick={handleMenuOpen}
-                sx={{ 
-                  transition: 'transform 0.2s ease',
-                  '&:active': {
-                    transform: 'scale(0.95)'
-                  }
-                }}
               >
                 <MenuIcon sx={{ color: 'white' }} />
               </IconButton>
@@ -1004,11 +990,6 @@ const LandingPage = () => {
               anchorEl={anchorEl}
               open={Boolean(anchorEl)}
               onClose={handleMenuClose}
-              disableScrollLock={true}
-              transitionDuration={{
-                enter: 200,
-                exit: 200
-              }}
               PaperProps={{
                 sx: {
                   backgroundColor: 'rgba(0, 0, 0, 0.9)',
