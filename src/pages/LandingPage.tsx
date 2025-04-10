@@ -58,8 +58,8 @@ import emailjs from '@emailjs/browser';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
 
 // Import fonts
-import '../fonts/primetime/primetime.css';
-// Poppins and Bebas Neue fonts are loaded via Google Fonts in embedded code
+// import '../fonts/primetime/primetime.css';
+// Poppins font is loaded via Google Fonts in embedded code
 
 // Define color constants at the top of the file
 const RED_COLOR = '#DE1F27';

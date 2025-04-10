@@ -43,7 +43,7 @@ import {
 import React from 'react';
 
 // Import fonts
-import '../fonts/primetime/primetime.css';
+// import '../fonts/primetime/primetime.css';
 // Poppins font is loaded via Google Fonts in embedded code
 
 // Define colors
