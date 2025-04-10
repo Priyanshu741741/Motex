@@ -1490,7 +1490,7 @@ const LandingPage = () => {
         />
 
         {/* Services Section */}
-        <Box id="services-section" sx={{ py: -1, position: 'relative', zIndex: 2 }}>
+        <Box id="services-section" sx={{ pt: -1, pb:6 , position: 'relative', zIndex: 2 }}>
           <Container maxWidth="lg">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
