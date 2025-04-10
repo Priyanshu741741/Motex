@@ -58,7 +58,7 @@ import emailjs from '@emailjs/browser';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
 
 // Import fonts
-import '../fonts/primetime/primetime.css';
+// Oswald font is loaded via Google Fonts in embedded code
 // Poppins and Bebas Neue fonts are loaded via Google Fonts in embedded code
 
 // Define color constants at the top of the file
@@ -93,8 +93,10 @@ const GradientSpan = styled('span')(({ theme }) => ({
   WebkitTextFillColor: 'transparent',
   backgroundClip: 'text',
   textFillColor: 'transparent',
-  fontWeight: 1000,
-  fontFamily: '"Primtime", sans-serif',
+  fontWeight: 600, // Oswald looks better with medium weight
+  fontFamily: '"Oswald", sans-serif',
+  letterSpacing: '1px', // Add some spacing for better readability
+  textTransform: 'uppercase' // Oswald looks best in uppercase
 }));
 
 const GradientButton = styled(Button)<{ component?: React.ElementType; to?: string }>(({ theme }) => ({
@@ -309,7 +311,7 @@ const GradualSpacingText = ({ text }: { text: string }) => {
               // @ts-ignore
               textFillColor: 'transparent',
               fontWeight: 1000,
-              fontFamily: '"Primtime", sans-serif',
+              fontFamily: '"Anton", sans-serif',
               fontSize: 'inherit',
               letterSpacing: '2px'
             }}
@@ -1502,9 +1504,9 @@ const LandingPage = () => {
                 fontWeight: 700,
                 mb: 2,
                 color: 'white',
-                fontFamily: '"Primtime", sans-serif',
+                fontFamily: '"Oswald", sans-serif',
               }}>
-                Our Services
+                OUR SERVICES
               </Typography>
             </motion.div>
             <Typography variant="body1" align="center" sx={{ 
@@ -1654,9 +1656,9 @@ const LandingPage = () => {
               mb: 4, 
               letterSpacing: 1, 
               fontWeight: 800,
-              fontFamily: '"Primtime", sans-serif'
+              fontFamily: '"Oswald", sans-serif'
             }}>
-              Trusted By
+              TRUSTED BY
             </Typography>
             
             
@@ -1740,9 +1742,9 @@ const LandingPage = () => {
               fontWeight: 700,
               mb: 2,
               color: 'white',
-              fontFamily: '"Primtime", sans-serif',
+              fontFamily: '"Oswald", sans-serif',
             }}>
-              What We Offer
+              WHAT WE OFFER
             </Typography>
             
             <Typography variant="body1" align="center" sx={{ 
@@ -2206,10 +2208,10 @@ const LandingPage = () => {
                         fontWeight: 800,
                         mb: 2,
                         color: '#FFFFFF',
-                        fontFamily: '"Primtime", sans-serif',
+                        fontFamily: '"Oswald", sans-serif',
                         lineHeight: 1.2
                       }}>
-                        Get Your Transport Quote in Seconds
+                        GET YOUR TRANSPORT QUOTE IN SECONDS
                       </Typography>
                       
                       <Typography variant="body1" sx={{ 
@@ -2336,9 +2338,9 @@ const LandingPage = () => {
               fontWeight: 700,
               mb: 6,
               color: 'white',
-              fontFamily: '"Primtime", sans-serif',
+              fontFamily: '"Oswald", sans-serif',
             }}>
-              What Our Clients Say About Us
+              WHAT OUR CLIENTS SAY ABOUT US
             </Typography>
             
             <Grid container spacing={8}>

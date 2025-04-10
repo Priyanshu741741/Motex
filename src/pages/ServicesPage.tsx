@@ -43,7 +43,7 @@ import {
 import React from 'react';
 
 // Import fonts
-import '../fonts/primetime/primetime.css';
+// Oswald font is loaded via Google Fonts in embedded code
 // Poppins font is loaded via Google Fonts in embedded code
 
 // Define colors
@@ -103,8 +103,10 @@ const GradientSpan = styled('span')(({ theme }) => ({
   WebkitTextFillColor: 'transparent',
   backgroundClip: 'text',
   textFillColor: 'transparent',
-  fontWeight: 1000,
-  fontFamily: '"Primtime", sans-serif',
+  fontWeight: 600,
+  fontFamily: '"Oswald", sans-serif',
+  letterSpacing: '1px',
+  textTransform: 'uppercase'
 }));
 
 // Animation keyframes
@@ -745,13 +747,13 @@ const ServicesPage = () => {
                   mb: 1,
                   fontWeight: 800,
                   color: RED_COLOR,
-                  fontFamily: '"Primtime", sans-serif',
-                  fontSize: { xs: '40px', sm: '50px', md: '80px', lg: '90px' },
+                  fontFamily: '"Oswald", sans-serif',
+                  fontSize: { xs: '50px', sm: '60px', md: '90px', lg: '100px' },
                 }}
               >
                 <TextFade direction="down" staggerChildren={0.03}>
                   <div style={{ whiteSpace: 'nowrap' }}>
-                    Our Services
+                    OUR SERVICES
                   </div>
                 </TextFade>
               </Typography>
@@ -778,10 +780,10 @@ const ServicesPage = () => {
                     mb: 1,
                     fontWeight: 700,
                     color: 'white',
-                    fontFamily: '"Primtime", sans-serif',
+                    fontFamily: '"Oswald", sans-serif',
                   }}
                 >
-                  What We Offer
+                  WHAT WE OFFER
                 </Typography>
                 <Typography 
                   variant="body1" 
@@ -862,10 +864,10 @@ const ServicesPage = () => {
                     mb: 1,
                     fontWeight: 700,
                     color: 'white',
-                    fontFamily: '"Primtime", sans-serif',
+                    fontFamily: '"Oswald", sans-serif',
                   }}
                 >
-                  Client Testimonials
+                  CLIENT TESTIMONIALS
                 </Typography>
                 <Typography 
                   variant="body1" 
@@ -954,7 +956,7 @@ const ServicesPage = () => {
                     mb: 2,
                     fontWeight: 700,
                     color: 'white',
-                    fontFamily: '"Primtime", sans-serif',
+                    fontFamily: '"Oswald", sans-serif',
                   }}
                 >
                   Ready to Get Started?
