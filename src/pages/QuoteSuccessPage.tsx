@@ -32,7 +32,7 @@ const GradientText = styled(Typography)(({ theme }) => ({
   fontWeight: 800,
   letterSpacing: '-0.02em',
   lineHeight: 1.1,
-  fontFamily: '"Boldonse", "Poppins", sans-serif'
+  fontFamily: '"Boldonse", "Circular Std Book", sans-serif'
 }));
 
 const LogoText = styled(Typography)(({ theme }) => ({
