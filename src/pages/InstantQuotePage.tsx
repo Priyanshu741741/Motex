@@ -925,7 +925,7 @@ const InstantQuotePage = () => {
                   </SubmitButton>
                 </Box>
               </form>
-            </FormSection>
+            </FormSection> 
             
             {/* Other Inquiries Section */}
             <Box sx={{ mt: 8, mb: 4 }}>
