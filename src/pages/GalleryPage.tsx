@@ -38,6 +38,10 @@ const WHITE_TEXT = '#FFFFFF';
 const RED_COLOR = '#DE1F27';
 const PINK_RED = '#FF2992';
 
+// Define fonts
+const HEADING_FONT = '"Oswald", sans-serif';
+const BODY_FONT = '"Poppins", sans-serif';
+
 // Styled components
 const PageWrapper = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -49,7 +53,7 @@ const PageWrapper = styled(Box)(({ theme }) => ({
 }));
 
 const LogoText = styled(Typography)(({ theme }) => ({
-  fontFamily: '"Circular Std Bold", sans-serif',
+  fontFamily: HEADING_FONT,
   fontSize: '22px',
   fontWeight: 700,
   letterSpacing: '-0.01em',
@@ -149,19 +153,19 @@ const NavButton = styled(IconButton)(({ theme }) => ({
 const galleryItems = [
   { 
     id: 1, 
-    src: '/gallery 1.jpg', 
+    src: '/gallery 10.jpg', 
     title: 'Freight Fleet', 
     description: 'Our diverse fleet of vehicles ready to transport your goods across Australia.'
   },
   { 
     id: 2, 
-    src: '/gallery 2.jpg', 
+    src: '/chauffeur-2.jpg', 
     title: 'Transport Services', 
     description: 'Multiple vehicles positioned for efficient logistics services.'
   },
   { 
     id: 3, 
-    src: '/gallery 3.jpg', 
+    src: '/gallery 9.jpg', 
     title: 'Reliable Transportation', 
     description: 'Our freight vehicles ready for deployment in various conditions.'
   },
@@ -197,16 +201,23 @@ const galleryItems = [
   },
   { 
     id: 9, 
-    src: '/gallery 9.jpg', 
+    src: '/gallery 3.jpg', 
     title: 'Mercedes Sprinter Vans', 
     description: 'Mercedes Sprinter vans for smaller, time-sensitive deliveries.'
   },
   { 
     id: 10, 
-    src: '/gallery 10.jpg', 
+    src: '/gallery 2.jpg', 
     title: 'Commercial Van Fleet', 
     description: 'Our fleet of commercial vans ready for urban delivery operations.'
   },
+  { 
+    id: 11, 
+    src: '/gallery 1.jpg', 
+    title: 'Commercial Van Fleet', 
+    description: 'Our fleet of commercial vans ready for urban delivery operations.'
+  },
+ 
 ];
 
 const GalleryPage = () => {
@@ -278,9 +289,10 @@ const GalleryPage = () => {
   return (
     <PageWrapper>
       {/* Header - Updated to match landing page */}
-      <AppBar position="static" color="transparent" elevation={0} sx={{ py: 1.5, backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
-        <Toolbar>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+      <AppBar position="fixed" color="transparent" elevation={0} sx={{ py: 1, backgroundColor: 'rgba(0, 0, 0, 0.85)', backdropFilter: 'blur(8px)', zIndex: 1100 }}>
+        <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
+          {/* Logo on the left */}
+          <Box sx={{ display: 'flex', alignItems: 'center', width: '20%' }}>
             <Box 
               component={RouterLink}
               to="/"
@@ -294,47 +306,123 @@ const GalleryPage = () => {
                 component="img" 
                 src="/MOTEX+Logo.png" 
                 alt="MOTEX Logo" 
-                sx={{ height: 36 }} 
+                sx={{ height: 28 }} 
               />
             </Box>
           </Box>
           
-          {/* Desktop menu */}
+          {/* Desktop menu in the center */}
           {!isMobile && (
-            <Stack 
-              direction="row" 
-              spacing={3} 
-              sx={{ 
-                mx: 'auto', 
-                color: 'white', 
-                fontFamily: '"Circular Std Book", sans-serif', 
-                fontWeight: 300,
-                width: '100%',
-                justifyContent: 'center'
-              }}
-            >
-              <Link href="/" color="inherit" underline="none">
-                Home
-              </Link>
-              <Link href="/services" color="inherit" underline="none">
-                Services
-              </Link>
-              <Link href="/about-us" color="inherit" underline="none">
-                About Us
-              </Link>
-              <Link href="/instant-quote" color="inherit" underline="none">
-                Instant Quote
-              </Link>
-              <Link href="/gallery" color="inherit" underline="none" sx={{ color: RED_COLOR }}>
-                Gallery
-              </Link>
-              <Link href="/contact-us" color="inherit" underline="none">
-                Contact
-              </Link>
-            </Stack>
+            <Box sx={{ display: 'flex', justifyContent: 'center', width: '60%' }}>
+              <Stack 
+                direction="row" 
+                spacing={3} 
+                sx={{ 
+                  color: 'white', 
+                  fontFamily: BODY_FONT, 
+                  fontWeight: 400,
+                  justifyContent: 'center',
+                  fontSize: '16px',
+                  lineHeight: '29px',
+                }}
+              >
+                <Link 
+                  component={RouterLink}
+                  to="/" 
+                  color="inherit" 
+                  underline="none" 
+                  sx={{ 
+                    '&:hover': { color: RED_COLOR },
+                    fontFamily: BODY_FONT,
+                    fontSize: '16px',
+                    lineHeight: '29px',
+                    fontWeight: 400
+                  }}
+                >
+                  Home
+                </Link>
+                <Link 
+                  component={RouterLink}
+                  to="/services"
+                  color="inherit" 
+                  underline="none" 
+                  sx={{ 
+                    '&:hover': { color: RED_COLOR },
+                    fontFamily: BODY_FONT,
+                    fontSize: '16px',
+                    lineHeight: '29px',
+                    fontWeight: 400
+                  }}
+                >
+                  Services
+                </Link>
+                <Link 
+                  component={RouterLink}
+                  to="/about-us"
+                  color="inherit" 
+                  underline="none" 
+                  sx={{ 
+                    '&:hover': { color: RED_COLOR },
+                    fontFamily: BODY_FONT,
+                    fontSize: '16px',
+                    lineHeight: '29px',
+                    fontWeight: 400
+                  }}
+                >
+                  About Us
+                </Link>
+                <Link 
+                  component={RouterLink}
+                  to="/instant-quote"
+                  color="inherit" 
+                  underline="none" 
+                  sx={{ 
+                    '&:hover': { color: RED_COLOR },
+                    fontFamily: BODY_FONT,
+                    fontSize: '16px',
+                    lineHeight: '29px',
+                    fontWeight: 400
+                  }}
+                >
+                  Instant Quote
+                </Link>
+                <Link 
+                  component={RouterLink}
+                  to="/gallery"
+                  color="inherit" 
+                  underline="none" 
+                  sx={{ 
+                    color: RED_COLOR,
+                    '&:hover': { color: RED_COLOR },
+                    fontFamily: BODY_FONT,
+                    fontSize: '16px',
+                    lineHeight: '29px',
+                    fontWeight: 400
+                  }}
+                >
+                  Gallery
+                </Link>
+                <Link 
+                  component={RouterLink}
+                  to="/contact-us"
+                  color="inherit" 
+                  underline="none" 
+                  sx={{ 
+                    '&:hover': { color: RED_COLOR },
+                    fontFamily: BODY_FONT,
+                    fontSize: '16px',
+                    lineHeight: '29px',
+                    fontWeight: 400
+                  }}
+                >
+                  Contact
+                </Link>
+              </Stack>
+            </Box>
           )}
           
-          <Box sx={{ display: 'flex', ml: 'auto' }}>
+          {/* Get A Quote button on the right */}
+          <Box sx={{ display: 'flex', width: '20%', justifyContent: 'flex-end' }}>
             {!isMobile && (
               <Button 
                 component={RouterLink}
@@ -344,7 +432,7 @@ const GalleryPage = () => {
                   bgcolor: RED_COLOR, 
                   color: 'white',
                   textTransform: 'none',
-                  fontFamily: '"Circular Std Book", sans-serif',
+                  fontFamily: BODY_FONT,
                   fontWeight: 400,
                   fontSize: '15px',
                   borderRadius: '50px',
@@ -371,9 +459,9 @@ const GalleryPage = () => {
                 color="inherit"
                 aria-label="menu"
                 onClick={handleMenuOpen}
-                sx={{ ml: 'auto' }}
+                sx={{ color: 'white' }}
               >
-                <MenuIcon sx={{ color: 'white' }} />
+                <MenuIcon />
               </IconButton>
             )}
             
@@ -400,7 +488,7 @@ const GalleryPage = () => {
                 onClick={handleMenuClose}
                 sx={{ 
                   py: 1.5, 
-                  fontFamily: '"Circular Std Book", sans-serif'
+                  fontFamily: BODY_FONT
                 }}
               >
                 Home
@@ -411,7 +499,7 @@ const GalleryPage = () => {
                 onClick={handleMenuClose}
                 sx={{ 
                   py: 1.5, 
-                  fontFamily: '"Circular Std Book", sans-serif'
+                  fontFamily: BODY_FONT
                 }}
               >
                 Services
@@ -422,7 +510,7 @@ const GalleryPage = () => {
                 onClick={handleMenuClose}
                 sx={{ 
                   py: 1.5, 
-                  fontFamily: '"Circular Std Book", sans-serif'
+                  fontFamily: BODY_FONT
                 }}
               >
                 About Us
@@ -433,7 +521,7 @@ const GalleryPage = () => {
                 onClick={handleMenuClose}
                 sx={{ 
                   py: 1.5, 
-                  fontFamily: '"Circular Std Book", sans-serif'
+                  fontFamily: BODY_FONT
                 }}
               >
                 Instant Quote
@@ -444,7 +532,7 @@ const GalleryPage = () => {
                 onClick={handleMenuClose}
                 sx={{ 
                   py: 1.5, 
-                  fontFamily: '"Circular Std Book", sans-serif',
+                  fontFamily: BODY_FONT,
                   color: RED_COLOR
                 }}
               >
@@ -456,7 +544,7 @@ const GalleryPage = () => {
                 onClick={handleMenuClose}
                 sx={{ 
                   py: 1.5, 
-                  fontFamily: '"Circular Std Book", sans-serif'
+                  fontFamily: BODY_FONT
                 }}
               >
                 Contact
@@ -468,7 +556,7 @@ const GalleryPage = () => {
                 onClick={handleMenuClose}
                 sx={{ 
                   py: 1.5, 
-                  fontFamily: '"Circular Std Book", sans-serif',
+                  fontFamily: BODY_FONT,
                   color: RED_COLOR,
                   fontWeight: 'bold'
                 }}
@@ -479,6 +567,9 @@ const GalleryPage = () => {
           </Box>
         </Toolbar>
       </AppBar>
+      
+      {/* Add toolbar spacer */}
+      <Box sx={{ height: '64px' }} />
       
       <ContentSection>
         <Container maxWidth="lg" sx={{ py: 6 }}>
@@ -492,7 +583,7 @@ const GalleryPage = () => {
               letterSpacing: '2px',
               textAlign: 'center',
               color: RED_COLOR,
-              fontFamily: '"Bebas Neue", sans-serif',
+              fontFamily: HEADING_FONT,
             }}
           >
             OUR FLEET GALLERY
@@ -506,7 +597,7 @@ const GalleryPage = () => {
               textAlign: 'center',
               maxWidth: 700,
               mx: 'auto',
-              fontFamily: '"Circular Std Book", sans-serif',
+              fontFamily: BODY_FONT,
             }}
           >
             Explore our diverse fleet of vehicles available for all your transportation and logistics needs. From small vans to large trucks, we have the right vehicle for every job.
@@ -532,13 +623,13 @@ const GalleryPage = () => {
                         fontWeight: 700, 
                         mb: 1,
                         color: WHITE_TEXT,
-                        fontFamily: '"Circular Std Bold", sans-serif',
+                        fontFamily: HEADING_FONT,
                       }}>
                         {item.title}
                       </Typography>
                       <Typography variant="body2" sx={{ 
                         color: 'rgba(255, 255, 255, 0.8)',
-                        fontFamily: '"Circular Std Book", sans-serif',
+                        fontFamily: BODY_FONT,
                       }}>
                         {item.description}
                       </Typography>
@@ -600,13 +691,13 @@ const GalleryPage = () => {
                         color: WHITE_TEXT,
                         fontWeight: 700,
                         mb: 1,
-                        fontFamily: '"Circular Std Bold", sans-serif',
+                        fontFamily: HEADING_FONT,
                       }}>
                         {selectedItem.title}
                       </Typography>
                       <Typography variant="body1" sx={{ 
                         color: 'rgba(255, 255, 255, 0.8)',
-                        fontFamily: '"Circular Std Book", sans-serif',
+                        fontFamily: BODY_FONT,
                       }}>
                         {selectedItem.description}
                       </Typography>
@@ -634,7 +725,7 @@ const GalleryPage = () => {
                   }} 
                 />
               </Box>
-              <Typography variant="body2" sx={{ color: 'white', opacity: 0.8, mb: 3, fontFamily: '"Circular Std Book", sans-serif', fontWeight: 300 }}>
+              <Typography variant="body2" sx={{ color: 'white', opacity: 0.8, mb: 3, fontFamily: BODY_FONT, fontWeight: 300 }}>
                 MOTEX Transport is a leading provider of logistics and transportation services across Australia, offering reliable and efficient solutions for businesses of all sizes.
               </Typography>
               
@@ -677,50 +768,50 @@ const GalleryPage = () => {
             </Grid>
             
             <Grid item xs={12} sm={6} md={3}>
-              <Typography variant="h6" sx={{ color: 'white', mb: 2, fontFamily: '"Circular Std Bold", sans-serif', fontWeight: 'bold', fontSize: '20px' }}>
+              <Typography variant="h6" sx={{ color: 'white', mb: 2, fontFamily: HEADING_FONT, fontWeight: 'bold', fontSize: '20px' }}>
                 Quick Links
               </Typography>
               <Stack spacing={1}>
-                <Link href="/" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: '"Circular Std Book", sans-serif', fontWeight: 300 }}>
+                <Link href="/" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: BODY_FONT, fontWeight: 300 }}>
                   Home
                 </Link>
-                <Link href="/about-us" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: '"Circular Std Book", sans-serif', fontWeight: 300 }}>
+                <Link href="/about-us" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: BODY_FONT, fontWeight: 300 }}>
                   About Us
                 </Link>
-                <Link href="#" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: '"Circular Std Book", sans-serif', fontWeight: 300 }}>
+                <Link href="/services" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: BODY_FONT, fontWeight: 300 }}>
                   Services
                 </Link>
-                <Link href="/instant-quote" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: '"Circular Std Book", sans-serif', fontWeight: 300 }}>
+                <Link href="/instant-quote" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: BODY_FONT, fontWeight: 300 }}>
                   Instant Quote
                 </Link>
-                <Link href="/gallery" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: '"Circular Std Book", sans-serif', fontWeight: 300 }}>
+                <Link href="/gallery" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: BODY_FONT, fontWeight: 300 }}>
                   Gallery
                 </Link>
-                <Link href="#" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: '"Circular Std Book", sans-serif', fontWeight: 300 }}>
+                <Link href="/contact-us" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: BODY_FONT, fontWeight: 300 }}>
                   Contact
                 </Link>
               </Stack>
             </Grid>
             
             <Grid item xs={12} sm={6} md={4}>
-              <Typography variant="h6" sx={{ color: 'white', mb: 2, fontFamily: '"Circular Std Bold", sans-serif', fontWeight: 'bold', fontSize: '20px' }}>
+              <Typography variant="h6" sx={{ color: 'white', mb: 2, fontFamily: HEADING_FONT, fontWeight: 'bold', fontSize: '20px' }}>
                 Contact Information
               </Typography>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                 <LocationIcon sx={{ color: RED_COLOR, mr: 1.5 }} />
-                <Typography variant="body2" sx={{ color: 'white', opacity: 0.8, fontFamily: '"Circular Std Book", sans-serif', fontWeight: 300 }}>
+                <Typography variant="body2" sx={{ color: 'white', opacity: 0.8, fontFamily: BODY_FONT, fontWeight: 300 }}>
                   123 Transport Way, Sydney, NSW 2000, Australia
                 </Typography>
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                 <PhoneIcon sx={{ color: RED_COLOR, mr: 1.5 }} />
-                <Typography variant="body2" sx={{ color: 'white', opacity: 0.8, fontFamily: '"Circular Std Book", sans-serif', fontWeight: 300 }}>
+                <Typography variant="body2" sx={{ color: 'white', opacity: 0.8, fontFamily: BODY_FONT, fontWeight: 300 }}>
                   +61 2 1234 5678
                 </Typography>
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                 <EmailIcon sx={{ color: RED_COLOR, mr: 1.5 }} />
-                <Typography variant="body2" sx={{ color: 'white', opacity: 0.8, fontFamily: '"Circular Std Book", sans-serif', fontWeight: 300 }}>
+                <Typography variant="body2" sx={{ color: 'white', opacity: 0.8, fontFamily: BODY_FONT, fontWeight: 300 }}>
                   info@motextransport.com.au
                 </Typography>
               </Box>
@@ -729,7 +820,7 @@ const GalleryPage = () => {
           
           <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.1)', my: 4 }} />
           
-          <Typography variant="body2" align="center" sx={{ color: 'white', opacity: 0.7, fontFamily: '"Circular Std Book", sans-serif', fontWeight: 300 }}>
+          <Typography variant="body2" align="center" sx={{ color: 'white', opacity: 0.7, fontFamily: BODY_FONT, fontWeight: 300 }}>
             © {new Date().getFullYear()} MOTEX Transport. All rights reserved.
           </Typography>
         </Container>

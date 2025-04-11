@@ -443,12 +443,12 @@ const MobileServiceCarousel = () => {
   const services: ServiceItem[][] = [
     [
       { id: 'parcel', icon: <LocalShippingIcon sx={{ color: RED_COLOR, fontSize: 20 }} />, title: 'Parcel Delivery' },
-      { id: 'transport', icon: <BusinessIcon sx={{ color: RED_COLOR, fontSize: 20 }} />, title: 'Transport' },
-      { id: 'packers', icon: <InventoryIcon sx={{ color: RED_COLOR, fontSize: 20 }} />, title: 'Packers & Movers' },
+      { id: 'transport', icon: <BusinessIcon sx={{ color: RED_COLOR, fontSize: 20 }} />, title: 'Fragile Freight' },
+      { id: 'packers', icon: <InventoryIcon sx={{ color: RED_COLOR, fontSize: 20 }} />, title: 'Interstate Delivery' },
     ],
     [
-      { id: 'courier', icon: <PublicIcon sx={{ color: RED_COLOR, fontSize: 20 }} />, title: 'Courier' },
-      { id: 'sameday', icon: <SpeedIcon sx={{ color: RED_COLOR, fontSize: 20 }} />, title: 'Same Day' },
+      { id: 'courier', icon: <PublicIcon sx={{ color: RED_COLOR, fontSize: 20 }} />, title: 'Door to Door Service' },
+      { id: 'sameday', icon: <SpeedIcon sx={{ color: RED_COLOR, fontSize: 20 }} />, title: 'Same Day Delivery' },
       { id: 'chauffeur', icon: <ApartmentIcon sx={{ color: RED_COLOR, fontSize: 20 }} />, title: 'Chauffeur' },
     ],
   ];
@@ -1260,7 +1260,7 @@ const LandingPage = () => {
                         fontSize: '0.85rem',
                       }}
                     >
-                      Transport
+                      Fragile Freight
                     </Typography>
                   </Box>
                 </Grid>
@@ -1299,7 +1299,7 @@ const LandingPage = () => {
                         fontSize: '0.75rem',
                       }}
                     >
-                      Packers & Movers
+                      Interstate Delivery
                     </Typography>
                   </Box>
                 </Grid>
@@ -1338,7 +1338,7 @@ const LandingPage = () => {
                         fontSize: '0.75rem',
                       }}
                     >
-                      Courier
+                      Door to Door Service
                     </Typography>
                   </Box>
                 </Grid>
@@ -1377,7 +1377,7 @@ const LandingPage = () => {
                         fontSize: '0.75rem',
                       }}
                     >
-                      Same Day
+                      Same Day Delivery
                     </Typography>
                   </Box>
                 </Grid>

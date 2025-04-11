@@ -251,6 +251,10 @@ const TestimonialCard = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(4),
   position: 'relative',
   overflow: 'hidden',
+  height: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'space-between',
   '&::before': {
     content: '""',
     position: 'absolute',
@@ -396,21 +400,21 @@ const ServicesPage = () => {
   const testimonials = [
     {
       id: 1,
-      quote: "MOTEX Transport has been instrumental in streamlining our distribution process. Their reliability and professionalism are unmatched in the industry.",
-      author: "Sarah Johnson",
-      company: "Retail Solutions Inc."
+      quote: "The service we received from Motex Transport was extremely professional, honest and cost effective. Roy was an absolute life saver for us, during an extremely busy period for the business. We had multiple delivery drops - one being on a Sunday - and nothing was an issue. We liked that we could communicate directly with the driver, which was extremely reassuring for us when goods needed to be delivered within allocated time slots. He also continued to communicate with us in terms of delivery ETAs and updates. This really saved us sooooo much stress and pressure. We hope to continue to use Motex moving forward. Well done and thank you for your professionalism and wonderful service.",
+      author: "Natalie Tennant",
+      company: "Hunter Valley Wedding Planner"
     },
     {
       id: 2,
-      quote: "We've been using MOTEX's same-day delivery service for our urgent medical supplies, and they've never let us down. Truly a partner we can count on.",
-      author: "Dr. Michael Chen",
-      company: "MedSupply Australia"
+      quote: "Our premises are a challenge for deliveries with stairs and uneven surfaces, however Roy (Motex) has for many years delivered to us with efficiency, care and cheerfulness. This makes a huge difference as we are a small staff yet often have deliveries varying from 5 - 30 boxes at different times of the year. This enables us to function well and always be on top of stock and supply. I would highly recommend Motex Transport to any size or type of business - you won't be disappointed.",
+      author: "Christine Mill",
+      company: "CWCI Australia"
     },
     {
       id: 3,
-      quote: "The team at MOTEX handled our office relocation with incredible efficiency. Not a single item was damaged, and they kept to the schedule perfectly.",
-      author: "Tom Williams",
-      company: "Williams & Partners Law Firm"
+      quote: "The Motex Team consistently go that extra mile for the customer. In order to free up the time of our staff on the ground, the Motex team go above and beyond the typical expectations to ensure we as the customer are always put first whilst carrying out the job to an exemplary level. I would highly recommend and endorse Motex as being an excellent company, and we will most certainly continue to use their services.",
+      author: "Adam",
+      company: "Sydney Visitor Centre"
     }
   ];
 
@@ -889,43 +893,47 @@ const ServicesPage = () => {
                 <Grid container spacing={4}>
                   {testimonials.map((testimonial) => (
                     <Grid item xs={12} md={4} key={testimonial.id}>
-                      <TestimonialCard>
-                        <Typography 
-                          variant="body1" 
-                          sx={{ 
-                            mb: 3, 
-                            fontStyle: 'italic',
-                            color: 'white',
-                            fontFamily: '"Poppins", sans-serif',
-                            lineHeight: '29px',
-                            fontSize: '16px',
-                            fontWeight: 400
-                          }}
-                        >
-                          "{testimonial.quote}"
-                        </Typography>
-                        <Typography 
-                          variant="subtitle1" 
-                          sx={{ 
-                            fontWeight: 600,
-                            color: 'white',
-                            fontFamily: '"Poppins", sans-serif',
-                          }}
-                        >
-                          {testimonial.author}
-                        </Typography>
-                        <Typography 
-                          variant="body2" 
-                          sx={{ 
-                            color: 'rgba(255,255,255,0.7)',
-                            fontFamily: '"Poppins", sans-serif',
-                            fontSize: '16px',
-                            lineHeight: '29px',
-                            fontWeight: 400
-                          }}
-                        >
-                          {testimonial.company}
-                        </Typography>
+                      <TestimonialCard sx={{ minHeight: '350px' }}>
+                        <Box sx={{ flex: 1 }}>
+                          <Typography 
+                            variant="body1" 
+                            sx={{ 
+                              mb: 3, 
+                              fontStyle: 'italic',
+                              color: 'white',
+                              fontFamily: '"Poppins", sans-serif',
+                              lineHeight: '29px',
+                              fontSize: '16px',
+                              fontWeight: 400
+                            }}
+                          >
+                            "{testimonial.quote}"
+                          </Typography>
+                        </Box>
+                        <Box>
+                          <Typography 
+                            variant="subtitle1" 
+                            sx={{ 
+                              fontWeight: 600,
+                              color: 'white',
+                              fontFamily: '"Poppins", sans-serif',
+                            }}
+                          >
+                            {testimonial.author}
+                          </Typography>
+                          <Typography 
+                            variant="body2" 
+                            sx={{ 
+                              color: 'rgba(255,255,255,0.7)',
+                              fontFamily: '"Poppins", sans-serif',
+                              fontSize: '16px',
+                              lineHeight: '29px',
+                              fontWeight: 400
+                            }}
+                          >
+                            {testimonial.company}
+                          </Typography>
+                        </Box>
                       </TestimonialCard>
                     </Grid>
                   ))}

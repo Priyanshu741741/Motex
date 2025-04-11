@@ -44,6 +44,10 @@ const RED_COLOR = '#DE1F27';
 const PINK_RED = '#FF2992';
 const BLUE_COLOR = '#0078ff';
 
+// Define fonts
+const HEADING_FONT = '"Oswald", sans-serif';
+const BODY_FONT = '"Poppins", sans-serif';
+
 // Styled components
 const PageWrapper = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -75,7 +79,7 @@ const StyledInput = styled('input')(({ theme }) => ({
   borderRadius: '4px',
   color: WHITE_TEXT,
   fontSize: '14px',
-  fontFamily: '"Circular Std Book", sans-serif',
+  fontFamily: '"Poppins", sans-serif',
   outline: 'none',
   transition: 'all 0.2s ease',
   '&:focus': {
@@ -94,7 +98,7 @@ const StyledTextarea = styled('textarea')(({ theme }) => ({
   borderRadius: '4px',
   color: WHITE_TEXT,
   fontSize: '14px',
-  fontFamily: '"Circular Std Book", sans-serif',
+  fontFamily: '"Poppins", sans-serif',
   outline: 'none',
   minHeight: '100px',
   resize: 'vertical',
@@ -111,7 +115,7 @@ const FormLabel = styled(Typography)(({ theme }) => ({
   color: 'rgba(255, 255, 255, 0.8)',
   fontSize: '14px',
   marginBottom: theme.spacing(1),
-  fontFamily: '"Circular Std Book", sans-serif',
+  fontFamily: '"Poppins", sans-serif',
   fontWeight: 500,
 }));
 
@@ -123,7 +127,7 @@ const SubmitButton = styled(Button)(({ theme }) => ({
   textTransform: 'none',
   fontSize: '15px',
   fontWeight: 500,
-  fontFamily: '"Circular Std Book", sans-serif',
+  fontFamily: '"Poppins", sans-serif',
   width: '100%',
   boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)',
   transition: 'all 0.3s ease',
@@ -351,16 +355,17 @@ const InstantQuotePage = () => {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <PageWrapper>
-        {/* Header - Kept as is */}
-        <AppBar position="static" color="transparent" elevation={0} sx={{ py: 1.5, backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
-          <Toolbar>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        {/* Header - Matching LandingPage.tsx */}
+        <AppBar position="fixed" color="transparent" elevation={0} sx={{ py: 1, backgroundColor: 'rgba(0, 0, 0, 0.85)', backdropFilter: 'blur(8px)', zIndex: 1100 }}>
+          <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            {/* Logo on the left */}
+            <Box sx={{ display: 'flex', alignItems: 'center', width: '20%' }}>
               <Box 
                 component={RouterLink}
                 to="/"
                 sx={{ 
                   display: 'flex', 
-                  alignItems: 'center',
+                  alignItems: 'center', 
                   textDecoration: 'none'
                 }}
               >
@@ -368,57 +373,133 @@ const InstantQuotePage = () => {
                   component="img" 
                   src="/MOTEX+Logo.png" 
                   alt="MOTEX Logo" 
-                  sx={{ height: 32 }} 
+                  sx={{ height: 28 }} 
                 />
               </Box>
             </Box>
             
-            {/* Desktop menu */}
+            {/* Desktop menu in the center */}
             {!isMobile && (
-              <Stack 
-                direction="row" 
-                spacing={3} 
-                sx={{ 
-                  mx: 'auto', 
-                  color: 'white', 
-                  fontFamily: '"Circular Std Book", sans-serif', 
-                  fontWeight: 300,
-                  width: '100%',
-                  justifyContent: 'center'
-                }}
-              >
-                <Link href="/" color="inherit" underline="none">
-                  Home
-                </Link>
-                <Link href="/services" color="inherit" underline="none">
-                  Services
-                </Link>
-                <Link href="/about-us" color="inherit" underline="none">
-                  About Us
-                </Link>
-                <Link href="/instant-quote" color="inherit" underline="none" sx={{ color: RED_COLOR }}>
-                  Instant Quote
-                </Link>
-                <Link href="/gallery" color="inherit" underline="none">
-                  Gallery
-                </Link>
-                <Link href="/contact-us" color="inherit" underline="none">
-                  Contact
-                </Link>
-              </Stack>
+              <Box sx={{ display: 'flex', justifyContent: 'center', width: '60%' }}>
+                <Stack 
+                  direction="row" 
+                  spacing={3} 
+                  sx={{ 
+                    color: 'white', 
+                    fontFamily: BODY_FONT, 
+                    fontWeight: 400,
+                    justifyContent: 'center',
+                    fontSize: '16px',
+                    lineHeight: '29px',
+                  }}
+                >
+                  <Link 
+                    component={RouterLink} 
+                    to="/" 
+                    color="inherit" 
+                    underline="none" 
+                    sx={{ 
+                      '&:hover': { color: RED_COLOR },
+                      fontFamily: BODY_FONT,
+                      fontSize: '16px',
+                      lineHeight: '29px',
+                      fontWeight: 400
+                    }}
+                  >
+                    Home
+                  </Link>
+                  <Link 
+                    component={RouterLink} 
+                    to="/services"
+                    color="inherit" 
+                    underline="none" 
+                    sx={{ 
+                      '&:hover': { color: RED_COLOR },
+                      fontFamily: BODY_FONT,
+                      fontSize: '16px',
+                      lineHeight: '29px',
+                      fontWeight: 400
+                    }}
+                  >
+                    Services
+                  </Link>
+                  <Link 
+                    component={RouterLink} 
+                    to="/about-us"
+                    color="inherit" 
+                    underline="none" 
+                    sx={{ 
+                      '&:hover': { color: RED_COLOR },
+                      fontFamily: BODY_FONT,
+                      fontSize: '16px',
+                      lineHeight: '29px',
+                      fontWeight: 400
+                    }}
+                  >
+                    About Us
+                  </Link>
+                  <Link 
+                    component={RouterLink} 
+                    to="/instant-quote"
+                    color="inherit" 
+                    underline="none" 
+                    sx={{ 
+                      color: RED_COLOR,
+                      '&:hover': { color: RED_COLOR },
+                      fontFamily: BODY_FONT,
+                      fontSize: '16px',
+                      lineHeight: '29px',
+                      fontWeight: 400
+                    }}
+                  >
+                    Instant Quote
+                  </Link>
+                  <Link 
+                    component={RouterLink} 
+                    to="/gallery"
+                    color="inherit" 
+                    underline="none" 
+                    sx={{ 
+                      '&:hover': { color: RED_COLOR },
+                      fontFamily: BODY_FONT,
+                      fontSize: '16px',
+                      lineHeight: '29px',
+                      fontWeight: 400
+                    }}
+                  >
+                    Gallery
+                  </Link>
+                  <Link 
+                    component={RouterLink} 
+                    to="/contact-us"
+                    color="inherit" 
+                    underline="none" 
+                    sx={{ 
+                      '&:hover': { color: RED_COLOR },
+                      fontFamily: BODY_FONT,
+                      fontSize: '16px',
+                      lineHeight: '29px',
+                      fontWeight: 400
+                    }}
+                  >
+                    Contact
+                  </Link>
+                </Stack>
+              </Box>
             )}
             
-            <Box sx={{ display: 'flex', ml: 'auto' }}>
+            {/* Get A Quote button on the right */}
+            <Box sx={{ display: 'flex', width: '20%', justifyContent: 'flex-end' }}>
               {!isMobile && (
                 <Button 
+                  variant="contained"
                   component={RouterLink}
-                  to="/instant-quote"
-                  variant="contained" 
+                  to="/instant-quote" 
                   sx={{ 
                     bgcolor: RED_COLOR, 
                     color: 'white',
                     textTransform: 'none',
-                    fontFamily: '"Circular Std Book", sans-serif',
+                    fontFamily: BODY_FONT,
                     fontWeight: 400,
                     fontSize: '15px',
                     borderRadius: '50px',
@@ -445,9 +526,9 @@ const InstantQuotePage = () => {
                   color="inherit"
                   aria-label="menu"
                   onClick={handleMenuOpen}
-                  sx={{ ml: 'auto' }}
+                  sx={{ color: 'white' }}
                 >
-                  <MenuIcon sx={{ color: 'white' }} />
+                  <MenuIcon />
                 </IconButton>
               )}
               
@@ -474,7 +555,7 @@ const InstantQuotePage = () => {
                   onClick={handleMenuClose}
                   sx={{ 
                     py: 1.5, 
-                    fontFamily: '"Circular Std Book", sans-serif'
+                    fontFamily: BODY_FONT
                   }}
                 >
                   Home
@@ -485,7 +566,7 @@ const InstantQuotePage = () => {
                   onClick={handleMenuClose}
                   sx={{ 
                     py: 1.5, 
-                    fontFamily: '"Circular Std Book", sans-serif'
+                    fontFamily: BODY_FONT
                   }}
                 >
                   Services
@@ -496,7 +577,7 @@ const InstantQuotePage = () => {
                   onClick={handleMenuClose}
                   sx={{ 
                     py: 1.5, 
-                    fontFamily: '"Circular Std Book", sans-serif'
+                    fontFamily: BODY_FONT
                   }}
                 >
                   About Us
@@ -507,7 +588,7 @@ const InstantQuotePage = () => {
                   onClick={handleMenuClose}
                   sx={{ 
                     py: 1.5, 
-                    fontFamily: '"Circular Std Book", sans-serif',
+                    fontFamily: BODY_FONT,
                     color: RED_COLOR
                   }}
                 >
@@ -519,26 +600,43 @@ const InstantQuotePage = () => {
                   onClick={handleMenuClose}
                   sx={{ 
                     py: 1.5, 
-                    fontFamily: '"Circular Std Book", sans-serif'
+                    fontFamily: BODY_FONT
                   }}
                 >
                   Gallery
                 </MenuItem>
                 <MenuItem 
                   component={RouterLink} 
-                  to="#" 
+                  to="/contact-us" 
                   onClick={handleMenuClose}
                   sx={{ 
                     py: 1.5, 
-                    fontFamily: '"Circular Std Book", sans-serif'
+                    fontFamily: BODY_FONT
                   }}
                 >
                   Contact
+                </MenuItem>
+                <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.1)' }} />
+                <MenuItem 
+                  component={RouterLink} 
+                  to="/instant-quote" 
+                  onClick={handleMenuClose}
+                  sx={{ 
+                    py: 1.5, 
+                    fontFamily: BODY_FONT,
+                    color: RED_COLOR,
+                    fontWeight: 'bold'
+                  }}
+                >
+                  Get a Quote
                 </MenuItem>
               </Menu>
             </Box>
           </Toolbar>
         </AppBar>
+        
+        {/* Add toolbar spacer to prevent content from being hidden under fixed AppBar */}
+        <Box sx={{ height: '64px' }} />
         
         <ContentSection>
           {/* Main content with full-width layout */}
@@ -549,16 +647,16 @@ const InstantQuotePage = () => {
                 fontWeight: 700,
                 mb: 2,
                 letterSpacing: '-0.5px',
-                fontFamily: '"Circular Std Bold", sans-serif',
+                fontFamily: '"Oswald", sans-serif',
               }}>
-                Get a Quote
+                GET INSTANT QUOTE
               </Typography>
               
               <Typography variant="body1" sx={{ 
                 opacity: 0.7,
                 maxWidth: 600,
                 mx: 'auto',
-                fontFamily: '"Circular Std Book", sans-serif',
+                fontFamily: '"Poppins", sans-serif',
               }}>
                 Fill out the form below to receive a custom quote for your transport needs. We'll get back to you within 24 hours.
               </Typography>
@@ -835,9 +933,10 @@ const InstantQuotePage = () => {
                 fontSize: '2rem',
                 fontWeight: 700,
                 mb: 4,
-                letterSpacing: '-0.5px'
+                letterSpacing: '-0.5px',
+                fontFamily: '"Oswald", sans-serif'
               }}>
-                Other Inquiries
+                OTHER INQUIRIES
               </Typography>
               
               <FormSection sx={{ maxWidth: '800px', mx: 'auto' }}>
@@ -923,7 +1022,7 @@ const InstantQuotePage = () => {
                     }} 
                   />
                 </Box>
-                <Typography variant="body2" sx={{ color: 'white', opacity: 0.8, mb: 3, fontFamily: '"Circular Std Book", sans-serif', fontWeight: 300 }}>
+                <Typography variant="body2" sx={{ color: 'white', opacity: 0.8, mb: 3, fontFamily: '"Poppins", sans-serif', fontWeight: 300 }}>
                   MOTEX Transport is a leading provider of logistics and transportation services across Australia, offering reliable and efficient solutions for businesses of all sizes.
                 </Typography>
                 
@@ -966,50 +1065,50 @@ const InstantQuotePage = () => {
               </Grid>
               
               <Grid item xs={12} sm={6} md={3}>
-                <Typography variant="h6" sx={{ color: 'white', mb: 2, fontFamily: '"Circular Std Bold", sans-serif', fontWeight: 'bold', fontSize: '20px' }}>
+                <Typography variant="h6" sx={{ color: 'white', mb: 2, fontFamily: '"Oswald", sans-serif', fontWeight: 'bold', fontSize: '20px' }}>
                   Quick Links
                 </Typography>
                 <Stack spacing={1}>
-                  <Link href="/" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: '"Circular Std Book", sans-serif', fontWeight: 300 }}>
+                  <Link href="/" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: '"Poppins", sans-serif', fontWeight: 300 }}>
                     Home
                   </Link>
-                  <Link href="/about-us" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: '"Circular Std Book", sans-serif', fontWeight: 300 }}>
+                  <Link href="/about-us" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: '"Poppins", sans-serif', fontWeight: 300 }}>
                     About Us
                   </Link>
-                  <Link href="#" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: '"Circular Std Book", sans-serif', fontWeight: 300 }}>
+                  <Link href="#" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: '"Poppins", sans-serif', fontWeight: 300 }}>
                     Services
                   </Link>
-                  <Link href="/instant-quote" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: '"Circular Std Book", sans-serif', fontWeight: 300 }}>
+                  <Link href="/instant-quote" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: '"Poppins", sans-serif', fontWeight: 300 }}>
                     Instant Quote
                   </Link>
-                  <Link href="/gallery" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: '"Circular Std Book", sans-serif', fontWeight: 300 }}>
+                  <Link href="/gallery" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: '"Poppins", sans-serif', fontWeight: 300 }}>
                     Gallery
                   </Link>
-                  <Link href="#" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: '"Circular Std Book", sans-serif', fontWeight: 300 }}>
+                  <Link href="#" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: '"Poppins", sans-serif', fontWeight: 300 }}>
                     Contact
                   </Link>
                 </Stack>
               </Grid>
               
               <Grid item xs={12} sm={6} md={4}>
-                <Typography variant="h6" sx={{ color: 'white', mb: 2, fontFamily: '"Circular Std Bold", sans-serif', fontWeight: 'bold', fontSize: '20px' }}>
+                <Typography variant="h6" sx={{ color: 'white', mb: 2, fontFamily: '"Oswald", sans-serif', fontWeight: 'bold', fontSize: '20px' }}>
                   Contact Information
                 </Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                   <LocationIcon sx={{ color: RED_COLOR, mr: 1.5 }} />
-                  <Typography variant="body2" sx={{ color: 'white', opacity: 0.8, fontFamily: '"Circular Std Book", sans-serif', fontWeight: 300 }}>
+                  <Typography variant="body2" sx={{ color: 'white', opacity: 0.8, fontFamily: '"Poppins", sans-serif', fontWeight: 300 }}>
                     123 Transport Way, Sydney, NSW 2000, Australia
                   </Typography>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                   <PhoneIcon sx={{ color: RED_COLOR, mr: 1.5 }} />
-                  <Typography variant="body2" sx={{ color: 'white', opacity: 0.8, fontFamily: '"Circular Std Book", sans-serif', fontWeight: 300 }}>
+                  <Typography variant="body2" sx={{ color: 'white', opacity: 0.8, fontFamily: '"Poppins", sans-serif', fontWeight: 300 }}>
                     +61 2 1234 5678
                   </Typography>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                   <EmailIcon sx={{ color: RED_COLOR, mr: 1.5 }} />
-                  <Typography variant="body2" sx={{ color: 'white', opacity: 0.8, fontFamily: '"Circular Std Book", sans-serif', fontWeight: 300 }}>
+                  <Typography variant="body2" sx={{ color: 'white', opacity: 0.8, fontFamily: '"Poppins", sans-serif', fontWeight: 300 }}>
                     info@motextransport.com.au
                   </Typography>
                 </Box>
@@ -1018,7 +1117,7 @@ const InstantQuotePage = () => {
             
             <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.1)', my: 4 }} />
             
-            <Typography variant="body2" align="center" sx={{ color: 'white', opacity: 0.7, fontFamily: '"Circular Std Book", sans-serif', fontWeight: 300 }}>
+            <Typography variant="body2" align="center" sx={{ color: 'white', opacity: 0.7, fontFamily: '"Poppins", sans-serif', fontWeight: 300 }}>
               © {new Date().getFullYear()} MOTEX Transport. All rights reserved.
             </Typography>
           </Container>

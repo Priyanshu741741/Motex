@@ -46,6 +46,10 @@ const PINK_RED = '#FF2992';
 const INPUT_BG = 'rgba(255, 255, 255, 0.05)';
 const ACCENT_COLOR = '#38BDF8';
 
+// Define fonts
+const HEADING_FONT = '"Oswald", sans-serif';
+const BODY_FONT = '"Poppins", sans-serif';
+
 // Styled components
 const PageWrapper = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -127,7 +131,7 @@ const FormLabel = styled(Typography)(({ theme }) => ({
   marginBottom: theme.spacing(1),
   textTransform: 'uppercase',
   letterSpacing: '1px',
-  fontFamily: '"Circular Std Book", sans-serif',
+  fontFamily: BODY_FONT,
 }));
 
 const ContactCard = styled(Paper)(({ theme }) => ({
@@ -288,54 +292,141 @@ const ContactUsPage = () => {
 
   return (
     <PageWrapper>
-      {/* Header */}
-      <AppBar position="static" color="transparent" elevation={0} sx={{ py: 1.5, backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
-        <Toolbar>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+      {/* Header - Updated to match landing page */}
+      <AppBar position="fixed" color="transparent" elevation={0} sx={{ py: 1, backgroundColor: 'rgba(0, 0, 0, 0.85)', backdropFilter: 'blur(8px)', zIndex: 1100 }}>
+        <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
+          {/* Logo on the left */}
+          <Box sx={{ display: 'flex', alignItems: 'center', width: '20%' }}>
             <Box 
-              component="img" 
-              src="/MOTEX+Logo.png" 
-              alt="MOTEX Logo" 
-              sx={{ height: 36 }} 
-            />
-          </Box>
-          
-          {/* Desktop menu */}
-          {!isMobile && (
-            <Stack 
-              direction="row" 
-              spacing={3} 
+              component={RouterLink}
+              to="/"
               sx={{ 
-                mx: 'auto', 
-                color: 'white', 
-                fontFamily: '"Circular Std Book", sans-serif', 
-                fontWeight: 300,
-                width: '100%',
-                justifyContent: 'center'
+                display: 'flex', 
+                alignItems: 'center',
+                textDecoration: 'none'
               }}
             >
-              <Link href="/" color="inherit" underline="none">
-                Home
-              </Link>
-              <Link href="/services" color="inherit" underline="none">
-                Services
-              </Link>
-              <Link href="/about-us" color="inherit" underline="none">
-                About Us
-              </Link>
-              <Link href="/instant-quote" color="inherit" underline="none">
-                Instant Quote
-              </Link>
-              <Link href="/gallery" color="inherit" underline="none">
-                Gallery
-              </Link>
-              <Link href="/contact-us" color="inherit" underline="none" sx={{ color: RED_COLOR }}>
-                Contact
-              </Link>
-            </Stack>
+              <Box 
+                component="img" 
+                src="/MOTEX+Logo.png" 
+                alt="MOTEX Logo" 
+                sx={{ height: 28 }} 
+              />
+            </Box>
+          </Box>
+          
+          {/* Desktop menu in the center */}
+          {!isMobile && (
+            <Box sx={{ display: 'flex', justifyContent: 'center', width: '60%' }}>
+              <Stack 
+                direction="row" 
+                spacing={3} 
+                sx={{ 
+                  color: 'white', 
+                  fontFamily: BODY_FONT, 
+                  fontWeight: 400,
+                  justifyContent: 'center',
+                  fontSize: '16px',
+                  lineHeight: '29px',
+                }}
+              >
+                <Link 
+                  component={RouterLink}
+                  to="/" 
+                  color="inherit" 
+                  underline="none" 
+                  sx={{ 
+                    '&:hover': { color: RED_COLOR },
+                    fontFamily: BODY_FONT,
+                    fontSize: '16px',
+                    lineHeight: '29px',
+                    fontWeight: 400
+                  }}
+                >
+                  Home
+                </Link>
+                <Link 
+                  component={RouterLink}
+                  to="/services"
+                  color="inherit" 
+                  underline="none" 
+                  sx={{ 
+                    '&:hover': { color: RED_COLOR },
+                    fontFamily: BODY_FONT,
+                    fontSize: '16px',
+                    lineHeight: '29px',
+                    fontWeight: 400
+                  }}
+                >
+                  Services
+                </Link>
+                <Link 
+                  component={RouterLink}
+                  to="/about-us"
+                  color="inherit" 
+                  underline="none" 
+                  sx={{ 
+                    '&:hover': { color: RED_COLOR },
+                    fontFamily: BODY_FONT,
+                    fontSize: '16px',
+                    lineHeight: '29px',
+                    fontWeight: 400
+                  }}
+                >
+                  About Us
+                </Link>
+                <Link 
+                  component={RouterLink}
+                  to="/instant-quote"
+                  color="inherit" 
+                  underline="none" 
+                  sx={{ 
+                    '&:hover': { color: RED_COLOR },
+                    fontFamily: BODY_FONT,
+                    fontSize: '16px',
+                    lineHeight: '29px',
+                    fontWeight: 400
+                  }}
+                >
+                  Instant Quote
+                </Link>
+                <Link 
+                  component={RouterLink}
+                  to="/gallery"
+                  color="inherit" 
+                  underline="none" 
+                  sx={{ 
+                    '&:hover': { color: RED_COLOR },
+                    fontFamily: BODY_FONT,
+                    fontSize: '16px',
+                    lineHeight: '29px',
+                    fontWeight: 400
+                  }}
+                >
+                  Gallery
+                </Link>
+                <Link 
+                  component={RouterLink}
+                  to="/contact-us"
+                  color="inherit" 
+                  underline="none" 
+                  sx={{ 
+                    color: RED_COLOR,
+                    '&:hover': { color: RED_COLOR },
+                    fontFamily: BODY_FONT,
+                    fontSize: '16px',
+                    lineHeight: '29px',
+                    fontWeight: 400
+                  }}
+                >
+                  Contact
+                </Link>
+              </Stack>
+            </Box>
           )}
           
-          <Box sx={{ display: 'flex', ml: 'auto' }}>
+          {/* Get A Quote button on the right */}
+          <Box sx={{ display: 'flex', width: '20%', justifyContent: 'flex-end' }}>
             {!isMobile && (
               <Button 
                 component={RouterLink}
@@ -345,7 +436,7 @@ const ContactUsPage = () => {
                   bgcolor: RED_COLOR, 
                   color: 'white',
                   textTransform: 'none',
-                  fontFamily: '"Circular Std Book", sans-serif',
+                  fontFamily: BODY_FONT,
                   fontWeight: 400,
                   fontSize: '15px',
                   borderRadius: '50px',
@@ -372,9 +463,9 @@ const ContactUsPage = () => {
                 color="inherit"
                 aria-label="menu"
                 onClick={handleMenuOpen}
-                sx={{ ml: 'auto' }}
+                sx={{ color: 'white' }}
               >
-                <MenuIcon sx={{ color: 'white' }} />
+                <MenuIcon />
               </IconButton>
             )}
             
@@ -401,7 +492,7 @@ const ContactUsPage = () => {
                 onClick={handleMenuClose}
                 sx={{ 
                   py: 1.5, 
-                  fontFamily: '"Circular Std Book", sans-serif'
+                  fontFamily: BODY_FONT
                 }}
               >
                 Home
@@ -412,7 +503,7 @@ const ContactUsPage = () => {
                 onClick={handleMenuClose}
                 sx={{ 
                   py: 1.5, 
-                  fontFamily: '"Circular Std Book", sans-serif'
+                  fontFamily: BODY_FONT
                 }}
               >
                 Services
@@ -423,7 +514,7 @@ const ContactUsPage = () => {
                 onClick={handleMenuClose}
                 sx={{ 
                   py: 1.5, 
-                  fontFamily: '"Circular Std Book", sans-serif'
+                  fontFamily: BODY_FONT
                 }}
               >
                 About Us
@@ -434,7 +525,7 @@ const ContactUsPage = () => {
                 onClick={handleMenuClose}
                 sx={{ 
                   py: 1.5, 
-                  fontFamily: '"Circular Std Book", sans-serif'
+                  fontFamily: BODY_FONT
                 }}
               >
                 Instant Quote
@@ -445,7 +536,7 @@ const ContactUsPage = () => {
                 onClick={handleMenuClose}
                 sx={{ 
                   py: 1.5, 
-                  fontFamily: '"Circular Std Book", sans-serif'
+                  fontFamily: BODY_FONT
                 }}
               >
                 Gallery
@@ -456,16 +547,33 @@ const ContactUsPage = () => {
                 onClick={handleMenuClose}
                 sx={{ 
                   py: 1.5, 
-                  fontFamily: '"Circular Std Book", sans-serif',
+                  fontFamily: BODY_FONT,
                   color: RED_COLOR
                 }}
               >
                 Contact
               </MenuItem>
+              <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.1)' }} />
+              <MenuItem 
+                component={RouterLink} 
+                to="/instant-quote" 
+                onClick={handleMenuClose}
+                sx={{ 
+                  py: 1.5, 
+                  fontFamily: BODY_FONT,
+                  color: RED_COLOR,
+                  fontWeight: 'bold'
+                }}
+              >
+                Get a Quote
+              </MenuItem>
             </Menu>
           </Box>
         </Toolbar>
       </AppBar>
+      
+      {/* Add toolbar spacer */}
+      <Box sx={{ height: '64px' }} />
 
       {/* Hero Section */}
       <HeroSection>
@@ -483,7 +591,7 @@ const ContactUsPage = () => {
                 color: 'white', 
                 fontWeight: 700, 
                 mb: 2,
-                fontFamily: '"Circular Std Bold", sans-serif',
+                fontFamily: HEADING_FONT,
                 fontSize: { xs: '2.5rem', md: '3.5rem' }
               }}
             >
@@ -495,7 +603,7 @@ const ContactUsPage = () => {
                 color: 'rgba(255, 255, 255, 0.8)', 
                 maxWidth: '800px', 
                 mx: 'auto',
-                fontFamily: '"Circular Std Book", sans-serif',
+                fontFamily: BODY_FONT,
                 fontWeight: 300,
                 fontSize: { xs: '1rem', md: '1.2rem' }
               }}
@@ -522,7 +630,7 @@ const ContactUsPage = () => {
                     variant="h4" 
                     sx={{ 
                       mb: 4, 
-                      fontFamily: '"Circular Std Bold", sans-serif',
+                      fontFamily: HEADING_FONT,
                       fontWeight: 700 
                     }}
                   >
@@ -636,7 +744,7 @@ const ContactUsPage = () => {
                     variant="h4" 
                     sx={{ 
                       mb: 4, 
-                      fontFamily: '"Circular Std Bold", sans-serif',
+                      fontFamily: HEADING_FONT,
                       fontWeight: 700 
                     }}
                   >
@@ -651,10 +759,10 @@ const ContactUsPage = () => {
                         <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 2 }}>
                           <LocationIcon sx={{ color: RED_COLOR, mr: 2, fontSize: 28 }} />
                           <Box>
-                            <Typography variant="h6" sx={{ mb: 1, fontFamily: '"Circular Std Bold", sans-serif' }}>
+                            <Typography variant="h6" sx={{ mb: 1, fontFamily: HEADING_FONT }}>
                               Our Location
                             </Typography>
-                            <Typography variant="body1" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: '"Circular Std Book", sans-serif' }}>
+                            <Typography variant="body1" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: BODY_FONT }}>
                               123 Transport Way, Sydney, NSW 2000, Australia
                             </Typography>
                           </Box>
@@ -669,10 +777,10 @@ const ContactUsPage = () => {
                         <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 2 }}>
                           <PhoneIcon sx={{ color: RED_COLOR, mr: 2, fontSize: 28 }} />
                           <Box>
-                            <Typography variant="h6" sx={{ mb: 1, fontFamily: '"Circular Std Bold", sans-serif' }}>
+                            <Typography variant="h6" sx={{ mb: 1, fontFamily: HEADING_FONT }}>
                               Phone Number
                             </Typography>
-                            <Typography variant="body1" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: '"Circular Std Book", sans-serif' }}>
+                            <Typography variant="body1" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: BODY_FONT }}>
                               +61 2 1234 5678
                             </Typography>
                           </Box>
@@ -687,10 +795,10 @@ const ContactUsPage = () => {
                         <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 2 }}>
                           <EmailIcon sx={{ color: RED_COLOR, mr: 2, fontSize: 28 }} />
                           <Box>
-                            <Typography variant="h6" sx={{ mb: 1, fontFamily: '"Circular Std Bold", sans-serif' }}>
+                            <Typography variant="h6" sx={{ mb: 1, fontFamily: HEADING_FONT }}>
                               Email Address
                             </Typography>
-                            <Typography variant="body1" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: '"Circular Std Book", sans-serif' }}>
+                            <Typography variant="body1" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: BODY_FONT }}>
                               info@motextransport.com.au
                             </Typography>
                           </Box>
@@ -706,7 +814,7 @@ const ContactUsPage = () => {
                         sx={{ 
                           mt: 2, 
                           mb: 3, 
-                          fontFamily: '"Circular Std Bold", sans-serif',
+                          fontFamily: HEADING_FONT,
                           fontWeight: 600 
                         }}
                       >
@@ -765,7 +873,7 @@ const ContactUsPage = () => {
                 variant="h4" 
                 sx={{ 
                   mb: 4, 
-                  fontFamily: '"Circular Std Bold", sans-serif',
+                  fontFamily: HEADING_FONT,
                   fontWeight: 700 
                 }}
               >
@@ -802,7 +910,7 @@ const ContactUsPage = () => {
                   }} 
                 />
               </Box>
-              <Typography variant="body2" sx={{ color: 'white', opacity: 0.8, mb: 3, fontFamily: '"Circular Std Book", sans-serif', fontWeight: 300 }}>
+              <Typography variant="body2" sx={{ color: 'white', opacity: 0.8, mb: 3, fontFamily: BODY_FONT, fontWeight: 300 }}>
                 MOTEX Transport is a leading provider of logistics and transportation services across Australia, offering reliable and efficient solutions for businesses of all sizes.
               </Typography>
               
@@ -845,50 +953,50 @@ const ContactUsPage = () => {
             </Grid>
             
             <Grid item xs={12} sm={6} md={3}>
-              <Typography variant="h6" sx={{ color: 'white', mb: 2, fontFamily: '"Circular Std Bold", sans-serif', fontWeight: 'bold', fontSize: '20px' }}>
+              <Typography variant="h6" sx={{ color: 'white', mb: 2, fontFamily: HEADING_FONT, fontWeight: 'bold', fontSize: '20px' }}>
                 Quick Links
               </Typography>
               <Stack spacing={1}>
-                <Link href="/" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: '"Circular Std Book", sans-serif', fontWeight: 300 }}>
+                <Link href="/" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: BODY_FONT, fontWeight: 300 }}>
                   Home
                 </Link>
-                <Link href="/about-us" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: '"Circular Std Book", sans-serif', fontWeight: 300 }}>
+                <Link href="/about-us" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: BODY_FONT, fontWeight: 300 }}>
                   About Us
                 </Link>
-                <Link href="#" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: '"Circular Std Book", sans-serif', fontWeight: 300 }}>
+                <Link href="/services" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: BODY_FONT, fontWeight: 300 }}>
                   Services
                 </Link>
-                <Link href="/instant-quote" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: '"Circular Std Book", sans-serif', fontWeight: 300 }}>
+                <Link href="/instant-quote" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: BODY_FONT, fontWeight: 300 }}>
                   Instant Quote
                 </Link>
-                <Link href="/gallery" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: '"Circular Std Book", sans-serif', fontWeight: 300 }}>
+                <Link href="/gallery" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: BODY_FONT, fontWeight: 300 }}>
                   Gallery
                 </Link>
-                <Link href="/contact-us" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: '"Circular Std Book", sans-serif', fontWeight: 300 }}>
+                <Link href="/contact-us" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: BODY_FONT, fontWeight: 300 }}>
                   Contact
                 </Link>
               </Stack>
             </Grid>
             
             <Grid item xs={12} sm={6} md={4}>
-              <Typography variant="h6" sx={{ color: 'white', mb: 2, fontFamily: '"Circular Std Bold", sans-serif', fontWeight: 'bold', fontSize: '20px' }}>
+              <Typography variant="h6" sx={{ color: 'white', mb: 2, fontFamily: HEADING_FONT, fontWeight: 'bold', fontSize: '20px' }}>
                 Contact Information
               </Typography>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                 <LocationIcon sx={{ color: RED_COLOR, mr: 1.5 }} />
-                <Typography variant="body2" sx={{ color: 'white', opacity: 0.8, fontFamily: '"Circular Std Book", sans-serif', fontWeight: 300 }}>
+                <Typography variant="body2" sx={{ color: 'white', opacity: 0.8, fontFamily: BODY_FONT, fontWeight: 300 }}>
                   123 Transport Way, Sydney, NSW 2000, Australia
                 </Typography>
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                 <PhoneIcon sx={{ color: RED_COLOR, mr: 1.5 }} />
-                <Typography variant="body2" sx={{ color: 'white', opacity: 0.8, fontFamily: '"Circular Std Book", sans-serif', fontWeight: 300 }}>
+                <Typography variant="body2" sx={{ color: 'white', opacity: 0.8, fontFamily: BODY_FONT, fontWeight: 300 }}>
                   +61 2 1234 5678
                 </Typography>
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                 <EmailIcon sx={{ color: RED_COLOR, mr: 1.5 }} />
-                <Typography variant="body2" sx={{ color: 'white', opacity: 0.8, fontFamily: '"Circular Std Book", sans-serif', fontWeight: 300 }}>
+                <Typography variant="body2" sx={{ color: 'white', opacity: 0.8, fontFamily: BODY_FONT, fontWeight: 300 }}>
                   info@motextransport.com.au
                 </Typography>
               </Box>
@@ -897,7 +1005,7 @@ const ContactUsPage = () => {
           
           <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.1)', my: 4 }} />
           
-          <Typography variant="body2" align="center" sx={{ color: 'white', opacity: 0.7, fontFamily: '"Circular Std Book", sans-serif', fontWeight: 300 }}>
+          <Typography variant="body2" align="center" sx={{ color: 'white', opacity: 0.7, fontFamily: BODY_FONT, fontWeight: 300 }}>
             © {new Date().getFullYear()} MOTEX Transport. All rights reserved.
           </Typography>
         </Container>
