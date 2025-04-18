@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Motex Transport - Quote Request Confirmation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style type="text/css">
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+      background-color: #f5f5f5;
+      color: #333333;
+    }
+    .email-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #000000;
+      color: #ffffff;
+    }
+    .header {
+      background-color: #000000;
+      padding: 20px;
+      text-align: center;
+      border-bottom: 3px solid #DE1F27;
+    }
+    .logo-text {
+      font-family: 'Arial', sans-serif;
+      color: #ffffff;
+      font-size: 28px;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+    .logo-highlight {
+      color: #DE1F27;
+    }
+    .content {
+      padding: 30px 20px;
+      background-color: #0A0A0A;
+    }
+    .footer {
+      background-color: #000000;
+      padding: 20px;
+      text-align: center;
+      font-size: 12px;
+      color: #aaaaaa;
+      border-top: 1px solid #222222;
+    }
+    h1 {
+      color: #ffffff;
+      margin: 0 0 20px 0;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    p {
+      margin: 0 0 15px 0;
+      line-height: 1.5;
+    }
+    .highlight {
+      color: #DE1F27;
+      font-weight: bold;
+    }
+    .details-box {
+      background-color: rgba(255, 255, 255, 0.05);
+      border-left: 3px solid #DE1F27;
+      padding: 15px;
+      margin: 20px 0;
+    }
+    .details-item {
+      margin-bottom: 10px;
+    }
+    .details-label {
+      font-weight: bold;
+      color: #DE1F27;
+    }
+    .details-value {
+      color: #ffffff;
+    }
+    .button {
+      display: inline-block;
+      background-color: #DE1F27;
+      color: #ffffff;
+      text-decoration: none;
+      padding: 12px 25px;
+      border-radius: 4px;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+    .social-icons {
+      margin-top: 20px;
+    }
+    .social-icon {
+      display: inline-block;
+      margin: 0 5px;
+    }
+    .contact-info {
+      margin-top: 20px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="email-container">
+    <div class="header">
+      <div class="logo-text">MOTEX <span class="logo-highlight">TRANSPORT</span></div>
+    </div>
+    
+    <div class="content">
+      <h1>Quote Request Confirmation</h1>
+      
+      <p>Dear {{to_name}},</p>
+      
+      <p>Thank you for submitting your quote request with <span class="highlight">Motex Transport</span>. We have received your details and our team will review your requirements promptly.</p>
+      
+      <div class="details-box">
+        <div class="details-item">
+          <span class="details-label">Service/Mode:</span>
+          <span class="details-value">{{service_mode}}</span>
+        </div>
+        
+        <div class="details-item">
+          <span class="details-label">Pickup Location:</span>
+          <span class="details-value">{{pickup_suburb}}</span>
+        </div>
+        
+        <div class="details-item">
+          <span class="details-label">Delivery Location:</span>
+          <span class="details-value">{{delivery_suburb}}</span>
+        </div>
+        
+        <div class="details-item">
+          <span class="details-label">Preferred Date:</span>
+          <span class="details-value">{{date}}</span>
+        </div>
+        
+        <div class="details-item">
+          <span class="details-label">Preferred Time:</span>
+          <span class="details-value">{{time}}</span>
+        </div>
+        
+        <div class="details-item">
+          <span class="details-label">Items Description:</span>
+          <span class="details-value">{{goods_description}}</span>
+        </div>
+        
+        <div class="details-item">
+          <span class="details-label">Size (L x W x H):</span>
+          <span class="details-value">{{size}}</span>
+        </div>
+      </div>
+      
+      <p>Our team will contact you within <span class="highlight">24 hours</span> with a personalized quote based on your requirements. If you have any urgent questions in the meantime, please don't hesitate to contact us.</p>
+      
+      <p>Thank you for choosing Motex Transport for your delivery needs.</p>
+      
+      <a href="https://motextransport.com.au" class="button">Visit Our Website</a>
+      
+      <div class="contact-info">
+        <p><strong>Contact Us:</strong><br>
+        Email: info@motextransport.com.au<br>
+        Phone: 0404 494 006</p>
+      </div>
+      
+      <div class="social-icons">
+        <a href="https://instagram.com/motextransport" class="social-icon"><img src="https://cdn-icons-png.flaticon.com/128/1384/1384063.png" width="24" height="24" alt="Instagram"></a>
+        <a href="https://linkedin.com/company/motextransport" class="social-icon"><img src="https://cdn-icons-png.flaticon.com/128/3536/3536505.png" width="24" height="24" alt="LinkedIn"></a>
+        <a href="https://wa.me/61404494006" class="social-icon"><img src="https://cdn-icons-png.flaticon.com/128/733/733585.png" width="24" height="24" alt="WhatsApp"></a>
+      </div>
+    </div>
+    
+    <div class="footer">
+      <p>&copy; 2023 Motex Transport. All rights reserved.</p>
+      <p>This email was sent to {{to_email}} because you submitted a quote request on our website.</p>
+    </div>
+  </div>
+</body>
+</html> 

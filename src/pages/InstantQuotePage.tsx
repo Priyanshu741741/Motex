@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   Box, 
   Typography, 
@@ -17,7 +17,10 @@ import {
   IconButton,
   Menu,
   MenuItem,
-  Divider
+  Divider,
+  Dialog,
+  DialogContent,
+  DialogActions
 } from '@mui/material';
 import emailjs from '@emailjs/browser';
 import { styled } from '@mui/material/styles';
@@ -32,17 +35,15 @@ import LocationIcon from '@mui/icons-material/LocationOn';
 import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
 import MenuIcon from '@mui/icons-material/Menu';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import { useLocation } from 'react-router-dom';
 
 // Define colors
 const DARK_BG = '#0A0A0A';
-const DARKER_BG = '#050505';
 const WHITE_TEXT = '#FFFFFF';
 const ACCENT_COLOR = '#38BDF8';
 const INPUT_BG = 'rgba(255, 255, 255, 0.05)';
-const BUTTON_BG = 'rgba(255, 255, 255, 0.1)';
 const RED_COLOR = '#DE1F27';
-const PINK_RED = '#FF2992';
-const BLUE_COLOR = '#0078ff';
 
 // Define fonts
 const HEADING_FONT = '"Oswald", sans-serif';
@@ -87,6 +88,10 @@ const StyledInput = styled('input')(({ theme }) => ({
   },
   '&::placeholder': {
     color: 'rgba(255, 255, 255, 0.4)',
+  },
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '13px',
+    padding: '10px 14px',
   }
 }));
 
@@ -108,6 +113,11 @@ const StyledTextarea = styled('textarea')(({ theme }) => ({
   },
   '&::placeholder': {
     color: 'rgba(255, 255, 255, 0.4)',
+  },
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '13px',
+    padding: '10px 14px',
+    minHeight: '80px',
   }
 }));
 
@@ -117,6 +127,10 @@ const FormLabel = styled(Typography)(({ theme }) => ({
   marginBottom: theme.spacing(1),
   fontFamily: '"Poppins", sans-serif',
   fontWeight: 500,
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '13px',
+    marginBottom: theme.spacing(0.5),
+  }
 }));
 
 const SubmitButton = styled(Button)(({ theme }) => ({
@@ -138,6 +152,10 @@ const SubmitButton = styled(Button)(({ theme }) => ({
   '&.Mui-disabled': {
     backgroundColor: 'rgba(222, 31, 39, 0.5)',
     color: 'rgba(255, 255, 255, 0.7)',
+  },
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '14px',
+    padding: '10px 20px',
   }
 }));
 
@@ -146,10 +164,10 @@ const CalendarWrapper = styled(Box)(({ theme }) => ({
     color: WHITE_TEXT,
   },
   '& .MuiPickersDay-today': {
-    borderColor: ACCENT_COLOR,
+    borderColor: RED_COLOR,
   },
   '& .MuiPickersDay-daySelected': {
-    backgroundColor: ACCENT_COLOR,
+    backgroundColor: RED_COLOR,
     color: WHITE_TEXT,
   },
   '& .MuiPickersCalendarHeader-switchHeader': {
@@ -167,6 +185,37 @@ const CalendarWrapper = styled(Box)(({ theme }) => ({
   '& .MuiPaper-root': {
     backgroundColor: DARK_BG,
     border: '1px solid rgba(255, 255, 255, 0.1)',
+    borderRadius: '8px',
+    overflow: 'hidden',
+  },
+  '& .MuiDialogActions-root': {
+    backgroundColor: DARK_BG,
+    color: WHITE_TEXT,
+  },
+  '& .MuiButton-root': {
+    color: WHITE_TEXT,
+    '&:hover': {
+      backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    },
+  },
+  '& .MuiDialog-paper': {
+    backgroundImage: 'none',
+    backgroundColor: DARK_BG,
+  },
+  '& .MuiYearCalendar-root': {
+    backgroundColor: DARK_BG,
+    color: WHITE_TEXT,
+  },
+  '& .MuiPickersYear-yearButton': {
+    color: WHITE_TEXT,
+    '&.Mui-selected': {
+      backgroundColor: RED_COLOR,
+      color: WHITE_TEXT,
+    },
+  },
+  '& .MuiPickersToolbar-root': {
+    backgroundColor: DARK_BG,
+    color: WHITE_TEXT,
   },
 }));
 
@@ -175,11 +224,19 @@ const FormSection = styled(Box)(({ theme }) => ({
 }));
 
 const InstantQuotePage = () => {
+  const location = useLocation();
+  const { state } = location;
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [loading, setLoading] = useState(false);
+  const [successDialogOpen, setSuccessDialogOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -194,7 +251,8 @@ const InstantQuotePage = () => {
     last_name: '',
     email: '',
     goods_description: '',
-    size: 'Small',
+    size: '',
+    service_mode: state?.selectedService || 'Parcel Delivery',
     pickup_suburb: '',
     pickup_access: 'Ground Floor',
     delivery_suburb: '',
@@ -252,6 +310,7 @@ const InstantQuotePage = () => {
           time: formData.time,
           goods_description: formData.goods_description,
           size: formData.size,
+          service_mode: formData.service_mode,
           message: 'Thank you for your quote request. Our team will review it and get back to you within 24 hours.'
         },
         'L45k8LVh0pmGbMV6d'
@@ -268,6 +327,7 @@ const InstantQuotePage = () => {
           email: formData.email,
           goods_description: formData.goods_description,
           size: formData.size,
+          service_mode: formData.service_mode,
           pickup_suburb: formData.pickup_suburb,
           pickup_access: formData.pickup_access,
           delivery_suburb: formData.delivery_suburb,
@@ -286,7 +346,9 @@ const InstantQuotePage = () => {
       );
   
       console.log('Form submitted:', formData);
-      alert('Thank you for your quote request! We will get back to you shortly.');
+      
+      // Open the success dialog instead of alert
+      setSuccessDialogOpen(true);
       
       // Reset form
       setFormData({
@@ -294,7 +356,8 @@ const InstantQuotePage = () => {
         last_name: '',
         email: '',
         goods_description: '',
-        size: 'Small',
+        size: '',
+        service_mode: 'Parcel Delivery',
         pickup_suburb: '',
         pickup_access: 'Ground Floor',
         delivery_suburb: '',
@@ -315,41 +378,8 @@ const InstantQuotePage = () => {
     }
   };
 
-  const handleInquirySubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    
-    try {
-      await emailjs.send(
-        'service_hbi58cx',
-        'template_eghqznh',
-        {
-          first_name: formData.inquiry_name,
-          email: formData.inquiry_email,
-          message: formData.inquiry_message,
-          form_data: JSON.stringify({
-            name: formData.inquiry_name,
-            email: formData.inquiry_email,
-            message: formData.inquiry_message
-          }, null, 2),
-          submission_time: new Date().toLocaleString(),
-        },
-        'L45k8LVh0pmGbMV6d'
-      );
-      
-      alert('Your inquiry has been submitted successfully!');
-      setFormData({
-        ...formData,
-        inquiry_name: '',
-        inquiry_email: '',
-        inquiry_message: ''
-      });
-    } catch (error) {
-      console.error('Error submitting inquiry:', error);
-      alert('There was an error submitting your inquiry. Please try again.');
-    } finally {
-      setLoading(false);
-    }
+  const handleCloseSuccessDialog = () => {
+    setSuccessDialogOpen(false);
   };
 
   return (
@@ -641,11 +671,11 @@ const InstantQuotePage = () => {
         <ContentSection>
           {/* Main content with full-width layout */}
           <Box sx={{ width: '100%', maxWidth: '1400px', mx: 'auto', px: { xs: 2, sm: 4 } }}>
-            <Box sx={{ textAlign: 'center', mb: 6 }}>
+            <Box sx={{ textAlign: 'center', mb: { xs: 4, md: 6 } }}>
               <Typography variant="h2" component="h1" sx={{ 
-                fontSize: { xs: '2.5rem', md: '3rem' },
+                fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' },
                 fontWeight: 700,
-                mb: 2,
+                mb: { xs: 1, md: 2 },
                 letterSpacing: '-0.5px',
                 fontFamily: '"Oswald", sans-serif',
               }}>
@@ -657,16 +687,17 @@ const InstantQuotePage = () => {
                 maxWidth: 600,
                 mx: 'auto',
                 fontFamily: '"Poppins", sans-serif',
+                fontSize: { xs: '0.85rem', sm: '0.9rem', md: '1rem' },
               }}>
                 Fill out the form below to receive a custom quote for your transport needs. We'll get back to you within 24 hours.
               </Typography>
             </Box>
             
-            <FormSection>
+            <FormSection sx={{ mb: { xs: 4, md: 6 } }}>
               <form onSubmit={handleSubmit}>
-                <Grid container spacing={3}>
-                  {/* Name Fields */}
-                  <Grid item xs={12} sm={6}>
+                <Grid container spacing={{ xs: 2, md: 3 }}>
+                  {/* Name Fields - side by side even on mobile */}
+                  <Grid item xs={6} sm={6}>
                     <FormLabel>First Name</FormLabel>
                     <StyledInput
                       name="first_name"
@@ -677,7 +708,7 @@ const InstantQuotePage = () => {
                     />
                   </Grid>
                   
-                  <Grid item xs={12} sm={6}>
+                  <Grid item xs={6} sm={6}>
                     <FormLabel>Last Name</FormLabel>
                     <StyledInput
                       name="last_name"
@@ -713,20 +744,106 @@ const InstantQuotePage = () => {
                     />
                   </Grid>
                   
-                  {/* Size & Weight */}
+                  {/* Service/Mode Selection */}
                   <Grid item xs={12}>
-                    <FormLabel>Size & Weight</FormLabel>
+                    <FormLabel>Service</FormLabel>
+                    <RadioGroup
+                      name="service_mode"
+                      value={formData.service_mode}
+                      onChange={handleChange}
+                      sx={{ 
+                        display: 'grid', 
+                        gridTemplateColumns: { 
+                          xs: '1fr 1fr', 
+                          sm: '1fr 1fr', 
+                          md: '1fr 1fr 1fr' 
+                        }, 
+                        gap: { xs: 0.5, sm: 1 }
+                      }}
+                    >
+                      <FormControlLabel 
+                        value="Parcel Delivery" 
+                        control={<Radio size={isMobile ? "small" : "medium"} />} 
+                        label="Parcel Delivery" 
+                        sx={{ 
+                          color: 'rgba(255, 255, 255, 0.8)',
+                          '.MuiFormControlLabel-label': {
+                            fontSize: { xs: '0.8rem', sm: '0.9rem', md: '1rem' }
+                          }
+                        }}
+                      />
+                      <FormControlLabel 
+                        value="Fragile Freight" 
+                        control={<Radio size={isMobile ? "small" : "medium"} />} 
+                        label="Fragile Freight" 
+                        sx={{ 
+                          color: 'rgba(255, 255, 255, 0.8)',
+                          '.MuiFormControlLabel-label': {
+                            fontSize: { xs: '0.8rem', sm: '0.9rem', md: '1rem' }
+                          }
+                        }}
+                      />
+                      <FormControlLabel 
+                        value="Interstate Delivery" 
+                        control={<Radio size={isMobile ? "small" : "medium"} />} 
+                        label="Interstate Delivery" 
+                        sx={{ 
+                          color: 'rgba(255, 255, 255, 0.8)',
+                          '.MuiFormControlLabel-label': {
+                            fontSize: { xs: '0.8rem', sm: '0.9rem', md: '1rem' }
+                          }
+                        }}
+                      />
+                      <FormControlLabel 
+                        value="Door to Door Service" 
+                        control={<Radio size={isMobile ? "small" : "medium"} />} 
+                        label="Door to Door Service" 
+                        sx={{ 
+                          color: 'rgba(255, 255, 255, 0.8)',
+                          '.MuiFormControlLabel-label': {
+                            fontSize: { xs: '0.8rem', sm: '0.9rem', md: '1rem' }
+                          }
+                        }}
+                      />
+                      <FormControlLabel 
+                        value="Same Day Delivery" 
+                        control={<Radio size={isMobile ? "small" : "medium"} />} 
+                        label="Same Day Delivery" 
+                        sx={{ 
+                          color: 'rgba(255, 255, 255, 0.8)',
+                          '.MuiFormControlLabel-label': {
+                            fontSize: { xs: '0.8rem', sm: '0.9rem', md: '1rem' }
+                          }
+                        }}
+                      />
+                      <FormControlLabel 
+                        value="Chauffeur" 
+                        control={<Radio size={isMobile ? "small" : "medium"} />} 
+                        label="Chauffeur" 
+                        sx={{ 
+                          color: 'rgba(255, 255, 255, 0.8)',
+                          '.MuiFormControlLabel-label': {
+                            fontSize: { xs: '0.8rem', sm: '0.9rem', md: '1rem' }
+                          }
+                        }}
+                      />
+                    </RadioGroup>
+                  </Grid>
+                  
+                  {/* Size (L x W x H) in CM */}
+                  <Grid item xs={12}>
+                    <FormLabel>Size (L x W x H) in CM</FormLabel>
                     <StyledInput
                       name="size"
                       value={formData.size}
                       onChange={handleChange}
-                      placeholder="e.g. Small, Medium, Large"
+                      placeholder="e.g. 30 x 20 x 15"
                       required
                     />
                   </Grid>
                   
-                  {/* Pickup Suburb */}
-                  <Grid item xs={12} sm={6}>
+                  {/* Pickup and Delivery Suburbs - side by side even on mobile */}
+                  <Grid item xs={6}>
                     <FormLabel>Pickup Suburb</FormLabel>
                     <StyledInput
                       name="pickup_suburb"
@@ -737,8 +854,7 @@ const InstantQuotePage = () => {
                     />
                   </Grid>
                   
-                  {/* Delivery Suburb */}
-                  <Grid item xs={12} sm={6}>
+                  <Grid item xs={6}>
                     <FormLabel>Delivery Suburb</FormLabel>
                     <StyledInput
                       name="delivery_suburb"
@@ -752,6 +868,18 @@ const InstantQuotePage = () => {
                   {/* Pickup Access */}
                   <Grid item xs={12} sm={6}>
                     <FormLabel>Pickup Access</FormLabel>
+                    <Typography 
+                      variant="caption" 
+                      sx={{ 
+                        display: 'block', 
+                        mb: { xs: 0.5, md: 1.5 }, 
+                        color: 'rgba(255, 255, 255, 0.6)',
+                        fontFamily: BODY_FONT,
+                        fontSize: { xs: '0.7rem', sm: '0.75rem', md: '0.8rem' }
+                      }}
+                    >
+                      If pickup location is not on ground floor, please include the information under 'Other Info' field below.
+                    </Typography>
                     <RadioGroup
                       name="pickup_access"
                       value={formData.pickup_access}
@@ -760,15 +888,26 @@ const InstantQuotePage = () => {
                     >
                       <FormControlLabel 
                         value="Ground Floor" 
-                        control={<Radio size="small" />} 
+                        control={<Radio size={isMobile ? "small" : "medium"} />} 
                         label="Ground floor" 
-                        sx={{ color: 'rgba(255, 255, 255, 0.8)', mr: 3 }}
+                        sx={{ 
+                          color: 'rgba(255, 255, 255, 0.8)', 
+                          mr: 3,
+                          '.MuiFormControlLabel-label': {
+                            fontSize: { xs: '0.8rem', sm: '0.9rem', md: '1rem' }
+                          }
+                        }}
                       />
                       <FormControlLabel 
                         value="Stairs" 
-                        control={<Radio size="small" />} 
+                        control={<Radio size={isMobile ? "small" : "medium"} />} 
                         label="Stairs" 
-                        sx={{ color: 'rgba(255, 255, 255, 0.8)' }}
+                        sx={{ 
+                          color: 'rgba(255, 255, 255, 0.8)',
+                          '.MuiFormControlLabel-label': {
+                            fontSize: { xs: '0.8rem', sm: '0.9rem', md: '1rem' }
+                          }
+                        }}
                       />
                     </RadioGroup>
                   </Grid>
@@ -776,6 +915,18 @@ const InstantQuotePage = () => {
                   {/* Delivery Access */}
                   <Grid item xs={12} sm={6}>
                     <FormLabel>Delivery Access</FormLabel>
+                    <Typography 
+                      variant="caption" 
+                      sx={{ 
+                        display: 'block', 
+                        mb: { xs: 0.5, md: 1.5 }, 
+                        color: 'rgba(255, 255, 255, 0.6)',
+                        fontFamily: BODY_FONT,
+                        fontSize: { xs: '0.7rem', sm: '0.75rem', md: '0.8rem' }
+                      }}
+                    >
+                      If delivery location is not on ground floor, please include the information under 'Other Info' field below.
+                    </Typography>
                     <RadioGroup
                       name="delivery_access"
                       value={formData.delivery_access}
@@ -784,21 +935,32 @@ const InstantQuotePage = () => {
                     >
                       <FormControlLabel 
                         value="Ground Floor" 
-                        control={<Radio size="small" />} 
+                        control={<Radio size={isMobile ? "small" : "medium"} />} 
                         label="Ground floor" 
-                        sx={{ color: 'rgba(255, 255, 255, 0.8)', mr: 3 }}
+                        sx={{ 
+                          color: 'rgba(255, 255, 255, 0.8)', 
+                          mr: 3,
+                          '.MuiFormControlLabel-label': {
+                            fontSize: { xs: '0.8rem', sm: '0.9rem', md: '1rem' }
+                          }
+                        }}
                       />
                       <FormControlLabel 
                         value="Stairs" 
-                        control={<Radio size="small" />} 
+                        control={<Radio size={isMobile ? "small" : "medium"} />} 
                         label="Stairs" 
-                        sx={{ color: 'rgba(255, 255, 255, 0.8)' }}
+                        sx={{ 
+                          color: 'rgba(255, 255, 255, 0.8)',
+                          '.MuiFormControlLabel-label': {
+                            fontSize: { xs: '0.8rem', sm: '0.9rem', md: '1rem' }
+                          }
+                        }}
                       />
                     </RadioGroup>
                   </Grid>
                   
-                  {/* Date */}
-                  <Grid item xs={12} sm={6}>
+                  {/* Date and Time - side by side on all screen sizes */}
+                  <Grid item xs={6}>
                     <FormLabel>Date</FormLabel>
                     <CalendarWrapper sx={{ 
                       backgroundColor: INPUT_BG,
@@ -817,8 +979,33 @@ const InstantQuotePage = () => {
                             variant: "outlined",
                             sx: {
                               '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
-                              '& .MuiInputBase-input': { color: WHITE_TEXT, py: 1.5 },
+                              '& .MuiInputBase-input': { 
+                                color: WHITE_TEXT, 
+                                py: { xs: 1, md: 1.5 },
+                                fontSize: { xs: '0.8rem', sm: '0.9rem', md: '1rem' }
+                              },
                               '& .MuiSvgIcon-root': { color: WHITE_TEXT }
+                            }
+                          },
+                          actionBar: {
+                            actions: ['cancel', 'accept'],
+                            sx: {
+                              '& .MuiButton-root': {
+                                color: WHITE_TEXT,
+                                '&:hover': {
+                                  backgroundColor: 'rgba(255, 255, 255, 0.1)'
+                                }
+                              }
+                            }
+                          },
+                          popper: {
+                            sx: {
+                              '& .MuiPaper-root': {
+                                backgroundColor: DARK_BG,
+                                border: '1px solid rgba(255, 255, 255, 0.1)',
+                                borderRadius: '8px',
+                                overflow: 'hidden'
+                              }
                             }
                           }
                         }}
@@ -826,19 +1013,71 @@ const InstantQuotePage = () => {
                     </CalendarWrapper>
                   </Grid>
                   
-                  {/* Time - Simplified version */}
-                  <Grid item xs={12} sm={6}>
+                  <Grid item xs={6}>
                     <FormLabel>Time</FormLabel>
                     <Box sx={{ 
                       backgroundColor: INPUT_BG,
                       borderRadius: '4px',
                       '& .MuiInputBase-root': { color: WHITE_TEXT },
-                      '& .MuiOutlinedInput-notchedOutline': { border: 'none' }
+                      '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
+                      '& .MuiPaper-root': { backgroundColor: DARK_BG },
+                      '& .MuiClock-pin': { backgroundColor: RED_COLOR },
+                      '& .MuiClockPointer-root': { backgroundColor: RED_COLOR },
+                      '& .MuiClockPointer-thumb': { 
+                        backgroundColor: RED_COLOR, 
+                        borderColor: RED_COLOR 
+                      },
+                      '& .MuiClock-clock': { 
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.5)'
+                      },
+                      '& .MuiTypography-root': { color: WHITE_TEXT },
+                      '& .MuiButtonBase-root': { color: WHITE_TEXT },
+                      '& .MuiClockNumber-root': { 
+                        color: WHITE_TEXT,
+                        '&.Mui-disabled': {
+                          color: 'rgba(255, 255, 255, 0.3)'
+                        }
+                      },
+                      '& .MuiClockNumber-root.Mui-selected': { 
+                        backgroundColor: RED_COLOR,
+                        color: WHITE_TEXT
+                      },
+                      '& .MuiPickersDay-root.Mui-selected': {
+                        backgroundColor: RED_COLOR
+                      },
+                      '& .MuiPickersDay-root:hover': {
+                        backgroundColor: 'rgba(222, 31, 39, 0.2)'
+                      },
+                      '& .MuiPickersLayout-root': {
+                        backgroundColor: DARK_BG,
+                        color: WHITE_TEXT,
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        borderRadius: '8px',
+                        overflow: 'hidden'
+                      },
+                      '& .MuiDialog-paper': {
+                        backgroundImage: 'none',
+                        backgroundColor: DARK_BG
+                      },
+                      '& .MuiPickersCalendarHeader-root': {
+                        color: WHITE_TEXT
+                      }
                     }}>
                       <TimePicker
                         value={formData.time ? dayjs(`2023-01-01T${formData.time}`) : null}
                         onChange={(time) => handleTimeChange(time)}
-                        ampm={true}
+                        ampm={false}
+                        closeOnSelect
+                        skipDisabled
+                        minutesStep={5}
+                        timeSteps={{ minutes: 5 }}
+                        localeText={{ 
+                          toolbarTitle: "Select Time", 
+                          cancelButtonLabel: "Cancel", 
+                          okButtonLabel: "Confirm" 
+                        }}
                         slotProps={{
                           textField: {
                             placeholder: "Select time",
@@ -847,8 +1086,52 @@ const InstantQuotePage = () => {
                             variant: "outlined",
                             sx: {
                               '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
-                              '& .MuiInputBase-input': { color: WHITE_TEXT, py: 1.5 },
+                              '& .MuiInputBase-input': { 
+                                color: WHITE_TEXT, 
+                                py: { xs: 1, md: 1.5 },
+                                fontSize: { xs: '0.8rem', sm: '0.9rem', md: '1rem' }
+                              },
                               '& .MuiSvgIcon-root': { color: WHITE_TEXT }
+                            }
+                          },
+                          actionBar: {
+                            actions: ['cancel', 'accept'],
+                            sx: {
+                              '& .MuiButton-root': {
+                                color: WHITE_TEXT,
+                                '&:hover': {
+                                  backgroundColor: 'rgba(255, 255, 255, 0.1)'
+                                }
+                              }
+                            }
+                          },
+                          toolbar: {
+                            sx: {
+                              backgroundColor: DARK_BG,
+                              color: WHITE_TEXT,
+                              '& .MuiTypography-root': {
+                                color: WHITE_TEXT
+                              }
+                            }
+                          },
+                          digitalClockItem: {
+                            sx: {
+                              color: WHITE_TEXT,
+                              '&.Mui-selected': {
+                                backgroundColor: RED_COLOR,
+                                color: WHITE_TEXT
+                              }
+                            }
+                          },
+                          popper: {
+                            sx: {
+                              zIndex: 1300,
+                              '& .MuiPaper-root': {
+                                backgroundColor: DARK_BG,
+                                border: '1px solid rgba(255, 255, 255, 0.1)',
+                                borderRadius: '8px',
+                                overflow: 'hidden'
+                              }
                             }
                           }
                         }}
@@ -867,15 +1150,26 @@ const InstantQuotePage = () => {
                     >
                       <FormControlLabel 
                         value="true" 
-                        control={<Radio size="small" />} 
+                        control={<Radio size={isMobile ? "small" : "medium"} />} 
                         label="Yes" 
-                        sx={{ color: 'rgba(255, 255, 255, 0.8)', mr: 3 }}
+                        sx={{ 
+                          color: 'rgba(255, 255, 255, 0.8)', 
+                          mr: 3,
+                          '.MuiFormControlLabel-label': {
+                            fontSize: { xs: '0.8rem', sm: '0.9rem', md: '1rem' }
+                          }
+                        }}
                       />
                       <FormControlLabel 
                         value="false" 
-                        control={<Radio size="small" />} 
+                        control={<Radio size={isMobile ? "small" : "medium"} />} 
                         label="No" 
-                        sx={{ color: 'rgba(255, 255, 255, 0.8)' }}
+                        sx={{ 
+                          color: 'rgba(255, 255, 255, 0.8)',
+                          '.MuiFormControlLabel-label': {
+                            fontSize: { xs: '0.8rem', sm: '0.9rem', md: '1rem' }
+                          }
+                        }}
                       />
                     </RadioGroup>
                   </Grid>
@@ -892,7 +1186,7 @@ const InstantQuotePage = () => {
                   </Grid>
                 </Grid>
                 
-                <Box sx={{ mt: 4, maxWidth: '400px', mx: 'auto' }}>
+                <Box sx={{ mt: { xs: 3, md: 4 }, maxWidth: { xs: '100%', sm: '400px' }, mx: 'auto' }}>
                   <SubmitButton 
                     type="submit"
                     disabled={loading}
@@ -926,140 +1220,72 @@ const InstantQuotePage = () => {
                 </Box>
               </form>
             </FormSection> 
-            
-            {/* Other Inquiries Section */}
-            <Box sx={{ mt: 8, mb: 4 }}>
-              <Typography variant="h4" align="center" sx={{ 
-                fontSize: '2rem',
-                fontWeight: 700,
-                mb: 4,
-                letterSpacing: '-0.5px',
-                fontFamily: '"Oswald", sans-serif'
-              }}>
-                OTHER INQUIRIES
-              </Typography>
-              
-              <FormSection sx={{ maxWidth: '800px', mx: 'auto' }}>
-                <form onSubmit={handleInquirySubmit}>
-                  <Grid container spacing={3}>
-                    <Grid item xs={12} md={6}>
-                      <FormLabel>Name</FormLabel>
-                      <StyledInput
-                        name="inquiry_name"
-                        value={formData.inquiry_name}
-                        onChange={handleChange}
-                        placeholder="Your name"
-                        required
-                      />
-                    </Grid>
-                    
-                    <Grid item xs={12} md={6}>
-                      <FormLabel>Email</FormLabel>
-                      <StyledInput
-                        name="inquiry_email"
-                        type="email"
-                        value={formData.inquiry_email}
-                        onChange={handleChange}
-                        placeholder="Your email"
-                        required
-                      />
-                    </Grid>
-                    
-                    <Grid item xs={12}>
-                      <FormLabel>Message</FormLabel>
-                      <StyledTextarea
-                        name="inquiry_message"
-                        value={formData.inquiry_message}
-                        onChange={handleChange}
-                        placeholder="Your message"
-                        required
-                      />
-                    </Grid>
-                  </Grid>
-                  
-                  <Box sx={{ mt: 4, maxWidth: '400px', mx: 'auto' }}>
-                    <SubmitButton 
-                      type="submit"
-                      disabled={loading}
-                      sx={{
-                        position: 'relative',
-                        overflow: 'hidden',
-                        ...(loading && {
-                          '&::after': {
-                            content: '""',
-                            position: 'absolute',
-                            top: 0,
-                            left: 0,
-                            width: '30%',
-                            height: '100%',
-                            backgroundColor: 'rgba(255, 255, 255, 0.3)',
-                            animation: 'loading 1.5s infinite',
-                          }
-                        })
-                      }}
-                    >
-                      {loading ? 'Submitting...' : 'Send Message'}
-                    </SubmitButton>
-                  </Box>
-                </form>
-              </FormSection>
-            </Box>
           </Box>
         </ContentSection>
           
-        {/* Footer - Kept as is */}
-        <Box sx={{ bgcolor: '#000000', py: 6 }}>
+        {/* Footer - Updated for mobile responsiveness */}
+        <Box sx={{ bgcolor: '#000000', py: { xs: 4, md: 6 } }}>
           <Container maxWidth="lg">
-            <Grid container spacing={4}>
+            <Grid container spacing={{ xs: 3, md: 4 }}>
               <Grid item xs={12} md={5}>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: { xs: 2, md: 3 } }}>
                   <Box 
                     component="img" 
                     src="/MOTEX+Logo.png" 
                     alt="MOTEX Logo" 
                     sx={{ 
-                      height: 40, 
+                      height: { xs: 32, md: 40 }, 
                     }} 
                   />
                 </Box>
-                <Typography variant="body2" sx={{ color: 'white', opacity: 0.8, mb: 3, fontFamily: '"Poppins", sans-serif', fontWeight: 300 }}>
+                <Typography variant="body2" sx={{ 
+                  color: 'white', 
+                  opacity: 0.8, 
+                  mb: { xs: 2, md: 3 }, 
+                  fontFamily: '"Poppins", sans-serif', 
+                  fontWeight: 300,
+                  fontSize: { xs: '0.8rem', sm: '0.85rem', md: '0.875rem' }
+                }}>
                   MOTEX Transport is a leading provider of logistics and transportation services across Australia, offering reliable and efficient solutions for businesses of all sizes.
                 </Typography>
                 
                 {/* Social Media Icons */}
-                <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
+                <Stack direction="row" spacing={2} sx={{ mt: { xs: 1, md: 2 } }}>
                   <IconButton 
                     sx={{ 
                       color: 'white', 
                       backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                      '&:hover': { backgroundColor: RED_COLOR }
+                      '&:hover': { backgroundColor: RED_COLOR },
+                      padding: { xs: '6px', md: '8px' },
                     }}
                     component="a"
                     href="#instagram"
                   >
-                    <InstagramIcon />
+                    <InstagramIcon sx={{ fontSize: { xs: '1.2rem', md: '1.5rem' } }} />
                   </IconButton>
                   <IconButton 
                     sx={{ 
                       color: 'white', 
                       backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                      '&:hover': { backgroundColor: RED_COLOR }
+                      '&:hover': { backgroundColor: RED_COLOR },
+                      padding: { xs: '6px', md: '8px' },
                     }}
                     component="a"
                     href="#linkedin"
                   >
-                    <LinkedInIcon />
+                    <LinkedInIcon sx={{ fontSize: { xs: '1.2rem', md: '1.5rem' } }} />
                   </IconButton>
                   <IconButton 
                     sx={{ 
                       color: 'white', 
                       backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                      '&:hover': { backgroundColor: RED_COLOR }
+                      '&:hover': { backgroundColor: RED_COLOR },
+                      padding: { xs: '6px', md: '8px' },
                     }}
                     component="a"
                     href="#whatsapp"
                   >
-                    <WhatsAppIcon />
+                    <WhatsAppIcon sx={{ fontSize: { xs: '1.2rem', md: '1.5rem' } }} />
                   </IconButton>
                 </Stack>
               </Grid>
@@ -1115,13 +1341,77 @@ const InstantQuotePage = () => {
               </Grid>
             </Grid>
             
-            <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.1)', my: 4 }} />
+            <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.1)', my: { xs: 3, md: 4 } }} />
             
-            <Typography variant="body2" align="center" sx={{ color: 'white', opacity: 0.7, fontFamily: '"Poppins", sans-serif', fontWeight: 300 }}>
+            <Typography variant="body2" align="center" sx={{ 
+              color: 'white', 
+              opacity: 0.7, 
+              fontFamily: '"Poppins", sans-serif', 
+              fontWeight: 300,
+              fontSize: { xs: '0.75rem', sm: '0.8rem', md: '0.875rem' }
+            }}>
               © {new Date().getFullYear()} MOTEX Transport. All rights reserved.
             </Typography>
           </Container>
         </Box>
+        
+        {/* Success Dialog - Updated for mobile */}
+        <Dialog 
+          open={successDialogOpen} 
+          onClose={handleCloseSuccessDialog}
+          PaperProps={{
+            sx: {
+              backgroundColor: DARK_BG,
+              borderRadius: '8px',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              color: WHITE_TEXT,
+              maxWidth: { xs: '300px', sm: '400px' },
+              width: '100%'
+            }
+          }}
+        >
+          <DialogContent sx={{ textAlign: 'center', py: { xs: 3, md: 4 } }}>
+            <CheckCircleOutlineIcon sx={{ color: RED_COLOR, fontSize: { xs: 50, md: 60 }, mb: { xs: 1, md: 2 } }} />
+            <Typography variant="h5" sx={{ 
+              mb: { xs: 1, md: 2 },
+              fontFamily: HEADING_FONT,
+              fontWeight: 'bold',
+              fontSize: { xs: '1.2rem', md: '1.5rem' }
+            }}>
+              Thank You!
+            </Typography>
+            <Typography sx={{ 
+              mb: { xs: 2, md: 3 },
+              fontFamily: BODY_FONT,
+              fontSize: { xs: '0.85rem', md: '1rem' }
+            }}>
+              Your request has been submitted successfully. We'll get back to you within 24 hours.
+            </Typography>
+          </DialogContent>
+          <DialogActions sx={{ p: { xs: 1.5, md: 2 }, justifyContent: 'center' }}>
+            <Button 
+              onClick={handleCloseSuccessDialog}
+              sx={{
+                backgroundColor: RED_COLOR,
+                color: 'white',
+                padding: { xs: '8px 20px', md: '10px 24px' },
+                borderRadius: '50px',
+                textTransform: 'none',
+                fontFamily: BODY_FONT,
+                fontWeight: 400,
+                fontSize: { xs: '0.85rem', md: '0.95rem' },
+                minWidth: { xs: '100px', md: '130px' },
+                boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)',
+                '&:hover': {
+                  backgroundColor: '#c41922',
+                  boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.25)'
+                }
+              }}
+            >
+              Got it
+            </Button>
+          </DialogActions>
+        </Dialog>
       </PageWrapper>
     </LocalizationProvider>
   );

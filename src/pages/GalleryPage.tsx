@@ -9,19 +9,18 @@ import {
   Container,
   AppBar,
   Toolbar,
-  Modal,
   IconButton,
   useMediaQuery,
   useTheme,
   Divider,
-  Menu,
-  MenuItem
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { motion } from 'framer-motion';
-import CloseIcon from '@mui/icons-material/Close';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
@@ -29,6 +28,7 @@ import LocationIcon from '@mui/icons-material/LocationOn';
 import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
 import MenuIcon from '@mui/icons-material/Menu';
+import CloseIcon from '@mui/icons-material/Close';
 import { Link as RouterLink } from 'react-router-dom';
 
 // Define colors
@@ -36,7 +36,6 @@ const DARK_BG = '#0A0A0A';
 const DARKER_BG = '#050505';
 const WHITE_TEXT = '#FFFFFF';
 const RED_COLOR = '#DE1F27';
-const PINK_RED = '#FF2992';
 
 // Define fonts
 const HEADING_FONT = '"Oswald", sans-serif';
@@ -50,15 +49,6 @@ const PageWrapper = styled(Box)(({ theme }) => ({
   width: '100%',
   position: 'relative',
   backgroundColor: DARKER_BG,
-}));
-
-const LogoText = styled(Typography)(({ theme }) => ({
-  fontFamily: HEADING_FONT,
-  fontSize: '22px',
-  fontWeight: 700,
-  letterSpacing: '-0.01em',
-  marginLeft: '8px',
-  color: 'white'
 }));
 
 const ContentSection = styled(Box)(({ theme }) => ({
@@ -75,15 +65,14 @@ const GalleryItem = styled(motion.div)(({ theme }) => ({
   position: 'relative',
   borderRadius: '8px',
   overflow: 'hidden',
-  cursor: 'pointer',
   height: 0,
   paddingBottom: '70%', // Aspect ratio
   boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
   transition: 'transform 0.3s, box-shadow 0.3s',
   '&:hover': {
     boxShadow: '0 10px 30px rgba(0, 0, 0, 0.5)',
-    '& .overlay': {
-      opacity: 1,
+    '& img': {
+      transform: 'scale(1.05)',
     }
   },
 }));
@@ -97,58 +86,6 @@ const GalleryImage = styled('img')({
   objectFit: 'cover',
   transition: 'transform 0.5s ease',
 });
-
-const ImageOverlay = styled(Box)({
-  position: 'absolute',
-  bottom: 0,
-  left: 0,
-  right: 0,
-  backgroundColor: 'rgba(0, 0, 0, 0.7)',
-  backdropFilter: 'blur(5px)',
-  padding: '15px',
-  transform: 'translateY(100%)',
-  transition: 'transform 0.3s ease-in-out, opacity 0.3s ease',
-  opacity: 0,
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'flex-start',
-});
-
-const ModalContent = styled(Box)(({ theme }) => ({
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: '90%',
-  maxWidth: 1000,
-  backgroundColor: DARKER_BG,
-  borderRadius: '8px',
-  boxShadow: '0 10px 40px rgba(0, 0, 0, 0.5)',
-  padding: theme.spacing(2),
-  outline: 'none',
-  display: 'flex',
-  flexDirection: 'column',
-}));
-
-const ModalImage = styled('img')({
-  width: '100%',
-  height: 'auto',
-  maxHeight: 'calc(100vh - 200px)',
-  objectFit: 'contain',
-  marginBottom: '16px',
-});
-
-const NavButton = styled(IconButton)(({ theme }) => ({
-  backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  color: WHITE_TEXT,
-  position: 'absolute',
-  top: '50%',
-  transform: 'translateY(-50%)',
-  zIndex: 10,
-  '&:hover': {
-    backgroundColor: RED_COLOR,
-  },
-}));
 
 const galleryItems = [
   { 
@@ -165,13 +102,13 @@ const galleryItems = [
   },
   { 
     id: 3, 
-    src: '/gallery 9.jpg', 
+    src: '/PHOTO-2025-03-22-21-36-54_1.jpg', 
     title: 'Reliable Transportation', 
     description: 'Our freight vehicles ready for deployment in various conditions.'
   },
   { 
     id: 4, 
-    src: '/gallery 4.jpg', 
+    src: '/PHOTO-2025-03-22-21-36-58.jpg', 
     title: 'Vehicle Fleet', 
     description: 'Our range of transport solutions parked at our logistics center.'
   },
@@ -217,15 +154,20 @@ const galleryItems = [
     title: 'Commercial Van Fleet', 
     description: 'Our fleet of commercial vans ready for urban delivery operations.'
   },
+  { 
+    id: 12, 
+    src: '/gallery 9.jpg', 
+    title: 'Reliable Transportation', 
+    description: 'Our freight vehicles ready for deployment in various conditions.'
+  }
  
 ];
 
 const GalleryPage = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const [selectedImage, setSelectedImage] = useState<number | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     // Set loaded after a short delay to trigger animations
@@ -234,28 +176,6 @@ const GalleryPage = () => {
     }, 100);
     return () => clearTimeout(timer);
   }, []);
-
-  const handleOpen = (id: number) => {
-    setSelectedImage(id);
-  };
-
-  const handleClose = () => {
-    setSelectedImage(null);
-  };
-
-  const handleNext = () => {
-    if (selectedImage === null) return;
-    const nextIndex = (selectedImage % galleryItems.length) + 1;
-    setSelectedImage(nextIndex);
-  };
-
-  const handlePrev = () => {
-    if (selectedImage === null) return;
-    const prevIndex = selectedImage === 1 ? galleryItems.length : selectedImage - 1;
-    setSelectedImage(prevIndex);
-  };
-
-  const selectedItem = selectedImage !== null ? galleryItems.find(item => item.id === selectedImage) : null;
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -276,14 +196,6 @@ const GalleryPage = () => {
         duration: 0.5
       }
     }
-  };
-
-  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  
-  const handleMenuClose = () => {
-    setAnchorEl(null);
   };
 
   return (
@@ -425,9 +337,9 @@ const GalleryPage = () => {
           <Box sx={{ display: 'flex', width: '20%', justifyContent: 'flex-end' }}>
             {!isMobile && (
               <Button 
+                variant="contained"
                 component={RouterLink}
-                to="/instant-quote"
-                variant="contained" 
+                to="/instant-quote" 
                 sx={{ 
                   bgcolor: RED_COLOR, 
                   color: 'white',
@@ -458,259 +370,73 @@ const GalleryPage = () => {
                 edge="end"
                 color="inherit"
                 aria-label="menu"
-                onClick={handleMenuOpen}
+                onClick={() => setIsMobileMenuOpen(true)}
                 sx={{ color: 'white' }}
               >
                 <MenuIcon />
               </IconButton>
             )}
-            
-            {/* Mobile menu */}
-            <Menu
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={handleMenuClose}
-              PaperProps={{
-                sx: {
-                  backgroundColor: 'rgba(0, 0, 0, 0.9)',
-                  color: 'white',
-                  width: '200px',
-                  mt: 2,
-                  borderRadius: '8px',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
-                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
-                }
-              }}
-            >
-              <MenuItem 
-                component={RouterLink} 
-                to="/" 
-                onClick={handleMenuClose}
-                sx={{ 
-                  py: 1.5, 
-                  fontFamily: BODY_FONT
-                }}
-              >
-                Home
-              </MenuItem>
-              <MenuItem 
-                component={RouterLink} 
-                to="/services" 
-                onClick={handleMenuClose}
-                sx={{ 
-                  py: 1.5, 
-                  fontFamily: BODY_FONT
-                }}
-              >
-                Services
-              </MenuItem>
-              <MenuItem 
-                component={RouterLink} 
-                to="/about-us" 
-                onClick={handleMenuClose}
-                sx={{ 
-                  py: 1.5, 
-                  fontFamily: BODY_FONT
-                }}
-              >
-                About Us
-              </MenuItem>
-              <MenuItem 
-                component={RouterLink} 
-                to="/instant-quote" 
-                onClick={handleMenuClose}
-                sx={{ 
-                  py: 1.5, 
-                  fontFamily: BODY_FONT
-                }}
-              >
-                Instant Quote
-              </MenuItem>
-              <MenuItem 
-                component={RouterLink} 
-                to="/gallery" 
-                onClick={handleMenuClose}
-                sx={{ 
-                  py: 1.5, 
-                  fontFamily: BODY_FONT,
-                  color: RED_COLOR
-                }}
-              >
-                Gallery
-              </MenuItem>
-              <MenuItem 
-                component={RouterLink} 
-                to="/contact-us" 
-                onClick={handleMenuClose}
-                sx={{ 
-                  py: 1.5, 
-                  fontFamily: BODY_FONT
-                }}
-              >
-                Contact
-              </MenuItem>
-              <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.1)' }} />
-              <MenuItem 
-                component={RouterLink} 
-                to="/instant-quote" 
-                onClick={handleMenuClose}
-                sx={{ 
-                  py: 1.5, 
-                  fontFamily: BODY_FONT,
-                  color: RED_COLOR,
-                  fontWeight: 'bold'
-                }}
-              >
-                Get a Quote
-              </MenuItem>
-            </Menu>
           </Box>
         </Toolbar>
       </AppBar>
       
-      {/* Add toolbar spacer */}
+      {/* Add toolbar spacer to prevent content from being hidden under fixed AppBar */}
       <Box sx={{ height: '64px' }} />
       
       <ContentSection>
-        <Container maxWidth="lg" sx={{ py: 6 }}>
-          <Typography 
-            variant="h2" 
-            component="h1" 
-            sx={{ 
-              fontSize: { xs: '3rem', md: '4.5rem' },
-              fontWeight: 700,
-              mb: 2,
-              letterSpacing: '2px',
-              textAlign: 'center',
-              color: RED_COLOR,
-              fontFamily: HEADING_FONT,
-            }}
-          >
-            OUR FLEET GALLERY
-          </Typography>
+        <Container maxWidth="lg" sx={{ py: 8 }}>
+          <Box sx={{ textAlign: 'center', mb: 6 }}>
+            <Typography 
+              variant="h2" 
+              component="h1" 
+              sx={{ 
+                fontSize: { xs: '2rem', sm: '2.5rem', md: '3.5rem' },
+                fontWeight: 700,
+                mb: { xs: 1, md: 2 },
+                fontFamily: HEADING_FONT,
+              }}
+            >
+              OUR FLEET GALLERY
+            </Typography>
+            <Typography 
+              variant="body1" 
+              sx={{ 
+                opacity: 0.8,
+                maxWidth: 650,
+                mx: 'auto',
+                fontFamily: BODY_FONT,
+                fontSize: { xs: '0.85rem', sm: '0.95rem', md: '1rem' },
+                px: { xs: 2, md: 0 }
+              }}
+            >
+              Explore our fleet of vehicles and get a glimpse of our transport operations. Our modern equipment ensures your goods are in safe hands from pickup to delivery.
+            </Typography>
+          </Box>
           
-          <Typography 
-            variant="body1" 
-            sx={{ 
-              opacity: 0.7,
-              mb: 6,
-              textAlign: 'center',
-              maxWidth: 700,
-              mx: 'auto',
-              fontFamily: BODY_FONT,
-            }}
-          >
-            Explore our diverse fleet of vehicles available for all your transportation and logistics needs. From small vans to large trucks, we have the right vehicle for every job.
-          </Typography>
-          
-          <Box 
-            component={motion.div}
+          <motion.div
             variants={containerVariants}
             initial="hidden"
             animate={isLoaded ? "visible" : "hidden"}
           >
-            <Grid container spacing={3}>
+            <Grid container spacing={{ xs: 2, sm: 3, md: 3 }}>
               {galleryItems.map((item) => (
-                <Grid item xs={12} sm={6} md={4} key={item.id}>
-                  <GalleryItem 
-                    variants={itemVariants}
-                    whileHover={{ scale: 1.03 }}
-                    onClick={() => handleOpen(item.id)}
-                  >
-                    <GalleryImage src={item.src} alt={item.title} />
-                    <ImageOverlay className="overlay">
-                      <Typography variant="h6" sx={{ 
-                        fontWeight: 700, 
-                        mb: 1,
-                        color: WHITE_TEXT,
-                        fontFamily: HEADING_FONT,
-                      }}>
-                        {item.title}
-                      </Typography>
-                      <Typography variant="body2" sx={{ 
-                        color: 'rgba(255, 255, 255, 0.8)',
-                        fontFamily: BODY_FONT,
-                      }}>
-                        {item.description}
-                      </Typography>
-                    </ImageOverlay>
-                  </GalleryItem>
+                <Grid item xs={6} sm={6} md={4} key={item.id}>
+                  <motion.div variants={itemVariants}>
+                    <GalleryItem sx={{ 
+                      paddingBottom: { xs: '85%', sm: '75%', md: '70%' },
+                      mb: { xs: 1, md: 2 }
+                    }}>
+                      <GalleryImage src={item.src} alt={item.title} />
+                    </GalleryItem>
+                  </motion.div>
                 </Grid>
               ))}
             </Grid>
-          </Box>
-          
-          {/* Image Modal */}
-          <Modal
-            open={selectedImage !== null}
-            onClose={handleClose}
-            aria-labelledby="image-modal"
-            aria-describedby="enlarged image view"
-          >
-            <ModalContent>
-              <Box sx={{ position: 'relative' }}>
-                <IconButton 
-                  onClick={handleClose}
-                  sx={{ 
-                    position: 'absolute', 
-                    right: -10, 
-                    top: -10, 
-                    backgroundColor: RED_COLOR,
-                    color: 'white',
-                    zIndex: 10,
-                    '&:hover': {
-                      backgroundColor: PINK_RED,
-                    }
-                  }}
-                >
-                  <CloseIcon />
-                </IconButton>
-                
-                {selectedItem && (
-                  <>
-                    <NavButton 
-                      onClick={handlePrev}
-                      sx={{ left: 10 }}
-                    >
-                      <ChevronLeftIcon />
-                    </NavButton>
-                    
-                    <NavButton 
-                      onClick={handleNext}
-                      sx={{ right: 10 }}
-                    >
-                      <ChevronRightIcon />
-                    </NavButton>
-                    
-                    <Box component={motion.div} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                      <ModalImage 
-                        src={selectedItem.src} 
-                        alt={selectedItem.title} 
-                      />
-                      <Typography variant="h5" sx={{ 
-                        color: WHITE_TEXT,
-                        fontWeight: 700,
-                        mb: 1,
-                        fontFamily: HEADING_FONT,
-                      }}>
-                        {selectedItem.title}
-                      </Typography>
-                      <Typography variant="body1" sx={{ 
-                        color: 'rgba(255, 255, 255, 0.8)',
-                        fontFamily: BODY_FONT,
-                      }}>
-                        {selectedItem.description}
-                      </Typography>
-                    </Box>
-                  </>
-                )}
-              </Box>
-            </ModalContent>
-          </Modal>
+          </motion.div>
         </Container>
       </ContentSection>
-       
-      {/* Footer - Updated to match landing page */}
+      
+      {/* Footer */}
       <Box sx={{ bgcolor: '#000000', py: 6 }}>
         <Container maxWidth="lg">
           <Grid container spacing={4}>
@@ -725,7 +451,14 @@ const GalleryPage = () => {
                   }} 
                 />
               </Box>
-              <Typography variant="body2" sx={{ color: 'white', opacity: 0.8, mb: 3, fontFamily: BODY_FONT, fontWeight: 300 }}>
+              <Typography variant="body2" sx={{ 
+                color: 'white', 
+                opacity: 0.8, 
+                mb: 3, 
+                fontFamily: BODY_FONT, 
+                fontWeight: 300,
+                fontSize: { xs: '0.8rem', sm: '0.85rem', md: '0.875rem' } 
+              }}>
                 MOTEX Transport is a leading provider of logistics and transportation services across Australia, offering reliable and efficient solutions for businesses of all sizes.
               </Typography>
               
@@ -768,50 +501,110 @@ const GalleryPage = () => {
             </Grid>
             
             <Grid item xs={12} sm={6} md={3}>
-              <Typography variant="h6" sx={{ color: 'white', mb: 2, fontFamily: HEADING_FONT, fontWeight: 'bold', fontSize: '20px' }}>
+              <Typography variant="h6" sx={{ 
+                color: 'white', 
+                mb: 2, 
+                fontFamily: HEADING_FONT, 
+                fontWeight: 'bold', 
+                fontSize: { xs: '1rem', sm: '1.2rem', md: '1.25rem' } 
+              }}>
                 Quick Links
               </Typography>
               <Stack spacing={1}>
-                <Link href="/" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: BODY_FONT, fontWeight: 300 }}>
+                <Link component={RouterLink} to="/" color="inherit" underline="hover" sx={{ 
+                  color: 'rgba(255, 255, 255, 0.8)', 
+                  fontFamily: BODY_FONT, 
+                  fontWeight: 300,
+                  fontSize: { xs: '0.8rem', sm: '0.85rem', md: '0.875rem' } 
+                }}>
                   Home
                 </Link>
-                <Link href="/about-us" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: BODY_FONT, fontWeight: 300 }}>
+                <Link component={RouterLink} to="/about-us" color="inherit" underline="hover" sx={{ 
+                  color: 'rgba(255, 255, 255, 0.8)', 
+                  fontFamily: BODY_FONT, 
+                  fontWeight: 300,
+                  fontSize: { xs: '0.8rem', sm: '0.85rem', md: '0.875rem' } 
+                }}>
                   About Us
                 </Link>
-                <Link href="/services" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: BODY_FONT, fontWeight: 300 }}>
+                <Link component={RouterLink} to="/services" color="inherit" underline="hover" sx={{ 
+                  color: 'rgba(255, 255, 255, 0.8)', 
+                  fontFamily: BODY_FONT, 
+                  fontWeight: 300,
+                  fontSize: { xs: '0.8rem', sm: '0.85rem', md: '0.875rem' } 
+                }}>
                   Services
                 </Link>
-                <Link href="/instant-quote" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: BODY_FONT, fontWeight: 300 }}>
+                <Link component={RouterLink} to="/instant-quote" color="inherit" underline="hover" sx={{ 
+                  color: 'rgba(255, 255, 255, 0.8)', 
+                  fontFamily: BODY_FONT, 
+                  fontWeight: 300,
+                  fontSize: { xs: '0.8rem', sm: '0.85rem', md: '0.875rem' } 
+                }}>
                   Instant Quote
                 </Link>
-                <Link href="/gallery" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: BODY_FONT, fontWeight: 300 }}>
+                <Link component={RouterLink} to="/gallery" color="inherit" underline="hover" sx={{ 
+                  color: 'rgba(255, 255, 255, 0.8)', 
+                  fontFamily: BODY_FONT, 
+                  fontWeight: 300,
+                  fontSize: { xs: '0.8rem', sm: '0.85rem', md: '0.875rem' } 
+                }}>
                   Gallery
                 </Link>
-                <Link href="/contact-us" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: BODY_FONT, fontWeight: 300 }}>
+                <Link component={RouterLink} to="/contact-us" color="inherit" underline="hover" sx={{ 
+                  color: 'rgba(255, 255, 255, 0.8)', 
+                  fontFamily: BODY_FONT, 
+                  fontWeight: 300,
+                  fontSize: { xs: '0.8rem', sm: '0.85rem', md: '0.875rem' } 
+                }}>
                   Contact
                 </Link>
               </Stack>
             </Grid>
             
             <Grid item xs={12} sm={6} md={4}>
-              <Typography variant="h6" sx={{ color: 'white', mb: 2, fontFamily: HEADING_FONT, fontWeight: 'bold', fontSize: '20px' }}>
+              <Typography variant="h6" sx={{ 
+                color: 'white', 
+                mb: 2, 
+                fontFamily: HEADING_FONT, 
+                fontWeight: 'bold', 
+                fontSize: { xs: '1rem', sm: '1.2rem', md: '1.25rem' } 
+              }}>
                 Contact Information
               </Typography>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                 <LocationIcon sx={{ color: RED_COLOR, mr: 1.5 }} />
-                <Typography variant="body2" sx={{ color: 'white', opacity: 0.8, fontFamily: BODY_FONT, fontWeight: 300 }}>
+                <Typography variant="body2" sx={{ 
+                  color: 'white', 
+                  opacity: 0.8, 
+                  fontFamily: BODY_FONT, 
+                  fontWeight: 300,
+                  fontSize: { xs: '0.8rem', sm: '0.85rem', md: '0.875rem' } 
+                }}>
                   123 Transport Way, Sydney, NSW 2000, Australia
                 </Typography>
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                 <PhoneIcon sx={{ color: RED_COLOR, mr: 1.5 }} />
-                <Typography variant="body2" sx={{ color: 'white', opacity: 0.8, fontFamily: BODY_FONT, fontWeight: 300 }}>
+                <Typography variant="body2" sx={{ 
+                  color: 'white', 
+                  opacity: 0.8, 
+                  fontFamily: BODY_FONT, 
+                  fontWeight: 300,
+                  fontSize: { xs: '0.8rem', sm: '0.85rem', md: '0.875rem' } 
+                }}>
                   +61 2 1234 5678
                 </Typography>
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                 <EmailIcon sx={{ color: RED_COLOR, mr: 1.5 }} />
-                <Typography variant="body2" sx={{ color: 'white', opacity: 0.8, fontFamily: BODY_FONT, fontWeight: 300 }}>
+                <Typography variant="body2" sx={{ 
+                  color: 'white', 
+                  opacity: 0.8, 
+                  fontFamily: BODY_FONT, 
+                  fontWeight: 300,
+                  fontSize: { xs: '0.8rem', sm: '0.85rem', md: '0.875rem' } 
+                }}>
                   info@motextransport.com.au
                 </Typography>
               </Box>
@@ -820,11 +613,197 @@ const GalleryPage = () => {
           
           <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.1)', my: 4 }} />
           
-          <Typography variant="body2" align="center" sx={{ color: 'white', opacity: 0.7, fontFamily: BODY_FONT, fontWeight: 300 }}>
+          <Typography variant="body2" align="center" sx={{ 
+            color: 'white', 
+            opacity: 0.7, 
+            fontFamily: BODY_FONT, 
+            fontWeight: 300,
+            fontSize: { xs: '0.75rem', sm: '0.8rem', md: '0.875rem' } 
+          }}>
             © {new Date().getFullYear()} MOTEX Transport. All rights reserved.
           </Typography>
         </Container>
       </Box>
+      
+      {/* Mobile Menu */}
+      <Drawer
+        anchor="right"
+        open={isMobileMenuOpen}
+        onClose={() => setIsMobileMenuOpen(false)}
+        PaperProps={{
+          sx: {
+            width: { xs: '100%', sm: 300 },
+            backgroundColor: DARKER_BG,
+            padding: { xs: 2, sm: 3 }
+          }
+        }}
+      >
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <IconButton 
+            onClick={() => setIsMobileMenuOpen(false)}
+            sx={{ color: 'white' }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </Box>
+        
+        <Box component="img" src="/MOTEX+Logo.png" alt="MOTEX Logo" sx={{ width: 120, my: 2 }} />
+        
+        <List>
+          <ListItem disablePadding>
+            <ListItemButton 
+              component={RouterLink} 
+              to="/"
+              sx={{ 
+                py: 1.5,
+                '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.05)' }
+              }}
+            >
+              <ListItemText 
+                primary="Home" 
+                primaryTypographyProps={{ 
+                  fontFamily: BODY_FONT, 
+                  fontWeight: 400, 
+                  color: 'white',
+                  fontSize: { xs: '0.95rem', sm: '1rem' }
+                }} 
+              />
+            </ListItemButton>
+          </ListItem>
+          
+          <ListItem disablePadding>
+            <ListItemButton 
+              component={RouterLink} 
+              to="/services"
+              sx={{ 
+                py: 1.5,
+                '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.05)' }
+              }}
+            >
+              <ListItemText 
+                primary="Services" 
+                primaryTypographyProps={{ 
+                  fontFamily: BODY_FONT, 
+                  fontWeight: 400, 
+                  color: 'white',
+                  fontSize: { xs: '0.95rem', sm: '1rem' }
+                }} 
+              />
+            </ListItemButton>
+          </ListItem>
+          
+          <ListItem disablePadding>
+            <ListItemButton 
+              component={RouterLink} 
+              to="/about-us"
+              sx={{ 
+                py: 1.5,
+                '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.05)' }
+              }}
+            >
+              <ListItemText 
+                primary="About Us" 
+                primaryTypographyProps={{ 
+                  fontFamily: BODY_FONT, 
+                  fontWeight: 400, 
+                  color: 'white',
+                  fontSize: { xs: '0.95rem', sm: '1rem' }
+                }} 
+              />
+            </ListItemButton>
+          </ListItem>
+          
+          <ListItem disablePadding>
+            <ListItemButton 
+              component={RouterLink} 
+              to="/instant-quote"
+              sx={{ 
+                py: 1.5,
+                '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.05)' }
+              }}
+            >
+              <ListItemText 
+                primary="Instant Quote" 
+                primaryTypographyProps={{ 
+                  fontFamily: BODY_FONT, 
+                  fontWeight: 400, 
+                  color: 'white',
+                  fontSize: { xs: '0.95rem', sm: '1rem' }
+                }} 
+              />
+            </ListItemButton>
+          </ListItem>
+          
+          <ListItem disablePadding>
+            <ListItemButton 
+              component={RouterLink} 
+              to="/gallery"
+              sx={{ 
+                py: 1.5,
+                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.15)' }
+              }}
+            >
+              <ListItemText 
+                primary="Gallery" 
+                primaryTypographyProps={{ 
+                  fontFamily: BODY_FONT, 
+                  fontWeight: 600, 
+                  color: 'white',
+                  fontSize: { xs: '0.95rem', sm: '1rem' }
+                }} 
+              />
+            </ListItemButton>
+          </ListItem>
+          
+          <ListItem disablePadding>
+            <ListItemButton 
+              component={RouterLink} 
+              to="/contact-us"
+              sx={{ 
+                py: 1.5,
+                '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.05)' }
+              }}
+            >
+              <ListItemText 
+                primary="Contact Us" 
+                primaryTypographyProps={{ 
+                  fontFamily: BODY_FONT, 
+                  fontWeight: 400, 
+                  color: 'white',
+                  fontSize: { xs: '0.95rem', sm: '1rem' }
+                }} 
+              />
+            </ListItemButton>
+          </ListItem>
+        </List>
+        
+        <Box sx={{ p: 2, mt: 2 }}>
+          <Button 
+            component={RouterLink} 
+            to="/instant-quote"
+            variant="contained" 
+            fullWidth
+            sx={{
+              backgroundColor: RED_COLOR,
+              color: 'white',
+              fontFamily: HEADING_FONT,
+              fontWeight: 500,
+              py: 1,
+              borderRadius: 1,
+              transition: '0.3s',
+              fontSize: { xs: '0.9rem', sm: '1rem' },
+              '&:hover': {
+                backgroundColor: '#c50000',
+                transform: 'translateY(-2px)',
+                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)'
+              }
+            }}
+          >
+            Get a Quote
+          </Button>
+        </Box>
+      </Drawer>
     </PageWrapper>
   );
 };

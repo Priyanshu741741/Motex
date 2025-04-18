@@ -22,7 +22,7 @@ import {
 } from '@mui/material';
 import PageTransition from '../components/PageTransition';
 import { styled } from '@mui/material/styles';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { 
   LocationOn as LocationIcon,
@@ -38,16 +38,15 @@ import { Helmet } from 'react-helmet-async';
 
 // Define colors
 const DARK_BG = '#0A0A0A';
-const DARKER_BG = '#050505';
 const WHITE_TEXT = '#FFFFFF';
 const RED_COLOR = '#DE1F27';
 const PINK_RED = '#FF2992';
 
 // Define the font-family for Special Gothic with fallbacks
-const SPECIAL_GOTHIC_FONT = '"Special Gothic Expanded One", "Anton", "Impact", sans-serif !important';
+// const SPECIAL_GOTHIC_FONT = '"Special Gothic Expanded One", "Anton", "Impact", sans-serif !important';
 // Replace with Oswald font
 const HEADING_FONT = '"Oswald", sans-serif';
-const TAGLINE_FONT = '"Bebas Neue", sans-serif';
+// const TAGLINE_FONT = '"Bebas Neue", sans-serif';
 
 // Styled components
 const GradientBackground = styled(Box)(({ theme }) => ({
@@ -71,7 +70,7 @@ const CircleBackground = styled(Box)(({ theme }) => ({
 }));
 
 const HeroSection = styled(Box)(({ theme }) => ({
-  backgroundImage: 'url("/MotexFeb6.jpg")',
+  backgroundImage: 'url("/MotexFeb3.jpg")',
   backgroundSize: 'cover',
   backgroundPosition: 'center',
   backgroundRepeat: 'no-repeat',
@@ -105,31 +104,6 @@ const DecorativeLine = styled(Box)(({ theme }) => ({
   width: '100%',
 }));
 
-const LogoContainer = styled(Box)(({ theme }) => ({
-  background: '#000000',
-  padding: theme.spacing(4, 0),
-  overflow: 'hidden',
-  position: 'relative',
-  '&::before': {
-    content: '""',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    height: '1px',
-    background: 'linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%)',
-  },
-  '&::after': {
-    content: '""',
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: '1px',
-    background: 'linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%)',
-  }
-}));
-
 const ContentSection = styled(Box)(({ theme }) => ({
   position: 'relative',
   width: '100%',
@@ -138,25 +112,6 @@ const ContentSection = styled(Box)(({ theme }) => ({
   alignItems: 'center',
   backgroundColor: '#000000',
   overflow: 'hidden',
-}));
-
-const GradientButton = styled(Button)<{ component?: React.ElementType; to?: string }>(({ theme }) => ({
-  background: 'linear-gradient(90deg, #FF6B6B 0%, #DE1F27 50%, #FF2992 100%)',
-  color: 'white',
-  padding: '10px 24px',
-  borderRadius: '50px',
-  fontWeight: 600,
-  textTransform: 'none',
-  fontSize: '16px',
-  fontFamily: '"Poppins", sans-serif',
-  '&:hover': {
-    opacity: 0.9,
-    transform: 'translateY(-2px)',
-    transition: 'transform 0.3s ease'
-  },
-  '& .MuiButton-startIcon': {
-    marginRight: '8px'
-  }
 }));
 
 const FounderQuoteCard = styled(Paper)(({ theme }) => ({
@@ -721,7 +676,7 @@ const AboutUsPage = () => {
 
         {/* Founder Section with enhanced animations and modernistic design */}
         <Box sx={{ 
-          py: { xs: 8, md: 12 }, 
+          py: { xs: 5, md: 12 }, 
           backgroundColor: DARK_BG, 
           position: 'relative',
           overflow: 'hidden',
@@ -731,15 +686,15 @@ const AboutUsPage = () => {
           <CircleBackground sx={{ 
             top: '10%', 
             left: '5%',
-            width: '350px',
-            height: '350px',
+            width: { xs: '200px', md: '350px' },
+            height: { xs: '200px', md: '350px' },
             animation: 'pulse 8s infinite ease-in-out',
           }} />
           <CircleBackground sx={{ 
             bottom: '20%', 
             right: '10%', 
-            width: '280px',
-            height: '280px',
+            width: { xs: '180px', md: '280px' },
+            height: { xs: '180px', md: '280px' },
             background: 'radial-gradient(circle, rgba(255, 41, 146, 0.8) 0%, rgba(0,0,0,0) 70%)',
             animation: 'pulse 12s infinite ease-in-out',
           }} />
@@ -749,18 +704,19 @@ const AboutUsPage = () => {
               variant="h3" 
               align="center" 
               sx={{ 
-                mb: 6,
+                mb: { xs: 3, md: 6 },
                 fontFamily: HEADING_FONT,
                 fontWeight: 600,
                 color: WHITE_TEXT,
                 textTransform: 'uppercase',
-                letterSpacing: '1px'
+                letterSpacing: '1px',
+                fontSize: { xs: '1.75rem', sm: '2.25rem', md: '3rem' }
               }}
             >
               Meet Our Founder
             </Typography>
-            <Grid container spacing={6} alignItems="center" direction={{ xs: 'column-reverse', md: 'row-reverse' }}>
-              <Grid item xs={12} md={5}>
+            <Grid container spacing={{ xs: 2, sm: 4, md: 6 }} alignItems="center" direction={{ xs: 'row', md: 'row-reverse' }}>
+              <Grid item xs={5} md={5}>
                 <motion.div
                   initial={{ opacity: 0, x: 30 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -779,9 +735,9 @@ const AboutUsPage = () => {
                       alt="Roy Baheer - Founder"
                       sx={{
                         width: '100%',
-                        maxWidth: { xs: '80%', sm: '85%', md: '85%' },
+                        maxWidth: { xs: '100%', sm: '85%', md: '85%' },
                         mx: { xs: 'auto', md: 0 },
-                        display: { xs: 'block', md: 'block' },
+                        display: 'block',
                         borderRadius: '16px',
                         boxShadow: '0 15px 30px rgba(0,0,0,0.3)',
                         border: '1px solid rgba(255,255,255,0.1)',
@@ -795,14 +751,14 @@ const AboutUsPage = () => {
                     />
                   </Box>
                   
-                  {/* Decorative elements */}
+                  {/* Decorative elements - adjusted for mobile */}
                   <Box 
                     sx={{
                       position: 'absolute',
                       top: '-20px',
                       right: '-20px',
-                      width: '150px',
-                      height: '150px',
+                      width: { xs: '70px', md: '150px' },
+                      height: { xs: '70px', md: '150px' },
                       borderRadius: '50%',
                       background: `radial-gradient(circle, rgba(${Number.parseInt(RED_COLOR.slice(1,3), 16)},${Number.parseInt(RED_COLOR.slice(3,5), 16)},${Number.parseInt(RED_COLOR.slice(5,7), 16)},0.1) 0%, rgba(${Number.parseInt(RED_COLOR.slice(1,3), 16)},${Number.parseInt(RED_COLOR.slice(3,5), 16)},${Number.parseInt(RED_COLOR.slice(5,7), 16)},0) 70%)`,
                       zIndex: 0,
@@ -818,34 +774,10 @@ const AboutUsPage = () => {
                       repeatType: 'reverse',
                     }}
                   />
-                  
-                  <Box 
-                    sx={{
-                      position: 'absolute',
-                      bottom: '-30px',
-                      left: '-30px',
-                      width: '180px',
-                      height: '180px',
-                      borderRadius: '50%',
-                      background: `radial-gradient(circle, rgba(${Number.parseInt(PINK_RED.slice(1,3), 16)},${Number.parseInt(PINK_RED.slice(3,5), 16)},${Number.parseInt(PINK_RED.slice(5,7), 16)},0.1) 0%, rgba(${Number.parseInt(PINK_RED.slice(1,3), 16)},${Number.parseInt(PINK_RED.slice(3,5), 16)},${Number.parseInt(PINK_RED.slice(5,7), 16)},0) 70%)`,
-                      zIndex: 0,
-                    }}
-                    component={motion.div}
-                    animate={{ 
-                      scale: [1, 1.3, 1],
-                      opacity: [0.5, 0.8, 0.5],
-                    }}
-                    transition={{
-                      duration: 10,
-                      repeat: Number.POSITIVE_INFINITY,
-                      repeatType: 'reverse',
-                      delay: 1,
-                    }}
-                  />
                 </motion.div>
               </Grid>
               
-              <Grid item xs={12} md={7}>
+              <Grid item xs={7} md={7}>
                 <motion.div
                   initial={{ opacity: 0, x: -30 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -870,15 +802,18 @@ const AboutUsPage = () => {
                       transition: { duration: 0.3 }
                     }}
                   >
-                    <FounderQuoteCard elevation={0}>
+                    <FounderQuoteCard elevation={0} sx={{ 
+                      p: { xs: 2, md: 4 },
+                      height: '100%'
+                    }}>
                       <Typography 
                         variant="body1" 
                         sx={{ 
                           fontStyle: 'italic',
-                          fontSize: '1.2rem',
-                          lineHeight: 1.8,
+                          fontSize: { xs: '0.8rem', sm: '1rem', md: '1.2rem' },
+                          lineHeight: { xs: 1.4, md: 1.8 },
                           fontFamily: '"Poppins", sans-serif',
-                          mb: 3,
+                          mb: { xs: 1, md: 3 },
                           color: 'white',
                           position: 'relative'
                         }}
@@ -887,9 +822,9 @@ const AboutUsPage = () => {
                           component="span"
                           sx={{
                             position: 'absolute',
-                            top: '-20px',
-                            left: '-10px',
-                            fontSize: '4rem',
+                            top: { xs: '-10px', md: '-20px' },
+                            left: { xs: '-5px', md: '-10px' },
+                            fontSize: { xs: '2rem', md: '4rem' },
                             color: 'rgba(222, 31, 39, 0.2)',
                             fontFamily: 'serif',
                             lineHeight: 1
@@ -906,7 +841,8 @@ const AboutUsPage = () => {
                           color: 'white',
                           fontFamily: HEADING_FONT,
                           fontWeight: 500,
-                          letterSpacing: '0.5px'
+                          letterSpacing: '0.5px',
+                          fontSize: { xs: '0.85rem', md: '1.25rem' }
                         }}
                       >
                         - Roy Baheer
@@ -914,25 +850,27 @@ const AboutUsPage = () => {
                     </FounderQuoteCard>
                   </motion.div>
                   
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.8, delay: 1.2 }}
-                  >
-                    <Typography 
-                      variant="body1" 
-                      sx={{ 
-                        mt: 4,
-                        lineHeight: 1.8,
-                        fontSize: '1.05rem',
-                        opacity: 0.9,
-                        fontFamily: '"Poppins", sans-serif',
-                        color: 'white'
-                      }}
+                  <Box sx={{ display: { xs: 'none', md: 'block' } }}>
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.8, delay: 1.2 }}
                     >
-                      Motex Transport is a logistics business that Roy Baheer established. Roy has been very successful in the industry and is passionate about providing excellent customer service and experience. His top priority is the happiness of his customers, so Motex Transport offers services beyond expectations.
-                    </Typography>
-                  </motion.div>
+                      <Typography 
+                        variant="body1" 
+                        sx={{ 
+                          mt: { xs: 2, md: 4 },
+                          lineHeight: { xs: 1.6, md: 1.8 },
+                          fontSize: { xs: '0.9rem', sm: '0.95rem', md: '1.05rem' },
+                          opacity: 0.9,
+                          fontFamily: '"Poppins", sans-serif',
+                          color: 'white'
+                        }}
+                      >
+                        Motex Transport is a logistics business that Roy Baheer established. Roy has been very successful in the industry and is passionate about providing excellent customer service and experience. His top priority is the happiness of his customers, so Motex Transport offers services beyond expectations.
+                      </Typography>
+                    </motion.div>
+                  </Box>
                 </motion.div>
               </Grid>
             </Grid>
@@ -944,7 +882,7 @@ const AboutUsPage = () => {
         
         {/* Our Mission section with simple black background */}
         <Box sx={{ 
-          py: { xs: 8, md: 12 }, 
+          py: { xs: 5, md: 12 }, 
           backgroundColor: '#000000',
           position: 'relative',
           overflow: 'hidden',
@@ -960,12 +898,13 @@ const AboutUsPage = () => {
                 variant="h3" 
                 align="center" 
                 sx={{ 
-                  mb: 2,
+                  mb: { xs: 1, md: 2 },
                   fontFamily: HEADING_FONT,
                   fontWeight: 600,
                   color: WHITE_TEXT,
                   textTransform: 'uppercase',
-                  letterSpacing: '1px'
+                  letterSpacing: '1px',
+                  fontSize: { xs: '1.75rem', sm: '2.25rem', md: '3rem' }
                 }}
               >
                 Our Mission
@@ -977,12 +916,13 @@ const AboutUsPage = () => {
                 sx={{ 
                   maxWidth: 900,
                   mx: 'auto',
-                  mb: 8,
-                  fontSize: '1.1rem',
-                  lineHeight: 1.8,
+                  mb: { xs: 4, md: 8 },
+                  fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' },
+                  lineHeight: { xs: 1.6, md: 1.8 },
                   opacity: 0.9,
                   fontFamily: '"Poppins", sans-serif',
-                  color: 'white'
+                  color: 'white',
+                  px: { xs: 2, md: 0 }
                 }}
               >
                 At Motex Transport, we believe that no task is too difficult for us, and we are always eager to learn and gain exposure. Our enthusiastic team will do everything in our power to make your experience with us completely hassle-free. Our team is very experienced and professional, with over years of combined experience in the logistics industry. We can handle all your transportation requirements, from regular deliveries and collections to one-off projects.
@@ -990,7 +930,7 @@ const AboutUsPage = () => {
             </motion.div>
             
             {/* Decorative Line */}
-            <DecorativeLine sx={{ mb: 6 }} />
+            <DecorativeLine sx={{ mb: { xs: 3, md: 6 } }} />
             
             <Typography 
               variant="h3" 
@@ -1001,7 +941,8 @@ const AboutUsPage = () => {
                 fontWeight: 600,
                 color: WHITE_TEXT,
                 textTransform: 'uppercase',
-                letterSpacing: '1px'
+                letterSpacing: '1px',
+                fontSize: { xs: '1.75rem', sm: '2.25rem', md: '3rem' }
               }}
             >
               Our Values
@@ -1014,9 +955,11 @@ const AboutUsPage = () => {
               animate={isLoaded ? "visible" : "hidden"}
               sx={{ mt: 5, mb: 6 }}
             >
-              <Grid container spacing={5}>
-                {companyValues.map((value) => (
-                  <Grid item xs={12} sm={6} md={4} key={value.id} sx={{ mb: 2 }}>
+              {/* Mobile layout with adaptability in center and full width */}
+              <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
+                <Grid container spacing={2}>
+                  {/* Customer-Centric & Reliability side by side */}
+                  <Grid item xs={6}>
                     <motion.div variants={itemVariants} style={{ height: '100%' }}>
                       <FeatureCard
                         sx={{
@@ -1035,24 +978,24 @@ const AboutUsPage = () => {
                       >
                         <CardMedia
                           component="img"
-                          height="200"
-                          image={value.image}
-                          alt={value.title}
+                          image={companyValues[0].image}
+                          alt={companyValues[0].title}
                           sx={{
                             transition: 'transform 0.5s ease',
                             objectFit: 'cover',
+                            height: 100,
                             '&:hover': {
                               transform: 'scale(1.05)'
                             }
                           }}
                         />
                         <CardContent sx={{ 
-                          p: 3, 
+                          p: 1.5, 
                           flexGrow: 1, 
                           display: 'flex', 
                           flexDirection: 'column', 
-                          justifyContent: 'space-between',
-                          minHeight: '120px'
+                          justifyContent: 'center',
+                          minHeight: '60px'
                         }}>
                           <Typography 
                             variant="h5" 
@@ -1064,28 +1007,224 @@ const AboutUsPage = () => {
                               color: WHITE_TEXT,
                               transition: 'color 0.3s ease',
                               textTransform: 'capitalize',
-                              letterSpacing: '0.5px'
+                              letterSpacing: '0.5px',
+                              fontSize: '0.85rem',
+                              mb: 0,
+                              textAlign: 'center'
                             }}
                           >
-                            {value.title}
-                          </Typography>
-                          <Typography 
-                            variant="body2" 
-                            sx={{ 
-                              color: WHITE_TEXT,
-                              fontFamily: '"Poppins", sans-serif',
-                              fontSize: '0.95rem',
-                              lineHeight: 1.6
-                            }}
-                          >
-                            {value.description}
+                            {companyValues[0].title}
                           </Typography>
                         </CardContent>
                       </FeatureCard>
                     </motion.div>
                   </Grid>
-                ))}
-              </Grid>
+                  
+                  <Grid item xs={6}>
+                    <motion.div variants={itemVariants} style={{ height: '100%' }}>
+                      <FeatureCard
+                        sx={{
+                          height: '100%',
+                          transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          '&:hover': {
+                            transform: 'translateY(-8px)',
+                            boxShadow: '0 12px 20px rgba(0,0,0,0.4)',
+                            '& .value-title': {
+                              color: RED_COLOR
+                            }
+                          },
+                        }}
+                      >
+                        <CardMedia
+                          component="img"
+                          image={companyValues[1].image}
+                          alt={companyValues[1].title}
+                          sx={{
+                            transition: 'transform 0.5s ease',
+                            objectFit: 'cover',
+                            height: 100,
+                            '&:hover': {
+                              transform: 'scale(1.05)'
+                            }
+                          }}
+                        />
+                        <CardContent sx={{ 
+                          p: 1.5, 
+                          flexGrow: 1, 
+                          display: 'flex', 
+                          flexDirection: 'column', 
+                          justifyContent: 'center',
+                          minHeight: '60px'
+                        }}>
+                          <Typography 
+                            variant="h5" 
+                            gutterBottom 
+                            className="value-title"
+                            sx={{ 
+                              fontFamily: '"Poppins", sans-serif',
+                              fontWeight: 700,
+                              color: WHITE_TEXT,
+                              transition: 'color 0.3s ease',
+                              textTransform: 'capitalize',
+                              letterSpacing: '0.5px',
+                              fontSize: '0.85rem',
+                              mb: 0,
+                              textAlign: 'center'
+                            }}
+                          >
+                            {companyValues[1].title}
+                          </Typography>
+                        </CardContent>
+                      </FeatureCard>
+                    </motion.div>
+                  </Grid>
+                  
+                  {/* Adaptability in center */}
+                  <Grid item xs={12} sx={{ mt: 2 }}>
+                    <motion.div variants={itemVariants} style={{ height: '100%' }}>
+                      <FeatureCard
+                        sx={{
+                          height: '100%',
+                          transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          maxWidth: '70%',
+                          mx: 'auto',
+                          '&:hover': {
+                            transform: 'translateY(-8px)',
+                            boxShadow: '0 12px 20px rgba(0,0,0,0.4)',
+                            '& .value-title': {
+                              color: RED_COLOR
+                            }
+                          },
+                        }}
+                      >
+                        <CardMedia
+                          component="img"
+                          image={companyValues[2].image}
+                          alt={companyValues[2].title}
+                          sx={{
+                            transition: 'transform 0.5s ease',
+                            objectFit: 'cover',
+                            height: 120,
+                            '&:hover': {
+                              transform: 'scale(1.05)'
+                            }
+                          }}
+                        />
+                        <CardContent sx={{ 
+                          p: 1.5, 
+                          flexGrow: 1, 
+                          display: 'flex', 
+                          flexDirection: 'column', 
+                          justifyContent: 'center',
+                          minHeight: '60px'
+                        }}>
+                          <Typography 
+                            variant="h5" 
+                            gutterBottom 
+                            className="value-title"
+                            sx={{ 
+                              fontFamily: '"Poppins", sans-serif',
+                              fontWeight: 700,
+                              color: WHITE_TEXT,
+                              transition: 'color 0.3s ease',
+                              textTransform: 'capitalize',
+                              letterSpacing: '0.5px',
+                              fontSize: '0.9rem',
+                              mb: 0,
+                              textAlign: 'center'
+                            }}
+                          >
+                            {companyValues[2].title}
+                          </Typography>
+                        </CardContent>
+                      </FeatureCard>
+                    </motion.div>
+                  </Grid>
+                </Grid>
+              </Box>
+              
+              {/* Desktop and tablet layout */}
+              <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+                <Grid container spacing={{ xs: 2, sm: 3, md: 4 }}>
+                  {companyValues.map((value) => (
+                    <Grid item xs={6} sm={6} md={4} key={value.id} sx={{ mb: 2 }}>
+                      <motion.div variants={itemVariants} style={{ height: '100%' }}>
+                        <FeatureCard
+                          sx={{
+                            height: '100%',
+                            transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            '&:hover': {
+                              transform: 'translateY(-8px)',
+                              boxShadow: '0 12px 20px rgba(0,0,0,0.4)',
+                              '& .value-title': {
+                                color: RED_COLOR
+                              }
+                            },
+                          }}
+                        >
+                          <CardMedia
+                            component="img"
+                            height="200"
+                            image={value.image}
+                            alt={value.title}
+                            sx={{
+                              transition: 'transform 0.5s ease',
+                              objectFit: 'cover',
+                              height: { sm: 140, md: 200 },
+                              '&:hover': {
+                                transform: 'scale(1.05)'
+                              }
+                            }}
+                          />
+                          <CardContent sx={{ 
+                            p: { sm: 2, md: 3 }, 
+                            flexGrow: 1, 
+                            display: 'flex', 
+                            flexDirection: 'column', 
+                            justifyContent: 'space-between',
+                            minHeight: { sm: '100px', md: '120px' }
+                          }}>
+                            <Typography 
+                              variant="h5" 
+                              gutterBottom 
+                              className="value-title"
+                              sx={{ 
+                                fontFamily: '"Poppins", sans-serif',
+                                fontWeight: 700,
+                                color: WHITE_TEXT,
+                                transition: 'color 0.3s ease',
+                                textTransform: 'capitalize',
+                                letterSpacing: '0.5px',
+                                fontSize: { sm: '1rem', md: '1.5rem' },
+                                mb: { sm: 1, md: 2 }
+                              }}
+                            >
+                              {value.title}
+                            </Typography>
+                            <Typography 
+                              variant="body2" 
+                              sx={{ 
+                                color: WHITE_TEXT,
+                                fontFamily: '"Poppins", sans-serif',
+                                fontSize: { sm: '0.85rem', md: '0.95rem' },
+                                lineHeight: { sm: 1.5, md: 1.6 }
+                              }}
+                            >
+                              {value.description}
+                            </Typography>
+                          </CardContent>
+                        </FeatureCard>
+                      </motion.div>
+                    </Grid>
+                  ))}
+                </Grid>
+              </Box>
             </Box>
           </Container>
         </Box>

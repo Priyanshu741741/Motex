@@ -1,5 +1,5 @@
 // eslint-disable-next-line
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { 
   Box, 
   Typography, 
@@ -235,6 +235,7 @@ const ServiceCard = styled(Card)(({ theme }) => ({
   backgroundColor: 'rgba(0,0,0,0.5)',
   border: '1px solid rgba(255,255,255,0.1)',
   transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+  cursor: 'pointer',
   '&:hover': {
     transform: 'translateY(-8px)',
     boxShadow: '0 12px 20px rgba(0,0,0,0.4)',
@@ -288,12 +289,48 @@ const TrafficLanes = styled('div')(({ theme }) => ({
   pointerEvents: 'none',
 }));
 
+// Carousel components
+const CarouselContainer = styled(Box)(({ theme }) => ({
+  position: 'relative',
+  width: '100%',
+  overflow: 'hidden',
+  touchAction: 'pan-y',
+}));
+
+const CarouselTrack = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  transition: 'transform 0.5s ease-in-out',
+  width: '100%',
+}));
+
 const ServicesPage = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [isLoaded, setIsLoaded] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const navigate = useNavigate();
+  
+  // Testimonial carousel state
+  const [activeTestimonialSlide, setActiveTestimonialSlide] = useState(0);
+  const testimonialCarouselRef = useRef<HTMLDivElement>(null);
+
+  // Add a function for handling testimonial slide changes
+  const handleNextTestimonialSlide = useCallback(() => {
+    setActiveTestimonialSlide((prev: number) => (prev === 2 ? 0 : prev + 1));
+  }, []);
+
+  // Set up auto-scroll for testimonials with mobile optimization
+  useEffect(() => {
+    if (!isMobile) return; // Only run on mobile
+    
+    const intervalTime = 8000;
+    
+    const interval = setInterval(() => {
+      handleNextTestimonialSlide();
+    }, intervalTime);
+    
+    return () => clearInterval(interval);
+  }, [handleNextTestimonialSlide, isMobile]);
   
   // Mouse position state
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -400,13 +437,13 @@ const ServicesPage = () => {
   const testimonials = [
     {
       id: 1,
-      quote: "The service we received from Motex Transport was extremely professional, honest and cost effective. Roy was an absolute life saver for us, during an extremely busy period for the business. We had multiple delivery drops - one being on a Sunday - and nothing was an issue. We liked that we could communicate directly with the driver, which was extremely reassuring for us when goods needed to be delivered within allocated time slots. He also continued to communicate with us in terms of delivery ETAs and updates. This really saved us sooooo much stress and pressure. We hope to continue to use Motex moving forward. Well done and thank you for your professionalism and wonderful service.",
+      quote: "The service we received from Motex Transport was extremely professional, efficient and cost effective. Roy was an absolute life saver for us, during an extremely busy period for the business. We had multiple delivery drops - one being on a Saturday - and nothing was an issue. We liked that we could communicate directly with the driver, which was extremely reassuring for us when goods needed to be delivered within allocated time slots. He also continued to communicate with us in terms of delivery ETA's and updates. This really saved us sooooo much stress and pressure. We hope to continue to use Motex moving forward. Well done and thank you for your professionalism and wonderful service.",
       author: "Natalie Tennant",
       company: "Hunter Valley Wedding Planner"
     },
     {
       id: 2,
-      quote: "Our premises are a challenge for deliveries with stairs and uneven surfaces, however Roy (Motex) has for many years delivered to us with efficiency, care and cheerfulness. This makes a huge difference as we are a small staff yet often have deliveries varying from 5 - 30 boxes at different times of the year. This enables us to function well and always be on top of stock and supply. I would highly recommend Motex Transport to any size or type of business - you won't be disappointed.",
+      quote: "Our premises are a challenge for deliveries with stairs and uneven surfaces, however Roy (Motex) has for many years delivered boxes to us with efficiency, care and cheerfulness. This makes a huge difference as we are a small staff yet often have deliveries varying from 5 - 30 boxes at different times of the year. This enables us to function well and always be on top of stock and supply. I would highly recommend Motex Transport to any size or type of business - you won't be disappointed!",
       author: "Christine Mill",
       company: "CWCI Australia"
     },
@@ -752,7 +789,8 @@ const ServicesPage = () => {
                   fontWeight: 800,
                   color: RED_COLOR,
                   fontFamily: '"Oswald", sans-serif',
-                  fontSize: { xs: '50px', sm: '60px', md: '90px', lg: '100px' },
+                  fontSize: { xs: '2.5rem', sm: '3.5rem', md: '5rem', lg: '6rem' },
+                  letterSpacing: { xs: '1px', sm: '2px', md: '3px' }
                 }}
               >
                 <TextFade direction="down" staggerChildren={0.03}>
@@ -769,7 +807,7 @@ const ServicesPage = () => {
         <Box sx={{ position: 'relative' }}>
           {/* Services Section */}
           <Box 
-            sx={{ py: 8, position: 'relative', overflow: 'hidden' }}
+            sx={{ py: { xs: 5, md: 8 }, position: 'relative', overflow: 'hidden' }}
           >
             <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
               <motion.div
@@ -781,10 +819,11 @@ const ServicesPage = () => {
                   variant="h2" 
                   align="center" 
                   sx={{ 
-                    mb: 1,
+                    mb: { xs: 1, md: 2 },
                     fontWeight: 700,
                     color: 'white',
                     fontFamily: '"Oswald", sans-serif',
+                    fontSize: { xs: '1.75rem', sm: '2.25rem', md: '3rem' }
                   }}
                 >
                   WHAT WE OFFER
@@ -793,40 +832,47 @@ const ServicesPage = () => {
                   variant="body1" 
                   align="center" 
                   sx={{ 
-                    mb: 6,
+                    mb: { xs: 4, md: 6 },
                     color: 'rgba(255,255,255,0.7)',
                     maxWidth: '700px',
                     mx: 'auto',
                     fontFamily: '"Poppins", sans-serif',
-                    fontSize: '16px',
-                    lineHeight: '29px',
+                    fontSize: { xs: '0.875rem', sm: '1rem', md: '16px' },
+                    lineHeight: { xs: 1.5, md: '29px' },
                     fontWeight: 400
                   }}
                 >
                   From local deliveries to interstate transport, our comprehensive range of services is designed to meet all your logistics needs with efficiency and reliability.
                 </Typography>
 
-                <Grid container spacing={4}>
+                <Grid container spacing={{ xs: 2, sm: 3, md: 4 }}>
                   {services.map((service) => (
-                    <Grid item xs={12} sm={6} md={4} key={service.id}>
+                    <Grid item xs={6} sm={6} md={4} key={service.id}>
                       <motion.div variants={itemVariants}>
-                        <ServiceCard>
+                        <ServiceCard onClick={() => {
+                          navigate('/instant-quote', { state: { selectedService: service.title } });
+                          window.scrollTo(0, 0);
+                        }}>
                           <CardMedia
                             component="img"
                             height="200"
                             image={service.image}
                             alt={service.title}
-                            sx={{ opacity: 0.8 }}
+                            sx={{ 
+                              opacity: 0.8,
+                              height: { xs: 100, sm: 140, md: 200 }
+                            }}
                           />
-                          <CardContent sx={{ p: 3 }}>
+                          <CardContent sx={{ p: { xs: 1.5, sm: 2, md: 3 } }}>
                             <Typography 
                               variant="h5" 
                               className="service-title"
                               sx={{ 
-                                mb: 2,
+                                mb: { xs: 0.75, sm: 1, md: 2 },
                                 fontWeight: 600,
                                 color: 'white',
                                 fontFamily: '"Poppins", sans-serif',
+                                fontSize: { xs: '0.85rem', sm: '1rem', md: '1.5rem' }
                               }}
                             >
                               {service.title}
@@ -836,9 +882,10 @@ const ServicesPage = () => {
                               sx={{ 
                                 color: 'rgba(255,255,255,0.7)',
                                 fontFamily: '"Poppins", sans-serif',
-                                lineHeight: '29px',
-                                fontSize: '16px',
-                                fontWeight: 400
+                                lineHeight: { xs: 1.4, sm: 1.6, md: '29px' },
+                                fontSize: { xs: '0.75rem', sm: '0.85rem', md: '16px' },
+                                fontWeight: 400,
+                                display: { xs: 'none', sm: 'block' } // Hide description on extra small screens
                               }}
                             >
                               {service.description}
@@ -854,7 +901,7 @@ const ServicesPage = () => {
           </Box>
 
           {/* Testimonials Section */}
-          <Box sx={{ bgcolor: 'rgba(0,0,0,0.3)', py: 8 }}>
+          <Box sx={{ bgcolor: 'rgba(0,0,0,0.3)', py: { xs: 5, md: 8 } }}>
             <Container maxWidth="lg">
               <motion.div
                 initial={{ opacity: 0 }}
@@ -865,10 +912,11 @@ const ServicesPage = () => {
                   variant="h2" 
                   align="center" 
                   sx={{ 
-                    mb: 1,
+                    mb: { xs: 1, md: 2 },
                     fontWeight: 700,
                     color: 'white',
                     fontFamily: '"Oswald", sans-serif',
+                    fontSize: { xs: '1.75rem', sm: '2.25rem', md: '3rem' }
                   }}
                 >
                   CLIENT TESTIMONIALS
@@ -882,62 +930,267 @@ const ServicesPage = () => {
                     maxWidth: '700px',
                     mx: 'auto',
                     fontFamily: '"Poppins", sans-serif',
-                    fontSize: '16px',
-                    lineHeight: '29px',
+                    fontSize: { xs: '0.875rem', sm: '1rem', md: '16px' },
+                    lineHeight: { xs: 1.5, md: '29px' },
                     fontWeight: 400
                   }}
                 >
                   Don't just take our word for it. Here's what our clients have to say about our services.
                 </Typography>
 
-                <Grid container spacing={4}>
-                  {testimonials.map((testimonial) => (
-                    <Grid item xs={12} md={4} key={testimonial.id}>
-                      <TestimonialCard sx={{ minHeight: '350px' }}>
-                        <Box sx={{ flex: 1 }}>
-                          <Typography 
-                            variant="body1" 
-                            sx={{ 
-                              mb: 3, 
-                              fontStyle: 'italic',
-                              color: 'white',
-                              fontFamily: '"Poppins", sans-serif',
-                              lineHeight: '29px',
-                              fontSize: '16px',
-                              fontWeight: 400
-                            }}
-                          >
-                            "{testimonial.quote}"
-                          </Typography>
+                {/* Desktop testimonials grid */}
+                {!isMobile && (
+                  <Grid container spacing={4}>
+                    {testimonials.map((testimonial) => (
+                      <Grid item xs={12} md={4} key={testimonial.id}>
+                        <TestimonialCard sx={{ minHeight: '350px' }}>
+                          <Box sx={{ flex: 1 }}>
+                            <Typography 
+                              variant="body1" 
+                              sx={{ 
+                                mb: 3, 
+                                fontStyle: 'italic',
+                                color: 'white',
+                                fontFamily: '"Poppins", sans-serif',
+                                lineHeight: '29px',
+                                fontSize: '16px',
+                                fontWeight: 400
+                              }}
+                            >
+                              "{testimonial.quote}"
+                            </Typography>
+                          </Box>
+                          <Box>
+                            <Typography 
+                              variant="subtitle1" 
+                              sx={{ 
+                                fontWeight: 600,
+                                color: 'white',
+                                fontFamily: '"Poppins", sans-serif',
+                              }}
+                            >
+                              {testimonial.author}
+                            </Typography>
+                            <Typography 
+                              variant="body2" 
+                              sx={{ 
+                                color: 'rgba(255,255,255,0.7)',
+                                fontFamily: '"Poppins", sans-serif',
+                                fontSize: '16px',
+                                lineHeight: '29px',
+                                fontWeight: 400
+                              }}
+                            >
+                              {testimonial.company}
+                            </Typography>
+                          </Box>
+                        </TestimonialCard>
+                      </Grid>
+                    ))}
+                  </Grid>
+                )}
+
+                {/* Mobile testimonial carousel */}
+                {isMobile && (
+                  <Box>
+                    <CarouselContainer>
+                      <CarouselTrack 
+                        ref={testimonialCarouselRef}
+                        sx={{ 
+                          transform: `translateX(-${activeTestimonialSlide * 100}%)`,
+                        }}
+                      >
+                        {/* First Testimonial Slide */}
+                        <Box 
+                          sx={{ 
+                            display: 'flex',
+                            width: '100%',
+                            flexShrink: 0,
+                            justifyContent: 'center',
+                            p: { xs: 2 }
+                          }}
+                        >
+                          <TestimonialCard sx={{ width: '100%' }}>
+                            <Box sx={{ flex: 1 }}>
+                              <Typography 
+                                variant="body1" 
+                                sx={{ 
+                                  mb: 2, 
+                                  lineHeight: 1.5,
+                                  fontFamily: '"Poppins", sans-serif',
+                                  fontStyle: 'italic',
+                                  color: 'rgba(255, 255, 255, 0.9)',
+                                  fontSize: '0.75rem',
+                                  maxHeight: '200px',
+                                  overflow: 'auto'
+                                }}
+                              >
+                                "{testimonials[0].quote}"
+                              </Typography>
+                            </Box>
+                            <Box>
+                              <Typography 
+                                variant="subtitle1" 
+                                sx={{ 
+                                  fontWeight: 600,
+                                  color: 'white',
+                                  fontFamily: '"Poppins", sans-serif',
+                                  fontSize: '0.8rem'
+                                }}
+                              >
+                                {testimonials[0].author}
+                              </Typography>
+                              <Typography 
+                                variant="body2" 
+                                sx={{ 
+                                  color: 'rgba(255,255,255,0.7)',
+                                  fontFamily: '"Poppins", sans-serif',
+                                  fontSize: '0.75rem',
+                                  fontWeight: 400
+                                }}
+                              >
+                                {testimonials[0].company}
+                              </Typography>
+                            </Box>
+                          </TestimonialCard>
                         </Box>
-                        <Box>
-                          <Typography 
-                            variant="subtitle1" 
-                            sx={{ 
-                              fontWeight: 600,
-                              color: 'white',
-                              fontFamily: '"Poppins", sans-serif',
-                            }}
-                          >
-                            {testimonial.author}
-                          </Typography>
-                          <Typography 
-                            variant="body2" 
-                            sx={{ 
-                              color: 'rgba(255,255,255,0.7)',
-                              fontFamily: '"Poppins", sans-serif',
-                              fontSize: '16px',
-                              lineHeight: '29px',
-                              fontWeight: 400
-                            }}
-                          >
-                            {testimonial.company}
-                          </Typography>
+
+                        {/* Second Testimonial Slide */}
+                        <Box 
+                          sx={{ 
+                            display: 'flex',
+                            width: '100%',
+                            flexShrink: 0,
+                            justifyContent: 'center',
+                            p: { xs: 2 }
+                          }}
+                        >
+                          <TestimonialCard sx={{ width: '100%' }}>
+                            <Box sx={{ flex: 1 }}>
+                              <Typography 
+                                variant="body1" 
+                                sx={{ 
+                                  mb: 2, 
+                                  lineHeight: 1.5,
+                                  fontFamily: '"Poppins", sans-serif',
+                                  fontStyle: 'italic',
+                                  color: 'rgba(255, 255, 255, 0.9)',
+                                  fontSize: '0.75rem',
+                                  maxHeight: '200px',
+                                  overflow: 'auto'
+                                }}
+                              >
+                                "{testimonials[1].quote}"
+                              </Typography>
+                            </Box>
+                            <Box>
+                              <Typography 
+                                variant="subtitle1" 
+                                sx={{ 
+                                  fontWeight: 600,
+                                  color: 'white',
+                                  fontFamily: '"Poppins", sans-serif',
+                                  fontSize: '0.8rem'
+                                }}
+                              >
+                                {testimonials[1].author}
+                              </Typography>
+                              <Typography 
+                                variant="body2" 
+                                sx={{ 
+                                  color: 'rgba(255,255,255,0.7)',
+                                  fontFamily: '"Poppins", sans-serif',
+                                  fontSize: '0.75rem',
+                                  fontWeight: 400
+                                }}
+                              >
+                                {testimonials[1].company}
+                              </Typography>
+                            </Box>
+                          </TestimonialCard>
                         </Box>
-                      </TestimonialCard>
-                    </Grid>
-                  ))}
-                </Grid>
+
+                        {/* Third Testimonial Slide */}
+                        <Box 
+                          sx={{ 
+                            display: 'flex',
+                            width: '100%',
+                            flexShrink: 0,
+                            justifyContent: 'center',
+                            p: { xs: 2 }
+                          }}
+                        >
+                          <TestimonialCard sx={{ width: '100%' }}>
+                            <Box sx={{ flex: 1 }}>
+                              <Typography 
+                                variant="body1" 
+                                sx={{ 
+                                  mb: 2, 
+                                  lineHeight: 1.5,
+                                  fontFamily: '"Poppins", sans-serif',
+                                  fontStyle: 'italic',
+                                  color: 'rgba(255, 255, 255, 0.9)',
+                                  fontSize: '0.75rem',
+                                  maxHeight: '200px',
+                                  overflow: 'auto'
+                                }}
+                              >
+                                "{testimonials[2].quote}"
+                              </Typography>
+                            </Box>
+                            <Box>
+                              <Typography 
+                                variant="subtitle1" 
+                                sx={{ 
+                                  fontWeight: 600,
+                                  color: 'white',
+                                  fontFamily: '"Poppins", sans-serif',
+                                  fontSize: '0.8rem'
+                                }}
+                              >
+                                {testimonials[2].author}
+                              </Typography>
+                              <Typography 
+                                variant="body2" 
+                                sx={{ 
+                                  color: 'rgba(255,255,255,0.7)',
+                                  fontFamily: '"Poppins", sans-serif',
+                                  fontSize: '0.75rem',
+                                  fontWeight: 400
+                                }}
+                              >
+                                {testimonials[2].company}
+                              </Typography>
+                            </Box>
+                          </TestimonialCard>
+                        </Box>
+                      </CarouselTrack>
+                    </CarouselContainer>
+                    
+                    {/* Dots indicator for testimonial slides */}
+                    <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3, mb: 2 }}>
+                      {[
+                        { id: 'testimonial-dot-1', value: 0 }, 
+                        { id: 'testimonial-dot-2', value: 1 },
+                        { id: 'testimonial-dot-3', value: 2 }
+                      ].map((dot) => (
+                        <Box
+                          key={dot.id}
+                          sx={{
+                            width: 10,
+                            height: 10,
+                            borderRadius: '50%',
+                            mx: 0.5,
+                            cursor: 'pointer',
+                            backgroundColor: dot.value === activeTestimonialSlide ? RED_COLOR : 'rgba(255,255,255,0.3)',
+                            transition: 'background-color 0.3s',
+                          }}
+                          onClick={() => setActiveTestimonialSlide(dot.value)}
+                        />
+                      ))}
+                    </Box>
+                  </Box>
+                )}
               </motion.div>
             </Container>
           </Box>
@@ -952,8 +1205,8 @@ const ServicesPage = () => {
               <Box 
                 sx={{ 
                   bgcolor: 'rgba(222, 31, 39, 0.1)', 
-                  p: { xs: 4, md: 6 },
-                  borderRadius: 4,
+                  p: { xs: 3, md: 6 },
+                  borderRadius: { xs: 3, md: 4 },
                   textAlign: 'center',
                   border: '1px solid rgba(222, 31, 39, 0.2)'
                 }}
@@ -961,10 +1214,11 @@ const ServicesPage = () => {
                 <Typography 
                   variant="h3" 
                   sx={{ 
-                    mb: 2,
+                    mb: { xs: 1, md: 2 },
                     fontWeight: 700,
                     color: 'white',
                     fontFamily: '"Oswald", sans-serif',
+                    fontSize: { xs: '1.75rem', sm: '2.25rem', md: '2.5rem' }
                   }}
                 >
                   Ready to Get Started?
@@ -972,13 +1226,13 @@ const ServicesPage = () => {
                 <Typography 
                   variant="body1" 
                   sx={{ 
-                    mb: 4,
+                    mb: { xs: 3, md: 4 },
                     color: 'rgba(255,255,255,0.8)',
                     maxWidth: '700px',
                     mx: 'auto',
                     fontFamily: '"Poppins", sans-serif',
-                    fontSize: '16px',
-                    lineHeight: '29px',
+                    fontSize: { xs: '0.875rem', sm: '1rem', md: '16px' },
+                    lineHeight: { xs: 1.5, md: '29px' },
                     fontWeight: 400
                   }}
                 >

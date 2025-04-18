@@ -17,9 +17,6 @@ import {
   MenuItem,
   InputBase,
   Paper,
-  TextField,
-  FormControl,
-  Select,
   FormHelperText
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -42,7 +39,6 @@ const DARK_BG = '#0A0A0A';
 const DARKER_BG = '#050505';
 const WHITE_TEXT = '#FFFFFF';
 const RED_COLOR = '#DE1F27';
-const PINK_RED = '#FF2992';
 const INPUT_BG = 'rgba(255, 255, 255, 0.05)';
 const ACCENT_COLOR = '#38BDF8';
 
@@ -71,48 +67,69 @@ const ContentSection = styled(Box)(({ theme }) => ({
 }));
 
 const HeroSection = styled(Box)(({ theme }) => ({
-  backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("/MotexFeb6.jpg")',
+  backgroundImage: 'url("/services-15.jpg")',
   backgroundSize: 'cover',
   backgroundPosition: 'center',
-  padding: theme.spacing(12, 0),
+  backgroundRepeat: 'no-repeat',
   position: 'relative',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  height: '40vh',
-  [theme.breakpoints.down('md')]: {
-    padding: theme.spacing(6, 0),
-    height: '30vh',
+  minHeight: '55vh',
+  overflow: 'hidden',
+  zIndex: 10,
+  width: '100%',
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.25)',
+    zIndex: 1
   },
+  [theme.breakpoints.down('md')]: {
+    minHeight: '40vh',
+  }
 }));
 
 const StyledTextField = styled(InputBase)(({ theme }) => ({
   backgroundColor: INPUT_BG,
-  borderRadius: 0,
+  borderRadius: '4px',
   padding: '12px 16px',
   width: '100%',
   color: WHITE_TEXT,
   marginBottom: theme.spacing(3),
   transition: 'all 0.3s ease',
+  border: '1px solid rgba(255, 255, 255, 0.1)',
   '&:focus-within': {
-    borderBottom: `2px solid ${ACCENT_COLOR}`,
+    border: `1px solid ${ACCENT_COLOR}`,
+    boxShadow: `0 0 0 2px ${ACCENT_COLOR}30`,
   },
   '& .MuiInputBase-input': {
     padding: 0,
+    fontSize: '14px',
   },
-  borderBottom: '2px solid rgba(255,255,255,0.1)',
+  [theme.breakpoints.down('sm')]: {
+    padding: '10px 14px',
+    marginBottom: theme.spacing(2),
+    '& .MuiInputBase-input': {
+      fontSize: '13px',
+    }
+  }
 }));
 
 const SubmitButton = styled(Button)(({ theme }) => ({
   backgroundColor: RED_COLOR,
   color: 'white',
   padding: '12px 24px',
-  borderRadius: '50px',
+  borderRadius: '4px',
   textTransform: 'none',
   fontSize: '15px',
-  fontWeight: 400,
-  fontFamily: '"Circular Std Book", sans-serif',
-  whiteSpace: 'nowrap',
+  fontWeight: 500,
+  fontFamily: BODY_FONT,
+  width: '100%',
   boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)',
   transition: 'all 0.3s ease',
   '&:hover': {
@@ -122,16 +139,23 @@ const SubmitButton = styled(Button)(({ theme }) => ({
   '&.Mui-disabled': {
     backgroundColor: 'rgba(222, 31, 39, 0.5)',
     color: 'rgba(255, 255, 255, 0.7)',
+  },
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '14px',
+    padding: '10px 20px',
   }
 }));
 
 const FormLabel = styled(Typography)(({ theme }) => ({
-  color: 'rgba(255, 255, 255, 0.6)',
-  fontSize: '12px',
+  color: 'rgba(255, 255, 255, 0.8)',
+  fontSize: '14px',
   marginBottom: theme.spacing(1),
-  textTransform: 'uppercase',
-  letterSpacing: '1px',
   fontFamily: BODY_FONT,
+  fontWeight: 500,
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '13px',
+    marginBottom: theme.spacing(0.5),
+  }
 }));
 
 const ContactCard = styled(Paper)(({ theme }) => ({
@@ -145,6 +169,13 @@ const ContactCard = styled(Paper)(({ theme }) => ({
     transform: 'translateY(-5px)',
     boxShadow: '0 8px 20px rgba(0,0,0,0.3)',
   },
+  [theme.breakpoints.down('sm')]: {
+    padding: theme.spacing(2.5),
+    borderRadius: '12px',
+    '& .MuiTypography-body1': {
+      wordBreak: 'break-word',
+    }
+  }
 }));
 
 const MapContainer = styled(Box)(({ theme }) => ({
@@ -234,39 +265,46 @@ const ContactUsPage = () => {
     
     setLoading(true);
     
-    // Here you would typically send the form data to your backend or email service
-    // For example, using emailjs:
-    /*
+    // Use emailjs to send the form
+    // Send to template_4ymqxvf (user confirmation)
     emailjs.sendForm(
-      'YOUR_SERVICE_ID',
-      'YOUR_TEMPLATE_ID',
+      'service_hbi58cx', // Use your service ID 
+      'template_4ymqxvf',
       formRef.current!,
-      'YOUR_PUBLIC_KEY'
+      'zIkiY-TyFhBQlmHxZ'
     )
     .then((result) => {
-      setLoading(false);
-      // Handle success - maybe redirect to a thank you page
-      console.log(result.text);
-    }, (error) => {
-      setLoading(false);
-      // Handle error
-      console.log(error.text);
-    });
-    */
-    
-    // For now, let's simulate a successful submission
-    setTimeout(() => {
-      setLoading(false);
-      // Reset form
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        subject: '',
-        message: ''
+      console.log('Email sent to customer:', result.text);
+      
+      // Send to template_h6krq0n (admin notification)
+      emailjs.sendForm(
+        'service_hbi58cx', // Use your service ID
+        'template_h6krq0n',
+        formRef.current!,
+        'zIkiY-TyFhBQlmHxZ'
+      )
+      .then((result) => {
+        console.log('Email sent to admin:', result.text);
+        setLoading(false);
+        // Reset form
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          subject: '',
+          message: ''
+        });
+        alert('Thank you for your message! We will get back to you soon.');
+      }, (error) => {
+        console.log('Admin email error:', error.text);
+        setLoading(false);
+        alert('There was an error sending your message. Please try again.');
       });
-      alert('Thank you for your message! We will get back to you soon.');
-    }, 1500);
+    }, (error) => {
+      console.log('Customer email error:', error.text);
+      setLoading(false);
+      alert('There was an error sending your message. Please try again.');
+    });
   };
 
   const containerVariants = {
@@ -577,38 +615,31 @@ const ContactUsPage = () => {
 
       {/* Hero Section */}
       <HeroSection>
-        <Container maxWidth="lg">
+        <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2 }}>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            style={{ textAlign: 'center' }}
+            style={{ 
+              display: 'flex', 
+              flexDirection: 'column',
+              justifyContent: 'center', 
+              alignItems: 'center' 
+            }}
           >
             <Typography 
               variant="h2" 
               component="h1" 
+              align="center"
               sx={{ 
-                color: 'white', 
-                fontWeight: 700, 
-                mb: 2,
+                mb: 1,
+                fontWeight: 800, 
+                color: RED_COLOR,
                 fontFamily: HEADING_FONT,
-                fontSize: { xs: '2.5rem', md: '3.5rem' }
+                fontSize: { xs: '40px', sm: '50px', md: '90px', lg: '100px' }
               }}
             >
-              Contact Us
-            </Typography>
-            <Typography 
-              variant="h6" 
-              sx={{ 
-                color: 'rgba(255, 255, 255, 0.8)', 
-                maxWidth: '800px', 
-                mx: 'auto',
-                fontFamily: BODY_FONT,
-                fontWeight: 300,
-                fontSize: { xs: '1rem', md: '1.2rem' }
-              }}
-            >
-              We're here to help with all your transportation and logistics needs.
+              CONTACT US
             </Typography>
           </motion.div>
         </Container>
@@ -616,8 +647,8 @@ const ContactUsPage = () => {
 
       {/* Main Content */}
       <ContentSection>
-        <Container maxWidth="lg" sx={{ py: 8 }}>
-          <Grid container spacing={6}>
+        <Container maxWidth="lg" sx={{ py: { xs: 5, md: 8 } }}>
+          <Grid container spacing={{ xs: 4, md: 6 }}>
             {/* Contact Form Section */}
             <Grid item xs={12} md={7}>
               <motion.div
@@ -629,106 +660,132 @@ const ContactUsPage = () => {
                   <Typography 
                     variant="h4" 
                     sx={{ 
-                      mb: 4, 
+                      mb: { xs: 2, md: 4 }, 
                       fontFamily: HEADING_FONT,
-                      fontWeight: 700 
+                      fontWeight: 700,
+                      fontSize: { xs: '24px', sm: '28px', md: '36px' }
                     }}
                   >
-                    Send Us a Message
+                    SEND US A MESSAGE
                   </Typography>
                 </motion.div>
                 
-                <form ref={formRef} onSubmit={handleSubmit}>
-                  <motion.div variants={itemVariants}>
-                    <FormLabel>Your Name*</FormLabel>
-                    <StyledTextField
-                      placeholder="Enter your full name"
-                      fullWidth
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      error={formErrors.name}
-                    />
-                    {formErrors.name && (
-                      <FormHelperText error sx={{ mt: -2, mb: 2 }}>
-                        Please enter your name
-                      </FormHelperText>
-                    )}
-                  </motion.div>
-                  
-                  <motion.div variants={itemVariants}>
-                    <FormLabel>Email Address*</FormLabel>
-                    <StyledTextField
-                      placeholder="Enter your email address"
-                      fullWidth
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      error={formErrors.email}
-                    />
-                    {formErrors.email && (
-                      <FormHelperText error sx={{ mt: -2, mb: 2 }}>
-                        Please enter a valid email address
-                      </FormHelperText>
-                    )}
-                  </motion.div>
-                  
-                  <motion.div variants={itemVariants}>
-                    <FormLabel>Phone Number</FormLabel>
-                    <StyledTextField
-                      placeholder="Enter your phone number"
-                      fullWidth
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleChange}
-                    />
-                  </motion.div>
-                  
-                  <motion.div variants={itemVariants}>
-                    <FormLabel>Subject</FormLabel>
-                    <StyledTextField
-                      placeholder="What is this regarding?"
-                      fullWidth
-                      name="subject"
-                      value={formData.subject}
-                      onChange={handleChange}
-                    />
-                  </motion.div>
-                  
-                  <motion.div variants={itemVariants}>
-                    <FormLabel>Message*</FormLabel>
-                    <StyledTextField
-                      placeholder="Type your message here..."
-                      fullWidth
-                      multiline
-                      rows={5}
-                      name="message"
-                      value={formData.message}
-                      onChange={handleChange}
-                      error={formErrors.message}
-                      sx={{ 
-                        '& .MuiInputBase-inputMultiline': { 
-                          py: 1.5 
-                        } 
-                      }}
-                    />
-                    {formErrors.message && (
-                      <FormHelperText error sx={{ mt: -2, mb: 2 }}>
-                        Please enter your message
-                      </FormHelperText>
-                    )}
-                  </motion.div>
-                  
-                  <motion.div variants={itemVariants} style={{ marginTop: '16px' }}>
-                    <SubmitButton 
-                      type="submit" 
-                      disabled={loading}
-                      startIcon={<SendIcon />}
-                    >
-                      {loading ? 'Sending...' : 'Send Message'}
-                    </SubmitButton>
-                  </motion.div>
-                </form>
+                <Paper 
+                  elevation={0} 
+                  sx={{ 
+                    p: { xs: 3, md: 4 }, 
+                    backgroundColor: 'rgba(0,0,0,0.4)', 
+                    border: '1px solid rgba(255,255,255,0.1)',
+                    borderRadius: '8px'
+                  }}
+                >
+                  <form ref={formRef} onSubmit={handleSubmit}>
+                    {/* Name and Email - Side by side for mobile and up */}
+                    <Grid container spacing={2}>
+                      <Grid item xs={6}>
+                        <motion.div variants={itemVariants}>
+                          <FormLabel>Your Name*</FormLabel>
+                          <StyledTextField
+                            placeholder="Full name"
+                            fullWidth
+                            name="name"
+                            value={formData.name}
+                            onChange={handleChange}
+                            error={formErrors.name}
+                          />
+                          {formErrors.name && (
+                            <FormHelperText error sx={{ mt: -2, mb: 2, fontSize: { xs: '11px', md: '12px' } }}>
+                              Please enter your name
+                            </FormHelperText>
+                          )}
+                        </motion.div>
+                      </Grid>
+                      
+                      <Grid item xs={6}>
+                        <motion.div variants={itemVariants}>
+                          <FormLabel>Email Address*</FormLabel>
+                          <StyledTextField
+                            placeholder="Email address"
+                            fullWidth
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            error={formErrors.email}
+                          />
+                          {formErrors.email && (
+                            <FormHelperText error sx={{ mt: -2, mb: 2, fontSize: { xs: '11px', md: '12px' } }}>
+                              Please enter a valid email
+                            </FormHelperText>
+                          )}
+                        </motion.div>
+                      </Grid>
+                    </Grid>
+                    
+                    {/* Phone and Subject - Side by side */}
+                    <Grid container spacing={2}>
+                      <Grid item xs={6}>
+                        <motion.div variants={itemVariants}>
+                          <FormLabel>Phone Number</FormLabel>
+                          <StyledTextField
+                            placeholder="Phone number"
+                            fullWidth
+                            name="phone"
+                            value={formData.phone}
+                            onChange={handleChange}
+                          />
+                        </motion.div>
+                      </Grid>
+                      
+                      <Grid item xs={6}>
+                        <motion.div variants={itemVariants}>
+                          <FormLabel>Subject</FormLabel>
+                          <StyledTextField
+                            placeholder="What is this regarding?"
+                            fullWidth
+                            name="subject"
+                            value={formData.subject}
+                            onChange={handleChange}
+                          />
+                        </motion.div>
+                      </Grid>
+                    </Grid>
+                    
+                    <motion.div variants={itemVariants}>
+                      <FormLabel>Message*</FormLabel>
+                      <StyledTextField
+                        placeholder="Type your message here..."
+                        fullWidth
+                        multiline
+                        rows={5}
+                        name="message"
+                        value={formData.message}
+                        onChange={handleChange}
+                        error={formErrors.message}
+                        sx={{ 
+                          '& .MuiInputBase-inputMultiline': { 
+                            py: 1.5,
+                            fontSize: { xs: '13px', md: '14px' }
+                          } 
+                        }}
+                      />
+                      {formErrors.message && (
+                        <FormHelperText error sx={{ mt: -2, mb: 2, fontSize: { xs: '11px', md: '12px' } }}>
+                          Please enter your message
+                        </FormHelperText>
+                      )}
+                    </motion.div>
+                    
+                    <motion.div variants={itemVariants} style={{ marginTop: '24px' }}>
+                      <SubmitButton 
+                        type="submit" 
+                        disabled={loading}
+                        endIcon={<SendIcon sx={{ fontSize: { xs: '16px', md: '20px' } }} />}
+                      >
+                        {loading ? 'Sending...' : 'Send Message'}
+                      </SubmitButton>
+                    </motion.div>
+                  </form>
+                </Paper>
               </motion.div>
             </Grid>
             
@@ -743,26 +800,36 @@ const ContactUsPage = () => {
                   <Typography 
                     variant="h4" 
                     sx={{ 
-                      mb: 4, 
+                      mb: { xs: 2, md: 4 }, 
                       fontFamily: HEADING_FONT,
-                      fontWeight: 700 
+                      fontWeight: 700,
+                      fontSize: { xs: '24px', sm: '28px', md: '36px' }
                     }}
                   >
-                    Contact Information
+                    CONTACT INFORMATION
                   </Typography>
                 </motion.div>
                 
-                <Grid container spacing={3}>
+                <Grid container spacing={{ xs: 2, md: 3 }}>
+                  {/* Contact cards side by side on mobile */}
                   <Grid item xs={12}>
                     <motion.div variants={itemVariants}>
                       <ContactCard>
-                        <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 2 }}>
-                          <LocationIcon sx={{ color: RED_COLOR, mr: 2, fontSize: 28 }} />
+                        <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
+                          <LocationIcon sx={{ color: RED_COLOR, mr: 2, fontSize: { xs: 24, md: 28 } }} />
                           <Box>
-                            <Typography variant="h6" sx={{ mb: 1, fontFamily: HEADING_FONT }}>
-                              Our Location
+                            <Typography variant="h6" sx={{ 
+                              mb: 1, 
+                              fontFamily: HEADING_FONT,
+                              fontSize: { xs: '16px', md: '18px' }
+                            }}>
+                              OUR LOCATION
                             </Typography>
-                            <Typography variant="body1" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: BODY_FONT }}>
+                            <Typography variant="body1" sx={{ 
+                              color: 'rgba(255, 255, 255, 0.8)', 
+                              fontFamily: BODY_FONT,
+                              fontSize: { xs: '13px', md: '14px' }
+                            }}>
                               123 Transport Way, Sydney, NSW 2000, Australia
                             </Typography>
                           </Box>
@@ -771,16 +838,24 @@ const ContactUsPage = () => {
                     </motion.div>
                   </Grid>
                   
-                  <Grid item xs={12} sm={6} md={12}>
+                  <Grid item xs={6} md={12}>
                     <motion.div variants={itemVariants}>
                       <ContactCard>
-                        <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 2 }}>
-                          <PhoneIcon sx={{ color: RED_COLOR, mr: 2, fontSize: 28 }} />
+                        <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
+                          <PhoneIcon sx={{ color: RED_COLOR, mr: 2, fontSize: { xs: 24, md: 28 } }} />
                           <Box>
-                            <Typography variant="h6" sx={{ mb: 1, fontFamily: HEADING_FONT }}>
-                              Phone Number
+                            <Typography variant="h6" sx={{ 
+                              mb: 1, 
+                              fontFamily: HEADING_FONT,
+                              fontSize: { xs: '16px', md: '18px' }
+                            }}>
+                              PHONE NUMBER
                             </Typography>
-                            <Typography variant="body1" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: BODY_FONT }}>
+                            <Typography variant="body1" sx={{ 
+                              color: 'rgba(255, 255, 255, 0.8)', 
+                              fontFamily: BODY_FONT,
+                              fontSize: { xs: '13px', md: '14px' }
+                            }}>
                               +61 2 1234 5678
                             </Typography>
                           </Box>
@@ -789,16 +864,25 @@ const ContactUsPage = () => {
                     </motion.div>
                   </Grid>
                   
-                  <Grid item xs={12} sm={6} md={12}>
+                  <Grid item xs={6} md={12}>
                     <motion.div variants={itemVariants}>
                       <ContactCard>
-                        <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 2 }}>
-                          <EmailIcon sx={{ color: RED_COLOR, mr: 2, fontSize: 28 }} />
-                          <Box>
-                            <Typography variant="h6" sx={{ mb: 1, fontFamily: HEADING_FONT }}>
-                              Email Address
+                        <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
+                          <EmailIcon sx={{ color: RED_COLOR, mr: 2, fontSize: { xs: 24, md: 28 }, flexShrink: 0 }} />
+                          <Box sx={{ overflow: 'hidden' }}>
+                            <Typography variant="h6" sx={{ 
+                              mb: 1, 
+                              fontFamily: HEADING_FONT,
+                              fontSize: { xs: '16px', md: '18px' }
+                            }}>
+                              EMAIL ADDRESS
                             </Typography>
-                            <Typography variant="body1" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: BODY_FONT }}>
+                            <Typography variant="body1" sx={{ 
+                              color: 'rgba(255, 255, 255, 0.8)', 
+                              fontFamily: BODY_FONT,
+                              fontSize: { xs: '13px', md: '14px' },
+                              wordBreak: 'break-word'
+                            }}>
                               info@motextransport.com.au
                             </Typography>
                           </Box>
@@ -812,47 +896,51 @@ const ContactUsPage = () => {
                       <Typography 
                         variant="h5" 
                         sx={{ 
-                          mt: 2, 
-                          mb: 3, 
+                          mt: { xs: 1, md: 2 }, 
+                          mb: { xs: 2, md: 3 }, 
                           fontFamily: HEADING_FONT,
-                          fontWeight: 600 
+                          fontWeight: 600,
+                          fontSize: { xs: '18px', md: '20px' }
                         }}
                       >
-                        Follow Us
+                        FOLLOW US
                       </Typography>
                       <Stack direction="row" spacing={2}>
                         <IconButton 
                           sx={{ 
                             color: 'white', 
                             backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                            '&:hover': { backgroundColor: RED_COLOR }
+                            '&:hover': { backgroundColor: RED_COLOR },
+                            padding: { xs: '6px', md: '8px' },
                           }}
                           component="a"
                           href="#instagram"
                         >
-                          <InstagramIcon />
+                          <InstagramIcon sx={{ fontSize: { xs: '1.2rem', md: '1.5rem' } }} />
                         </IconButton>
                         <IconButton 
                           sx={{ 
                             color: 'white', 
                             backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                            '&:hover': { backgroundColor: RED_COLOR }
+                            '&:hover': { backgroundColor: RED_COLOR },
+                            padding: { xs: '6px', md: '8px' },
                           }}
                           component="a"
                           href="#linkedin"
                         >
-                          <LinkedInIcon />
+                          <LinkedInIcon sx={{ fontSize: { xs: '1.2rem', md: '1.5rem' } }} />
                         </IconButton>
                         <IconButton 
                           sx={{ 
                             color: 'white', 
                             backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                            '&:hover': { backgroundColor: RED_COLOR }
+                            '&:hover': { backgroundColor: RED_COLOR },
+                            padding: { xs: '6px', md: '8px' },
                           }}
                           component="a"
                           href="#whatsapp"
                         >
-                          <WhatsAppIcon />
+                          <WhatsAppIcon sx={{ fontSize: { xs: '1.2rem', md: '1.5rem' } }} />
                         </IconButton>
                       </Stack>
                     </motion.div>
@@ -863,7 +951,7 @@ const ContactUsPage = () => {
           </Grid>
           
           {/* Map Section */}
-          <Box sx={{ mt: 8 }}>
+          <Box sx={{ mt: { xs: 5, md: 8 } }}>
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: isLoaded ? 1 : 0, y: isLoaded ? 0 : 30 }}
@@ -872,12 +960,13 @@ const ContactUsPage = () => {
               <Typography 
                 variant="h4" 
                 sx={{ 
-                  mb: 4, 
+                  mb: { xs: 2, md: 4 }, 
                   fontFamily: HEADING_FONT,
-                  fontWeight: 700 
+                  fontWeight: 700,
+                  fontSize: { xs: '24px', sm: '28px', md: '36px' }
                 }}
               >
-                Find Us
+                FIND US
               </Typography>
               <MapContainer>
                 <iframe 
@@ -888,6 +977,7 @@ const ContactUsPage = () => {
                   allowFullScreen 
                   loading="lazy" 
                   referrerPolicy="no-referrer-when-downgrade"
+                  title="MOTEX Transport Location Map"
                 ></iframe>
               </MapContainer>
             </motion.div>
@@ -895,117 +985,195 @@ const ContactUsPage = () => {
         </Container>
       </ContentSection>
       
-      {/* Footer */}
-      <Box sx={{ bgcolor: '#000000', py: 6 }}>
+      {/* Footer - Updated for mobile responsiveness */}
+      <Box sx={{ bgcolor: '#000000', py: { xs: 4, md: 6 } }}>
         <Container maxWidth="lg">
-          <Grid container spacing={4}>
+          <Grid container spacing={{ xs: 3, md: 4 }}>
             <Grid item xs={12} md={5}>
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: { xs: 2, md: 3 } }}>
                 <Box 
                   component="img" 
                   src="/MOTEX+Logo.png" 
                   alt="MOTEX Logo" 
                   sx={{ 
-                    height: 40, 
+                    height: { xs: 32, md: 40 }, 
                   }} 
                 />
               </Box>
-              <Typography variant="body2" sx={{ color: 'white', opacity: 0.8, mb: 3, fontFamily: BODY_FONT, fontWeight: 300 }}>
+              <Typography variant="body2" sx={{ 
+                color: 'white', 
+                opacity: 0.8, 
+                mb: { xs: 2, md: 3 }, 
+                fontFamily: BODY_FONT, 
+                fontWeight: 300,
+                fontSize: { xs: '0.8rem', sm: '0.85rem', md: '0.875rem' }
+              }}>
                 MOTEX Transport is a leading provider of logistics and transportation services across Australia, offering reliable and efficient solutions for businesses of all sizes.
               </Typography>
               
               {/* Social Media Icons */}
-              <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
+              <Stack direction="row" spacing={2} sx={{ mt: { xs: 1, md: 2 } }}>
                 <IconButton 
                   sx={{ 
                     color: 'white', 
                     backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                    '&:hover': { backgroundColor: RED_COLOR }
+                    '&:hover': { backgroundColor: RED_COLOR },
+                    padding: { xs: '6px', md: '8px' },
                   }}
                   component="a"
                   href="#instagram"
                 >
-                  <InstagramIcon />
+                  <InstagramIcon sx={{ fontSize: { xs: '1.2rem', md: '1.5rem' } }} />
                 </IconButton>
                 <IconButton 
                   sx={{ 
                     color: 'white', 
                     backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                    '&:hover': { backgroundColor: RED_COLOR }
+                    '&:hover': { backgroundColor: RED_COLOR },
+                    padding: { xs: '6px', md: '8px' },
                   }}
                   component="a"
                   href="#linkedin"
                 >
-                  <LinkedInIcon />
+                  <LinkedInIcon sx={{ fontSize: { xs: '1.2rem', md: '1.5rem' } }} />
                 </IconButton>
                 <IconButton 
                   sx={{ 
                     color: 'white', 
                     backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                    '&:hover': { backgroundColor: RED_COLOR }
+                    '&:hover': { backgroundColor: RED_COLOR },
+                    padding: { xs: '6px', md: '8px' },
                   }}
                   component="a"
                   href="#whatsapp"
                 >
-                  <WhatsAppIcon />
+                  <WhatsAppIcon sx={{ fontSize: { xs: '1.2rem', md: '1.5rem' } }} />
                 </IconButton>
               </Stack>
             </Grid>
             
-            <Grid item xs={12} sm={6} md={3}>
-              <Typography variant="h6" sx={{ color: 'white', mb: 2, fontFamily: HEADING_FONT, fontWeight: 'bold', fontSize: '20px' }}>
-                Quick Links
+            <Grid item xs={6} md={3}>
+              <Typography variant="h6" sx={{ 
+                color: 'white', 
+                mb: { xs: 1, md: 2 }, 
+                fontFamily: HEADING_FONT, 
+                fontWeight: 'bold', 
+                fontSize: { xs: '16px', sm: '18px', md: '20px' } 
+              }}>
+                QUICK LINKS
               </Typography>
-              <Stack spacing={1}>
-                <Link href="/" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: BODY_FONT, fontWeight: 300 }}>
+              <Stack spacing={0.5}>
+                <Link href="/" color="inherit" underline="hover" sx={{ 
+                  color: 'rgba(255, 255, 255, 0.8)', 
+                  fontFamily: BODY_FONT, 
+                  fontWeight: 300,
+                  fontSize: { xs: '0.75rem', sm: '0.8rem', md: '0.875rem' } 
+                }}>
                   Home
                 </Link>
-                <Link href="/about-us" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: BODY_FONT, fontWeight: 300 }}>
+                <Link href="/about-us" color="inherit" underline="hover" sx={{ 
+                  color: 'rgba(255, 255, 255, 0.8)', 
+                  fontFamily: BODY_FONT, 
+                  fontWeight: 300,
+                  fontSize: { xs: '0.75rem', sm: '0.8rem', md: '0.875rem' } 
+                }}>
                   About Us
                 </Link>
-                <Link href="/services" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: BODY_FONT, fontWeight: 300 }}>
+                <Link href="/services" color="inherit" underline="hover" sx={{ 
+                  color: 'rgba(255, 255, 255, 0.8)', 
+                  fontFamily: BODY_FONT, 
+                  fontWeight: 300,
+                  fontSize: { xs: '0.75rem', sm: '0.8rem', md: '0.875rem' } 
+                }}>
                   Services
                 </Link>
-                <Link href="/instant-quote" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: BODY_FONT, fontWeight: 300 }}>
+                <Link href="/instant-quote" color="inherit" underline="hover" sx={{ 
+                  color: 'rgba(255, 255, 255, 0.8)', 
+                  fontFamily: BODY_FONT, 
+                  fontWeight: 300,
+                  fontSize: { xs: '0.75rem', sm: '0.8rem', md: '0.875rem' } 
+                }}>
                   Instant Quote
                 </Link>
-                <Link href="/gallery" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: BODY_FONT, fontWeight: 300 }}>
+                <Link href="/gallery" color="inherit" underline="hover" sx={{ 
+                  color: 'rgba(255, 255, 255, 0.8)', 
+                  fontFamily: BODY_FONT, 
+                  fontWeight: 300,
+                  fontSize: { xs: '0.75rem', sm: '0.8rem', md: '0.875rem' } 
+                }}>
                   Gallery
                 </Link>
-                <Link href="/contact-us" color="inherit" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontFamily: BODY_FONT, fontWeight: 300 }}>
+                <Link href="/contact-us" color="inherit" underline="hover" sx={{ 
+                  color: 'rgba(255, 255, 255, 0.8)', 
+                  fontFamily: BODY_FONT, 
+                  fontWeight: 300,
+                  fontSize: { xs: '0.75rem', sm: '0.8rem', md: '0.875rem' } 
+                }}>
                   Contact
                 </Link>
               </Stack>
             </Grid>
             
-            <Grid item xs={12} sm={6} md={4}>
-              <Typography variant="h6" sx={{ color: 'white', mb: 2, fontFamily: HEADING_FONT, fontWeight: 'bold', fontSize: '20px' }}>
-                Contact Information
+            <Grid item xs={6} md={4}>
+              <Typography variant="h6" sx={{ 
+                color: 'white', 
+                mb: { xs: 1, md: 2 }, 
+                fontFamily: HEADING_FONT, 
+                fontWeight: 'bold', 
+                fontSize: { xs: '16px', sm: '18px', md: '20px' } 
+              }}>
+                CONTACT INFORMATION
               </Typography>
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <LocationIcon sx={{ color: RED_COLOR, mr: 1.5 }} />
-                <Typography variant="body2" sx={{ color: 'white', opacity: 0.8, fontFamily: BODY_FONT, fontWeight: 300 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
+                <LocationIcon sx={{ color: RED_COLOR, mr: 1.5, fontSize: { xs: '0.9rem', md: '1.2rem' } }} />
+                <Typography variant="body2" sx={{ 
+                  color: 'white', 
+                  opacity: 0.8, 
+                  fontFamily: BODY_FONT, 
+                  fontWeight: 300,
+                  fontSize: { xs: '0.75rem', sm: '0.8rem', md: '0.875rem' } 
+                }}>
                   123 Transport Way, Sydney, NSW 2000, Australia
                 </Typography>
               </Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <PhoneIcon sx={{ color: RED_COLOR, mr: 1.5 }} />
-                <Typography variant="body2" sx={{ color: 'white', opacity: 0.8, fontFamily: BODY_FONT, fontWeight: 300 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
+                <PhoneIcon sx={{ color: RED_COLOR, mr: 1.5, fontSize: { xs: '0.9rem', md: '1.2rem' } }} />
+                <Typography variant="body2" sx={{ 
+                  color: 'white', 
+                  opacity: 0.8, 
+                  fontFamily: BODY_FONT, 
+                  fontWeight: 300,
+                  fontSize: { xs: '0.75rem', sm: '0.8rem', md: '0.875rem' } 
+                }}>
                   +61 2 1234 5678
                 </Typography>
               </Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <EmailIcon sx={{ color: RED_COLOR, mr: 1.5 }} />
-                <Typography variant="body2" sx={{ color: 'white', opacity: 0.8, fontFamily: BODY_FONT, fontWeight: 300 }}>
+              <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 1.5 }}>
+                <EmailIcon sx={{ color: RED_COLOR, mr: 1.5, fontSize: { xs: '0.9rem', md: '1.2rem' }, flexShrink: 0 }} />
+                <Typography variant="body2" sx={{ 
+                  color: 'white', 
+                  opacity: 0.8, 
+                  fontFamily: BODY_FONT, 
+                  fontWeight: 300,
+                  fontSize: { xs: '0.75rem', sm: '0.8rem', md: '0.875rem' },
+                  wordBreak: 'break-word',
+                  overflow: 'hidden'
+                }}>
                   info@motextransport.com.au
                 </Typography>
               </Box>
             </Grid>
           </Grid>
           
-          <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.1)', my: 4 }} />
+          <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.1)', my: { xs: 3, md: 4 } }} />
           
-          <Typography variant="body2" align="center" sx={{ color: 'white', opacity: 0.7, fontFamily: BODY_FONT, fontWeight: 300 }}>
+          <Typography variant="body2" align="center" sx={{ 
+            color: 'white', 
+            opacity: 0.7, 
+            fontFamily: BODY_FONT, 
+            fontWeight: 300,
+            fontSize: { xs: '0.75rem', sm: '0.8rem', md: '0.875rem' }
+          }}>
             © {new Date().getFullYear()} MOTEX Transport. All rights reserved.
           </Typography>
         </Container>
