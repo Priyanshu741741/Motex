@@ -20,7 +20,12 @@ import {
   Divider,
   Dialog,
   DialogContent,
-  DialogActions
+  DialogActions,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText
 } from '@mui/material';
 import emailjs from '@emailjs/browser';
 import { styled } from '@mui/material/styles';
@@ -35,6 +40,7 @@ import LocationIcon from '@mui/icons-material/LocationOn';
 import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
 import MenuIcon from '@mui/icons-material/Menu';
+import CloseIcon from '@mui/icons-material/Close';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { useLocation } from 'react-router-dom';
 
@@ -231,6 +237,12 @@ const InstantQuotePage = () => {
   const [loading, setLoading] = useState(false);
   const [successDialogOpen, setSuccessDialogOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  
+  // Initialize EmailJS
+  useEffect(() => {
+    emailjs.init("4UoPVi0_UFU0fK2L0");
+  }, []);
   
   // Scroll to top when component mounts
   useEffect(() => {
@@ -243,6 +255,12 @@ const InstantQuotePage = () => {
   
   const handleMenuClose = () => {
     setAnchorEl(null);
+  };
+  
+  // Handle navigation with scroll to top
+  const handleNavigation = (path: string) => {
+    window.location.href = path;
+    window.scrollTo(0, 0);
   };
   
   // Form state matching Supabase table
@@ -298,10 +316,11 @@ const InstantQuotePage = () => {
       const currentYear = new Date().getFullYear();
       
       // Send confirmation email to user
-      await emailjs.send(
-        'service_hbi58cx',
-        'template_p1h9d13',
-        {
+      const customerEmailParams = {
+        service_id: 'service_g472qdp',
+        template_id: 'template_cce116x',
+        user_id: '4UoPVi0_UFU0fK2L0',
+        template_params: {
           to_email: formData.email,
           to_name: `${formData.first_name} ${formData.last_name}`,
           pickup_suburb: formData.pickup_suburb,
@@ -312,15 +331,15 @@ const InstantQuotePage = () => {
           size: formData.size,
           service_mode: formData.service_mode,
           message: 'Thank you for your quote request. Our team will review it and get back to you within 24 hours.'
-        },
-        'L45k8LVh0pmGbMV6d'
-      );
-  
+        }
+      };
+      
       // For admin notification, send all fields directly
-      await emailjs.send(
-        'service_hbi58cx',
-        'template_eghqznh',
-        {
+      const adminEmailParams = {
+        service_id: 'service_g472qdp',
+        template_id: 'template_92wv5g9',
+        user_id: '4UoPVi0_UFU0fK2L0',
+        template_params: {
           // Individual form fields
           first_name: formData.first_name,
           last_name: formData.last_name,
@@ -341,10 +360,35 @@ const InstantQuotePage = () => {
           form_data: JSON.stringify(formData, null, 2),
           submission_time: new Date().toLocaleString(),
           current_year: currentYear.toString()
+        }
+      };
+      
+      // Send the customer confirmation email
+      const customerResponse = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
         },
-        'L45k8LVh0pmGbMV6d'
-      );
-  
+        body: JSON.stringify(customerEmailParams)
+      });
+      
+      if (!customerResponse.ok) {
+        throw new Error(`Customer email failed: ${customerResponse.statusText}`);
+      }
+      
+      // Send the admin notification email
+      const adminResponse = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(adminEmailParams)
+      });
+      
+      if (!adminResponse.ok) {
+        throw new Error(`Admin email failed: ${adminResponse.statusText}`);
+      }
+      
       console.log('Form submitted:', formData);
       
       // Open the success dialog instead of alert
@@ -372,7 +416,7 @@ const InstantQuotePage = () => {
       });
     } catch (error) {
       console.error('Error submitting form:', error);
-      alert('There was an error submitting your request. Please try again.');
+      alert('There was an error submitting your request. Please try again. Error: ' + (error instanceof Error ? error.message : 'Unknown error'));
     } finally {
       setLoading(false);
     }
@@ -555,112 +599,12 @@ const InstantQuotePage = () => {
                   edge="end"
                   color="inherit"
                   aria-label="menu"
-                  onClick={handleMenuOpen}
+                  onClick={() => setIsMobileMenuOpen(true)}
                   sx={{ color: 'white' }}
                 >
                   <MenuIcon />
                 </IconButton>
               )}
-              
-              {/* Mobile menu */}
-              <Menu
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
-                onClose={handleMenuClose}
-                PaperProps={{
-                  sx: {
-                    backgroundColor: 'rgba(0, 0, 0, 0.9)',
-                    color: 'white',
-                    width: '200px',
-                    mt: 2,
-                    borderRadius: '8px',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
-                  }
-                }}
-              >
-                <MenuItem 
-                  component={RouterLink} 
-                  to="/" 
-                  onClick={handleMenuClose}
-                  sx={{ 
-                    py: 1.5, 
-                    fontFamily: BODY_FONT
-                  }}
-                >
-                  Home
-                </MenuItem>
-                <MenuItem 
-                  component={RouterLink} 
-                  to="/services" 
-                  onClick={handleMenuClose}
-                  sx={{ 
-                    py: 1.5, 
-                    fontFamily: BODY_FONT
-                  }}
-                >
-                  Services
-                </MenuItem>
-                <MenuItem 
-                  component={RouterLink} 
-                  to="/about-us" 
-                  onClick={handleMenuClose}
-                  sx={{ 
-                    py: 1.5, 
-                    fontFamily: BODY_FONT
-                  }}
-                >
-                  About Us
-                </MenuItem>
-                <MenuItem 
-                  component={RouterLink} 
-                  to="/instant-quote" 
-                  onClick={handleMenuClose}
-                  sx={{ 
-                    py: 1.5, 
-                    fontFamily: BODY_FONT,
-                    color: RED_COLOR
-                  }}
-                >
-                  Instant Quote
-                </MenuItem>
-                <MenuItem 
-                  component={RouterLink} 
-                  to="/gallery" 
-                  onClick={handleMenuClose}
-                  sx={{ 
-                    py: 1.5, 
-                    fontFamily: BODY_FONT
-                  }}
-                >
-                  Gallery
-                </MenuItem>
-                <MenuItem 
-                  component={RouterLink} 
-                  to="/contact-us" 
-                  onClick={handleMenuClose}
-                  sx={{ 
-                    py: 1.5, 
-                    fontFamily: BODY_FONT
-                  }}
-                >
-                  Contact
-                </MenuItem>
-                <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.1)' }} />
-                <MenuItem 
-                  component={RouterLink} 
-                  to="/instant-quote" 
-                  onClick={handleMenuClose}
-                  sx={{ 
-                    py: 1.5, 
-                    fontFamily: BODY_FONT,
-                    color: RED_COLOR,
-                    fontWeight: 'bold'
-                  }}
-                >
-                  Get a Quote
-                </MenuItem>
-              </Menu>
             </Box>
           </Toolbar>
         </AppBar>
@@ -1259,33 +1203,9 @@ const InstantQuotePage = () => {
                       padding: { xs: '6px', md: '8px' },
                     }}
                     component="a"
-                    href="#instagram"
+                    href="https://www.instagram.com/motextransport/"
                   >
                     <InstagramIcon sx={{ fontSize: { xs: '1.2rem', md: '1.5rem' } }} />
-                  </IconButton>
-                  <IconButton 
-                    sx={{ 
-                      color: 'white', 
-                      backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                      '&:hover': { backgroundColor: RED_COLOR },
-                      padding: { xs: '6px', md: '8px' },
-                    }}
-                    component="a"
-                    href="#linkedin"
-                  >
-                    <LinkedInIcon sx={{ fontSize: { xs: '1.2rem', md: '1.5rem' } }} />
-                  </IconButton>
-                  <IconButton 
-                    sx={{ 
-                      color: 'white', 
-                      backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                      '&:hover': { backgroundColor: RED_COLOR },
-                      padding: { xs: '6px', md: '8px' },
-                    }}
-                    component="a"
-                    href="#whatsapp"
-                  >
-                    <WhatsAppIcon sx={{ fontSize: { xs: '1.2rem', md: '1.5rem' } }} />
                   </IconButton>
                 </Stack>
               </Grid>
@@ -1323,19 +1243,19 @@ const InstantQuotePage = () => {
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                   <LocationIcon sx={{ color: RED_COLOR, mr: 1.5 }} />
                   <Typography variant="body2" sx={{ color: 'white', opacity: 0.8, fontFamily: '"Poppins", sans-serif', fontWeight: 300 }}>
-                    123 Transport Way, Sydney, NSW 2000, Australia
+                    3 Hornsey Street Rozelle 2039, Australia
                   </Typography>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                   <PhoneIcon sx={{ color: RED_COLOR, mr: 1.5 }} />
                   <Typography variant="body2" sx={{ color: 'white', opacity: 0.8, fontFamily: '"Poppins", sans-serif', fontWeight: 300 }}>
-                    +61 2 1234 5678
+                    +61 423 440 056
                   </Typography>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                   <EmailIcon sx={{ color: RED_COLOR, mr: 1.5 }} />
                   <Typography variant="body2" sx={{ color: 'white', opacity: 0.8, fontFamily: '"Poppins", sans-serif', fontWeight: 300 }}>
-                    info@motextransport.com.au
+                    motextransportau@gmail.com
                   </Typography>
                 </Box>
               </Grid>
@@ -1412,6 +1332,200 @@ const InstantQuotePage = () => {
             </Button>
           </DialogActions>
         </Dialog>
+        
+        {/* Mobile Menu Drawer */}
+        <Drawer
+          anchor="right"
+          open={isMobileMenuOpen}
+          onClose={() => setIsMobileMenuOpen(false)}
+          PaperProps={{
+            sx: {
+              width: { xs: '100%', sm: 300 },
+              backgroundColor: DARK_BG,
+              padding: { xs: 2, sm: 3 }
+            }
+          }}
+        >
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <IconButton 
+              onClick={() => setIsMobileMenuOpen(false)}
+              sx={{ color: 'white' }}
+            >
+              <CloseIcon />
+            </IconButton>
+          </Box>
+          
+          <Box component="img" src="/MOTEX+Logo.png" alt="MOTEX Logo" sx={{ width: 120, my: 2 }} />
+          
+          <List>
+            <ListItem disablePadding>
+              <ListItemButton 
+                onClick={() => {
+                  handleNavigation('/');
+                  setIsMobileMenuOpen(false);
+                }}
+                sx={{ 
+                  py: 1.5,
+                  '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.05)' }
+                }}
+              >
+                <ListItemText 
+                  primary="Home" 
+                  primaryTypographyProps={{ 
+                    fontFamily: BODY_FONT, 
+                    fontWeight: 400, 
+                    color: 'white',
+                    fontSize: { xs: '0.95rem', sm: '1rem' }
+                  }} 
+                />
+              </ListItemButton>
+            </ListItem>
+            
+            <ListItem disablePadding>
+              <ListItemButton 
+                onClick={() => {
+                  handleNavigation('/services');
+                  setIsMobileMenuOpen(false);
+                }}
+                sx={{ 
+                  py: 1.5,
+                  '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.05)' }
+                }}
+              >
+                <ListItemText 
+                  primary="Services" 
+                  primaryTypographyProps={{ 
+                    fontFamily: BODY_FONT, 
+                    fontWeight: 400, 
+                    color: 'white',
+                    fontSize: { xs: '0.95rem', sm: '1rem' }
+                  }} 
+                />
+              </ListItemButton>
+            </ListItem>
+            
+            <ListItem disablePadding>
+              <ListItemButton 
+                onClick={() => {
+                  handleNavigation('/about-us');
+                  setIsMobileMenuOpen(false);
+                }}
+                sx={{ 
+                  py: 1.5,
+                  '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.05)' }
+                }}
+              >
+                <ListItemText 
+                  primary="About Us" 
+                  primaryTypographyProps={{ 
+                    fontFamily: BODY_FONT, 
+                    fontWeight: 400, 
+                    color: 'white',
+                    fontSize: { xs: '0.95rem', sm: '1rem' }
+                  }} 
+                />
+              </ListItemButton>
+            </ListItem>
+            
+            <ListItem disablePadding>
+              <ListItemButton 
+                onClick={() => {
+                  handleNavigation('/instant-quote');
+                  setIsMobileMenuOpen(false);
+                }}
+                sx={{ 
+                  py: 1.5,
+                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                  '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.15)' }
+                }}
+              >
+                <ListItemText 
+                  primary="Instant Quote" 
+                  primaryTypographyProps={{ 
+                    fontFamily: BODY_FONT, 
+                    fontWeight: 600, 
+                    color: 'white',
+                    fontSize: { xs: '0.95rem', sm: '1rem' }
+                  }} 
+                />
+              </ListItemButton>
+            </ListItem>
+            
+            <ListItem disablePadding>
+              <ListItemButton 
+                onClick={() => {
+                  handleNavigation('/gallery');
+                  setIsMobileMenuOpen(false);
+                }}
+                sx={{ 
+                  py: 1.5,
+                  '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.05)' }
+                }}
+              >
+                <ListItemText 
+                  primary="Gallery" 
+                  primaryTypographyProps={{ 
+                    fontFamily: BODY_FONT, 
+                    fontWeight: 400, 
+                    color: 'white',
+                    fontSize: { xs: '0.95rem', sm: '1rem' }
+                  }} 
+                />
+              </ListItemButton>
+            </ListItem>
+            
+            <ListItem disablePadding>
+              <ListItemButton 
+                onClick={() => {
+                  handleNavigation('/contact-us');
+                  setIsMobileMenuOpen(false);
+                }}
+                sx={{ 
+                  py: 1.5,
+                  '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.05)' }
+                }}
+              >
+                <ListItemText 
+                  primary="Contact Us" 
+                  primaryTypographyProps={{ 
+                    fontFamily: BODY_FONT, 
+                    fontWeight: 400, 
+                    color: 'white',
+                    fontSize: { xs: '0.95rem', sm: '1rem' }
+                  }} 
+                />
+              </ListItemButton>
+            </ListItem>
+          </List>
+          
+          <Box sx={{ p: 2, mt: 2 }}>
+            <Button 
+              onClick={() => {
+                handleNavigation('/instant-quote');
+                setIsMobileMenuOpen(false);
+              }}
+              variant="contained" 
+              fullWidth
+              sx={{
+                backgroundColor: RED_COLOR,
+                color: 'white',
+                fontFamily: HEADING_FONT,
+                fontWeight: 500,
+                py: 1,
+                borderRadius: 1,
+                transition: '0.3s',
+                fontSize: { xs: '0.9rem', sm: '1rem' },
+                '&:hover': {
+                  backgroundColor: '#c50000',
+                  transform: 'translateY(-2px)',
+                  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)'
+                }
+              }}
+            >
+              Get a Quote
+            </Button>
+          </Box>
+        </Drawer>
       </PageWrapper>
     </LocalizationProvider>
   );

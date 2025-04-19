@@ -471,31 +471,9 @@ const GalleryPage = () => {
                     '&:hover': { backgroundColor: RED_COLOR }
                   }}
                   component="a"
-                  href="#instagram"
+                  href="https://www.instagram.com/motextransport/"
                 >
                   <InstagramIcon />
-                </IconButton>
-                <IconButton 
-                  sx={{ 
-                    color: 'white', 
-                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                    '&:hover': { backgroundColor: RED_COLOR }
-                  }}
-                  component="a"
-                  href="#linkedin"
-                >
-                  <LinkedInIcon />
-                </IconButton>
-                <IconButton 
-                  sx={{ 
-                    color: 'white', 
-                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                    '&:hover': { backgroundColor: RED_COLOR }
-                  }}
-                  component="a"
-                  href="#whatsapp"
-                >
-                  <WhatsAppIcon />
                 </IconButton>
               </Stack>
             </Grid>
@@ -581,7 +559,7 @@ const GalleryPage = () => {
                   fontWeight: 300,
                   fontSize: { xs: '0.8rem', sm: '0.85rem', md: '0.875rem' } 
                 }}>
-                  123 Transport Way, Sydney, NSW 2000, Australia
+                  3 Hornsey Street Rozelle 2039, Australia
                 </Typography>
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -593,19 +571,13 @@ const GalleryPage = () => {
                   fontWeight: 300,
                   fontSize: { xs: '0.8rem', sm: '0.85rem', md: '0.875rem' } 
                 }}>
-                  +61 2 1234 5678
+                  +61 423 440 056
                 </Typography>
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                 <EmailIcon sx={{ color: RED_COLOR, mr: 1.5 }} />
-                <Typography variant="body2" sx={{ 
-                  color: 'white', 
-                  opacity: 0.8, 
-                  fontFamily: BODY_FONT, 
-                  fontWeight: 300,
-                  fontSize: { xs: '0.8rem', sm: '0.85rem', md: '0.875rem' } 
-                }}>
-                  info@motextransport.com.au
+                <Typography variant="body2" sx={{ color: 'white', opacity: 0.8, fontFamily: '"Poppins", sans-serif', fontWeight: 300 }}>
+                  motextransportau@gmail.com
                 </Typography>
               </Box>
             </Grid>

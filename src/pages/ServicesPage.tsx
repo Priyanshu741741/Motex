@@ -19,11 +19,16 @@ import {
   Paper,
   IconButton,
   Menu,
-  MenuItem
+  MenuItem,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText
 } from '@mui/material';
 import PageTransition from '../components/PageTransition';
 import { styled, Theme, keyframes } from '@mui/material/styles';
-import { motion, useInView } from 'framer-motion';
+import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { 
   LocationOn as LocationIcon,
@@ -38,7 +43,9 @@ import {
   Public as PublicIcon,
   Inventory as InventoryIcon,
   Apartment as ApartmentIcon,
-  EventAvailable as EventAvailableIcon
+  EventAvailable as EventAvailableIcon,
+  ArrowForward as ArrowForwardIcon,
+  Close as CloseIcon
 } from '@mui/icons-material';
 import React from 'react';
 
@@ -307,7 +314,7 @@ const ServicesPage = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [isLoaded, setIsLoaded] = useState(false);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
   
   // Testimonial carousel state
@@ -378,11 +385,11 @@ const ServicesPage = () => {
   };
   
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
+    setIsMobileMenuOpen(true);
   };
   
   const handleMenuClose = () => {
-    setAnchorEl(null);
+    setIsMobileMenuOpen(false);
   };
 
   useEffect(() => {
@@ -594,12 +601,13 @@ const ServicesPage = () => {
             </Box>
           )}
           
-          {/* Get a Quote button on the right */}
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', width: '20%' }}>
+          {/* Get A Quote button on the right */}
+          <Box sx={{ display: 'flex', width: '20%', justifyContent: 'flex-end' }}>
             {!isMobile && (
               <Button 
-                variant="contained"
+                component="button" 
                 onClick={() => handleNavigation('/instant-quote')} 
+                variant="contained" 
                 sx={{ 
                   bgcolor: RED_COLOR, 
                   color: 'white',
@@ -613,8 +621,6 @@ const ServicesPage = () => {
                   minWidth: '130px',
                   whiteSpace: 'nowrap',
                   boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)',
-                  position: 'relative',
-                  overflow: 'hidden',
                   '&:hover': {
                     bgcolor: '#c41922',
                     boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.25)'
@@ -632,119 +638,12 @@ const ServicesPage = () => {
                 edge="end"
                 color="inherit"
                 aria-label="menu"
-                onClick={handleMenuOpen}
+                onClick={() => setIsMobileMenuOpen(true)}
+                sx={{ color: 'white' }}
               >
-                <MenuIcon sx={{ color: 'white' }} />
+                <MenuIcon />
               </IconButton>
             )}
-            
-            {/* Mobile menu */}
-            <Menu
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={handleMenuClose}
-              PaperProps={{
-                sx: {
-                  backgroundColor: 'rgba(0, 0, 0, 0.9)',
-                  color: 'white',
-                  width: '200px',
-                  mt: 2,
-                  borderRadius: '8px',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
-                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
-                }
-              }}
-            >
-              {/* Mobile menu items */}
-              <MenuItem 
-                onClick={() => {
-                  handleMenuClose();
-                  handleNavigation('/');
-                }}
-                sx={{ 
-                  py: 1.5, 
-                  fontFamily: '"Poppins", sans-serif'
-                }}
-              >
-                Home
-              </MenuItem>
-              <MenuItem 
-                onClick={() => {
-                  handleMenuClose();
-                  handleNavigation('/services');
-                }}
-                sx={{ 
-                  py: 1.5, 
-                  fontFamily: '"Poppins", sans-serif',
-                  color: RED_COLOR
-                }}
-              >
-                Services
-              </MenuItem>
-              <MenuItem 
-                onClick={() => {
-                  handleMenuClose();
-                  handleNavigation('/about-us');
-                }}
-                sx={{ 
-                  py: 1.5, 
-                  fontFamily: '"Poppins", sans-serif'
-                }}
-              >
-                About Us
-              </MenuItem>
-              <MenuItem 
-                onClick={() => {
-                  handleMenuClose();
-                  handleNavigation('/instant-quote');
-                }}
-                sx={{ 
-                  py: 1.5, 
-                  fontFamily: '"Poppins", sans-serif'
-                }}
-              >
-                Instant Quote
-              </MenuItem>
-              <MenuItem 
-                onClick={() => {
-                  handleMenuClose();
-                  handleNavigation('/gallery');
-                }}
-                sx={{ 
-                  py: 1.5, 
-                  fontFamily: '"Poppins", sans-serif'
-                }}
-              >
-                Gallery
-              </MenuItem>
-              <MenuItem 
-                onClick={() => {
-                  handleMenuClose();
-                  handleNavigation('/contact-us');
-                }}
-                sx={{ 
-                  py: 1.5, 
-                  fontFamily: '"Poppins", sans-serif'
-                }}
-              >
-                Contact
-              </MenuItem>
-              <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.1)' }} />
-              <MenuItem 
-                onClick={() => {
-                  handleMenuClose();
-                  handleNavigation('/instant-quote');
-                }}
-                sx={{ 
-                  py: 1.5, 
-                  fontFamily: '"Poppins", sans-serif',
-                  color: RED_COLOR,
-                  fontWeight: 'bold'
-                }}
-              >
-                Get a Quote
-              </MenuItem>
-            </Menu>
           </Box>
         </Toolbar>
       </AppBar>
@@ -1298,31 +1197,9 @@ const ServicesPage = () => {
                       '&:hover': { backgroundColor: '#DE1F27' }
                     }}
                     component="a"
-                    href="#instagram"
+                    href="https://www.instagram.com/motextransport/"
                   >
                     <InstagramIcon />
-                  </IconButton>
-                  <IconButton 
-                    sx={{ 
-                      color: 'white', 
-                      backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                      '&:hover': { backgroundColor: '#DE1F27' }
-                    }}
-                    component="a"
-                    href="#linkedin"
-                  >
-                    <LinkedInIcon />
-                  </IconButton>
-                  <IconButton 
-                    sx={{ 
-                      color: 'white', 
-                      backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                      '&:hover': { backgroundColor: '#DE1F27' }
-                    }}
-                    component="a"
-                    href="#whatsapp"
-                  >
-                    <WhatsAppIcon />
                   </IconButton>
                 </Stack>
               </Grid>
@@ -1360,19 +1237,19 @@ const ServicesPage = () => {
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                   <LocationIcon sx={{ color: '#DE1F27', mr: 1.5 }} />
                   <Typography variant="body2" sx={{ color: 'white', opacity: 0.8, fontFamily: '"Poppins", sans-serif', fontWeight: 300 }}>
-                    123 Transport Way, Sydney, NSW 2000, Australia
+                    3 Hornsey Street Rozelle 2039, Australia
                   </Typography>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                   <PhoneIcon sx={{ color: '#DE1F27', mr: 1.5 }} />
                   <Typography variant="body2" sx={{ color: 'white', opacity: 0.8, fontFamily: '"Poppins", sans-serif', fontWeight: 300 }}>
-                    +61 2 1234 5678
+                    +61 423 440 056
                   </Typography>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                   <EmailIcon sx={{ color: '#DE1F27', mr: 1.5 }} />
                   <Typography variant="body2" sx={{ color: 'white', opacity: 0.8, fontFamily: '"Poppins", sans-serif', fontWeight: 300 }}>
-                    info@motextransport.com.au
+                    motextransportau@gmail.com
                   </Typography>
                 </Box>
               </Grid>
@@ -1386,6 +1263,200 @@ const ServicesPage = () => {
           </Container>
         </Box>
       </ContentSection>
+
+      {/* Mobile Menu */}
+      <Drawer
+        anchor="right"
+        open={isMobileMenuOpen}
+        onClose={() => setIsMobileMenuOpen(false)}
+        PaperProps={{
+          sx: {
+            width: { xs: '100%', sm: 300 },
+            backgroundColor: DARKER_BG,
+            padding: { xs: 2, sm: 3 }
+          }
+        }}
+      >
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <IconButton 
+            onClick={() => setIsMobileMenuOpen(false)}
+            sx={{ color: 'white' }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </Box>
+        
+        <Box component="img" src="/MOTEX+Logo.png" alt="MOTEX Logo" sx={{ width: 120, my: 2 }} />
+        
+        <List>
+          <ListItem disablePadding>
+            <ListItemButton 
+              onClick={() => {
+                handleNavigation('/');
+                setIsMobileMenuOpen(false);
+              }}
+              sx={{ 
+                py: 1.5,
+                '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.05)' }
+              }}
+            >
+              <ListItemText 
+                primary="Home" 
+                primaryTypographyProps={{ 
+                  fontFamily: '"Poppins", sans-serif', 
+                  fontWeight: 400, 
+                  color: 'white',
+                  fontSize: { xs: '0.95rem', sm: '1rem' }
+                }} 
+              />
+            </ListItemButton>
+          </ListItem>
+          
+          <ListItem disablePadding>
+            <ListItemButton 
+              onClick={() => {
+                handleNavigation('/services');
+                setIsMobileMenuOpen(false);
+              }}
+              sx={{ 
+                py: 1.5,
+                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.15)' }
+              }}
+            >
+              <ListItemText 
+                primary="Services" 
+                primaryTypographyProps={{ 
+                  fontFamily: '"Poppins", sans-serif', 
+                  fontWeight: 600, 
+                  color: 'white',
+                  fontSize: { xs: '0.95rem', sm: '1rem' }
+                }} 
+              />
+            </ListItemButton>
+          </ListItem>
+          
+          <ListItem disablePadding>
+            <ListItemButton 
+              onClick={() => {
+                handleNavigation('/about-us');
+                setIsMobileMenuOpen(false);
+              }}
+              sx={{ 
+                py: 1.5,
+                '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.05)' }
+              }}
+            >
+              <ListItemText 
+                primary="About Us" 
+                primaryTypographyProps={{ 
+                  fontFamily: '"Poppins", sans-serif', 
+                  fontWeight: 400, 
+                  color: 'white',
+                  fontSize: { xs: '0.95rem', sm: '1rem' }
+                }} 
+              />
+            </ListItemButton>
+          </ListItem>
+          
+          <ListItem disablePadding>
+            <ListItemButton 
+              onClick={() => {
+                handleNavigation('/instant-quote');
+                setIsMobileMenuOpen(false);
+              }}
+              sx={{ 
+                py: 1.5,
+                '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.05)' }
+              }}
+            >
+              <ListItemText 
+                primary="Instant Quote" 
+                primaryTypographyProps={{ 
+                  fontFamily: '"Poppins", sans-serif', 
+                  fontWeight: 400, 
+                  color: 'white',
+                  fontSize: { xs: '0.95rem', sm: '1rem' }
+                }} 
+              />
+            </ListItemButton>
+          </ListItem>
+          
+          <ListItem disablePadding>
+            <ListItemButton 
+              onClick={() => {
+                handleNavigation('/gallery');
+                setIsMobileMenuOpen(false);
+              }}
+              sx={{ 
+                py: 1.5,
+                '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.05)' }
+              }}
+            >
+              <ListItemText 
+                primary="Gallery" 
+                primaryTypographyProps={{ 
+                  fontFamily: '"Poppins", sans-serif', 
+                  fontWeight: 400, 
+                  color: 'white',
+                  fontSize: { xs: '0.95rem', sm: '1rem' }
+                }} 
+              />
+            </ListItemButton>
+          </ListItem>
+          
+          <ListItem disablePadding>
+            <ListItemButton 
+              onClick={() => {
+                handleNavigation('/contact-us');
+                setIsMobileMenuOpen(false);
+              }}
+              sx={{ 
+                py: 1.5,
+                '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.05)' }
+              }}
+            >
+              <ListItemText 
+                primary="Contact Us" 
+                primaryTypographyProps={{ 
+                  fontFamily: '"Poppins", sans-serif', 
+                  fontWeight: 400, 
+                  color: 'white',
+                  fontSize: { xs: '0.95rem', sm: '1rem' }
+                }} 
+              />
+            </ListItemButton>
+          </ListItem>
+        </List>
+        
+        <Box sx={{ p: 2, mt: 2 }}>
+          <Button 
+            onClick={() => {
+              handleNavigation('/instant-quote');
+              setIsMobileMenuOpen(false);
+            }}
+            variant="contained" 
+            fullWidth
+            sx={{
+              backgroundColor: RED_COLOR,
+              color: 'white',
+              fontFamily: '"Poppins", sans-serif',
+              fontWeight: 500,
+              py: 1,
+              borderRadius: 1,
+              transition: '0.3s',
+              fontSize: { xs: '0.9rem', sm: '1rem' },
+              '&:hover': {
+                backgroundColor: '#c50000',
+                transform: 'translateY(-2px)',
+                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)'
+              }
+            }}
+          >
+            Get a Quote
+          </Button>
+        </Box>
+      </Drawer>
     </PageWrapper>
     </PageTransition>
   );

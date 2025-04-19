@@ -17,7 +17,12 @@ import {
   MenuItem,
   InputBase,
   Paper,
-  FormHelperText
+  FormHelperText,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { motion } from 'framer-motion';
@@ -30,7 +35,8 @@ import {
   LinkedIn as LinkedInIcon,
   WhatsApp as WhatsAppIcon,
   Menu as MenuIcon,
-  Send as SendIcon
+  Send as SendIcon,
+  Close as CloseIcon
 } from '@mui/icons-material';
 import emailjs from '@emailjs/browser';
 
@@ -193,9 +199,14 @@ const ContactUsPage = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [isLoaded, setIsLoaded] = useState(false);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
+  
+  // Initialize EmailJS
+  useEffect(() => {
+    emailjs.init("4UoPVi0_UFU0fK2L0");
+  }, []);
   
   // Form state
   const [formData, setFormData] = useState({
@@ -213,14 +224,6 @@ const ContactUsPage = () => {
     message: false,
   });
   
-  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
-
   useEffect(() => {
     // Set loaded after a short delay to trigger animations
     const timer = setTimeout(() => {
@@ -256,7 +259,7 @@ const ContactUsPage = () => {
     return !Object.values(errors).some(error => error);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!validateForm()) {
@@ -265,46 +268,85 @@ const ContactUsPage = () => {
     
     setLoading(true);
     
-    // Use emailjs to send the form
-    // Send to template_4ymqxvf (user confirmation)
-    emailjs.sendForm(
-      'service_hbi58cx', // Use your service ID 
-      'template_4ymqxvf',
-      formRef.current!,
-      'zIkiY-TyFhBQlmHxZ'
-    )
-    .then((result) => {
-      console.log('Email sent to customer:', result.text);
+    try {
+      // Prepare customer email parameters
+      const customerEmailParams = {
+        service_id: 'service_g472qdp',
+        template_id: 'template_cce116x',
+        user_id: '4UoPVi0_UFU0fK2L0',
+        template_params: {
+          to_name: formData.name,
+          to_email: formData.email,
+          from_name: 'MOTEX Transport',
+          message: 'Thank you for your message. We will get back to you shortly.',
+          phone: formData.phone || 'Not provided',
+          subject: formData.subject || 'General Inquiry',
+          reply_message: formData.message
+        }
+      };
       
-      // Send to template_h6krq0n (admin notification)
-      emailjs.sendForm(
-        'service_hbi58cx', // Use your service ID
-        'template_h6krq0n',
-        formRef.current!,
-        'zIkiY-TyFhBQlmHxZ'
-      )
-      .then((result) => {
-        console.log('Email sent to admin:', result.text);
-        setLoading(false);
-        // Reset form
-        setFormData({
-          name: '',
-          email: '',
-          phone: '',
-          subject: '',
-          message: ''
-        });
-        alert('Thank you for your message! We will get back to you soon.');
-      }, (error) => {
-        console.log('Admin email error:', error.text);
-        setLoading(false);
-        alert('There was an error sending your message. Please try again.');
+      // Prepare admin email parameters
+      const adminEmailParams = {
+        service_id: 'service_g472qdp',
+        template_id: 'template_92wv5g9',
+        user_id: '4UoPVi0_UFU0fK2L0',
+        template_params: {
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone || 'Not provided',
+          subject: formData.subject || 'General Inquiry',
+          message: formData.message,
+          submission_time: new Date().toLocaleString()
+        }
+      };
+      
+      // Send customer confirmation email
+      const customerResponse = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(customerEmailParams)
       });
-    }, (error) => {
-      console.log('Customer email error:', error.text);
+      
+      if (!customerResponse.ok) {
+        throw new Error(`Customer email failed: ${customerResponse.statusText}`);
+      }
+      
+      console.log('Email sent to customer');
+      
+      // Send admin notification email
+      const adminResponse = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(adminEmailParams)
+      });
+      
+      if (!adminResponse.ok) {
+        throw new Error(`Admin email failed: ${adminResponse.statusText}`);
+      }
+      
+      console.log('Email sent to admin');
+      
       setLoading(false);
-      alert('There was an error sending your message. Please try again.');
-    });
+      
+      // Reset form
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        subject: '',
+        message: ''
+      });
+      
+      alert('Thank you for your message! We will get back to you soon.');
+    } catch (error) {
+      console.error('Email error:', error);
+      setLoading(false);
+      alert('There was an error sending your message. Please try again. Error: ' + (error instanceof Error ? error.message : 'Unknown error'));
+    }
   };
 
   const containerVariants = {
@@ -500,112 +542,12 @@ const ContactUsPage = () => {
                 edge="end"
                 color="inherit"
                 aria-label="menu"
-                onClick={handleMenuOpen}
+                onClick={() => setIsMobileMenuOpen(true)}
                 sx={{ color: 'white' }}
               >
                 <MenuIcon />
               </IconButton>
             )}
-            
-            {/* Mobile menu */}
-            <Menu
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={handleMenuClose}
-              PaperProps={{
-                sx: {
-                  backgroundColor: 'rgba(0, 0, 0, 0.9)',
-                  color: 'white',
-                  width: '200px',
-                  mt: 2,
-                  borderRadius: '8px',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
-                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
-                }
-              }}
-            >
-              <MenuItem 
-                component={RouterLink} 
-                to="/" 
-                onClick={handleMenuClose}
-                sx={{ 
-                  py: 1.5, 
-                  fontFamily: BODY_FONT
-                }}
-              >
-                Home
-              </MenuItem>
-              <MenuItem 
-                component={RouterLink} 
-                to="/services" 
-                onClick={handleMenuClose}
-                sx={{ 
-                  py: 1.5, 
-                  fontFamily: BODY_FONT
-                }}
-              >
-                Services
-              </MenuItem>
-              <MenuItem 
-                component={RouterLink} 
-                to="/about-us" 
-                onClick={handleMenuClose}
-                sx={{ 
-                  py: 1.5, 
-                  fontFamily: BODY_FONT
-                }}
-              >
-                About Us
-              </MenuItem>
-              <MenuItem 
-                component={RouterLink} 
-                to="/instant-quote" 
-                onClick={handleMenuClose}
-                sx={{ 
-                  py: 1.5, 
-                  fontFamily: BODY_FONT
-                }}
-              >
-                Instant Quote
-              </MenuItem>
-              <MenuItem 
-                component={RouterLink} 
-                to="/gallery" 
-                onClick={handleMenuClose}
-                sx={{ 
-                  py: 1.5, 
-                  fontFamily: BODY_FONT
-                }}
-              >
-                Gallery
-              </MenuItem>
-              <MenuItem 
-                component={RouterLink} 
-                to="/contact-us" 
-                onClick={handleMenuClose}
-                sx={{ 
-                  py: 1.5, 
-                  fontFamily: BODY_FONT,
-                  color: RED_COLOR
-                }}
-              >
-                Contact
-              </MenuItem>
-              <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.1)' }} />
-              <MenuItem 
-                component={RouterLink} 
-                to="/instant-quote" 
-                onClick={handleMenuClose}
-                sx={{ 
-                  py: 1.5, 
-                  fontFamily: BODY_FONT,
-                  color: RED_COLOR,
-                  fontWeight: 'bold'
-                }}
-              >
-                Get a Quote
-              </MenuItem>
-            </Menu>
           </Box>
         </Toolbar>
       </AppBar>
@@ -830,7 +772,7 @@ const ContactUsPage = () => {
                               fontFamily: BODY_FONT,
                               fontSize: { xs: '13px', md: '14px' }
                             }}>
-                              123 Transport Way, Sydney, NSW 2000, Australia
+                              3 Hornsey Street Rozelle 2039, Australia
                             </Typography>
                           </Box>
                         </Box>
@@ -856,7 +798,7 @@ const ContactUsPage = () => {
                               fontFamily: BODY_FONT,
                               fontSize: { xs: '13px', md: '14px' }
                             }}>
-                              +61 2 1234 5678
+                              +61 423 440 056
                             </Typography>
                           </Box>
                         </Box>
@@ -877,13 +819,17 @@ const ContactUsPage = () => {
                             }}>
                               EMAIL ADDRESS
                             </Typography>
-                            <Typography variant="body1" sx={{ 
-                              color: 'rgba(255, 255, 255, 0.8)', 
-                              fontFamily: BODY_FONT,
-                              fontSize: { xs: '13px', md: '14px' },
-                              wordBreak: 'break-word'
-                            }}>
-                              info@motextransport.com.au
+                            <Typography
+                              sx={{
+                                color: 'white',
+                                fontSize: '16px',
+                                fontFamily: BODY_FONT,
+                                fontWeight: 300,
+                                opacity: 0.8,
+                                mb: 0.5,
+                              }}
+                            >
+                              motextransportau@gmail.com
                             </Typography>
                           </Box>
                         </Box>
@@ -914,33 +860,9 @@ const ContactUsPage = () => {
                             padding: { xs: '6px', md: '8px' },
                           }}
                           component="a"
-                          href="#instagram"
+                          href="https://www.instagram.com/motextransport/"
                         >
                           <InstagramIcon sx={{ fontSize: { xs: '1.2rem', md: '1.5rem' } }} />
-                        </IconButton>
-                        <IconButton 
-                          sx={{ 
-                            color: 'white', 
-                            backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                            '&:hover': { backgroundColor: RED_COLOR },
-                            padding: { xs: '6px', md: '8px' },
-                          }}
-                          component="a"
-                          href="#linkedin"
-                        >
-                          <LinkedInIcon sx={{ fontSize: { xs: '1.2rem', md: '1.5rem' } }} />
-                        </IconButton>
-                        <IconButton 
-                          sx={{ 
-                            color: 'white', 
-                            backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                            '&:hover': { backgroundColor: RED_COLOR },
-                            padding: { xs: '6px', md: '8px' },
-                          }}
-                          component="a"
-                          href="#whatsapp"
-                        >
-                          <WhatsAppIcon sx={{ fontSize: { xs: '1.2rem', md: '1.5rem' } }} />
                         </IconButton>
                       </Stack>
                     </motion.div>
@@ -970,7 +892,7 @@ const ContactUsPage = () => {
               </Typography>
               <MapContainer>
                 <iframe 
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d53659.50470927456!2d151.17486399640866!3d-33.86882975936304!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6b12ae401e8b983f%3A0x5017d681632ccc0!2sSydney%20NSW%2C%20Australia!5e0!3m2!1sen!2sus!4v1652345678901!5m2!1sen!2sus" 
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3312.5838747281664!2d151.1671803!3d-33.8647532!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6b12afe54ac57777%3A0x63a9fb8de35c7cf9!2s3%20Hornsey%20St%2C%20Rozelle%20NSW%202039%2C%20Australia!5e0!3m2!1sen!2sus!4v1710301828283!5m2!1sen!2sus" 
                   width="100%" 
                   height="100%" 
                   style={{ border: 0 }} 
@@ -1021,33 +943,9 @@ const ContactUsPage = () => {
                     padding: { xs: '6px', md: '8px' },
                   }}
                   component="a"
-                  href="#instagram"
+                  href="https://www.instagram.com/motextransport/"
                 >
                   <InstagramIcon sx={{ fontSize: { xs: '1.2rem', md: '1.5rem' } }} />
-                </IconButton>
-                <IconButton 
-                  sx={{ 
-                    color: 'white', 
-                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                    '&:hover': { backgroundColor: RED_COLOR },
-                    padding: { xs: '6px', md: '8px' },
-                  }}
-                  component="a"
-                  href="#linkedin"
-                >
-                  <LinkedInIcon sx={{ fontSize: { xs: '1.2rem', md: '1.5rem' } }} />
-                </IconButton>
-                <IconButton 
-                  sx={{ 
-                    color: 'white', 
-                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                    '&:hover': { backgroundColor: RED_COLOR },
-                    padding: { xs: '6px', md: '8px' },
-                  }}
-                  component="a"
-                  href="#whatsapp"
-                >
-                  <WhatsAppIcon sx={{ fontSize: { xs: '1.2rem', md: '1.5rem' } }} />
                 </IconButton>
               </Stack>
             </Grid>
@@ -1124,7 +1022,7 @@ const ContactUsPage = () => {
               }}>
                 CONTACT INFORMATION
               </Typography>
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
+              <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 1.5 }}>
                 <LocationIcon sx={{ color: RED_COLOR, mr: 1.5, fontSize: { xs: '0.9rem', md: '1.2rem' } }} />
                 <Typography variant="body2" sx={{ 
                   color: 'white', 
@@ -1133,7 +1031,7 @@ const ContactUsPage = () => {
                   fontWeight: 300,
                   fontSize: { xs: '0.75rem', sm: '0.8rem', md: '0.875rem' } 
                 }}>
-                  123 Transport Way, Sydney, NSW 2000, Australia
+                  3 Hornsey Street Rozelle 2039, Australia
                 </Typography>
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
@@ -1145,21 +1043,22 @@ const ContactUsPage = () => {
                   fontWeight: 300,
                   fontSize: { xs: '0.75rem', sm: '0.8rem', md: '0.875rem' } 
                 }}>
-                  +61 2 1234 5678
+                  +61 423 440 056
                 </Typography>
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 1.5 }}>
                 <EmailIcon sx={{ color: RED_COLOR, mr: 1.5, fontSize: { xs: '0.9rem', md: '1.2rem' }, flexShrink: 0 }} />
-                <Typography variant="body2" sx={{ 
-                  color: 'white', 
-                  opacity: 0.8, 
-                  fontFamily: BODY_FONT, 
-                  fontWeight: 300,
-                  fontSize: { xs: '0.75rem', sm: '0.8rem', md: '0.875rem' },
-                  wordBreak: 'break-word',
-                  overflow: 'hidden'
-                }}>
-                  info@motextransport.com.au
+                <Typography
+                  sx={{
+                    color: 'white',
+                    fontSize: '16px',
+                    fontFamily: BODY_FONT,
+                    fontWeight: 300,
+                    opacity: 0.8,
+                    mb: 0.5,
+                  }}
+                >
+                  motextransportau@gmail.com
                 </Typography>
               </Box>
             </Grid>
@@ -1178,6 +1077,186 @@ const ContactUsPage = () => {
           </Typography>
         </Container>
       </Box>
+
+      {/* Mobile Menu */}
+      <Drawer
+        anchor="right"
+        open={isMobileMenuOpen}
+        onClose={() => setIsMobileMenuOpen(false)}
+        PaperProps={{
+          sx: {
+            width: { xs: '100%', sm: 300 },
+            backgroundColor: DARKER_BG,
+            padding: { xs: 2, sm: 3 }
+          }
+        }}
+      >
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <IconButton 
+            onClick={() => setIsMobileMenuOpen(false)}
+            sx={{ color: 'white' }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </Box>
+        
+        <Box component="img" src="/MOTEX+Logo.png" alt="MOTEX Logo" sx={{ width: 120, my: 2 }} />
+        
+        <List>
+          <ListItem disablePadding>
+            <ListItemButton 
+              component={RouterLink} 
+              to="/"
+              sx={{ 
+                py: 1.5,
+                '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.05)' }
+              }}
+            >
+              <ListItemText 
+                primary="Home" 
+                primaryTypographyProps={{ 
+                  fontFamily: BODY_FONT, 
+                  fontWeight: 400, 
+                  color: 'white',
+                  fontSize: { xs: '0.95rem', sm: '1rem' }
+                }} 
+              />
+            </ListItemButton>
+          </ListItem>
+          
+          <ListItem disablePadding>
+            <ListItemButton 
+              component={RouterLink} 
+              to="/services"
+              sx={{ 
+                py: 1.5,
+                '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.05)' }
+              }}
+            >
+              <ListItemText 
+                primary="Services" 
+                primaryTypographyProps={{ 
+                  fontFamily: BODY_FONT, 
+                  fontWeight: 400, 
+                  color: 'white',
+                  fontSize: { xs: '0.95rem', sm: '1rem' }
+                }} 
+              />
+            </ListItemButton>
+          </ListItem>
+          
+          <ListItem disablePadding>
+            <ListItemButton 
+              component={RouterLink} 
+              to="/about-us"
+              sx={{ 
+                py: 1.5,
+                '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.05)' }
+              }}
+            >
+              <ListItemText 
+                primary="About Us" 
+                primaryTypographyProps={{ 
+                  fontFamily: BODY_FONT, 
+                  fontWeight: 400, 
+                  color: 'white',
+                  fontSize: { xs: '0.95rem', sm: '1rem' }
+                }} 
+              />
+            </ListItemButton>
+          </ListItem>
+          
+          <ListItem disablePadding>
+            <ListItemButton 
+              component={RouterLink} 
+              to="/instant-quote"
+              sx={{ 
+                py: 1.5,
+                '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.05)' }
+              }}
+            >
+              <ListItemText 
+                primary="Instant Quote" 
+                primaryTypographyProps={{ 
+                  fontFamily: BODY_FONT, 
+                  fontWeight: 400, 
+                  color: 'white',
+                  fontSize: { xs: '0.95rem', sm: '1rem' }
+                }} 
+              />
+            </ListItemButton>
+          </ListItem>
+          
+          <ListItem disablePadding>
+            <ListItemButton 
+              component={RouterLink} 
+              to="/gallery"
+              sx={{ 
+                py: 1.5,
+                '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.05)' }
+              }}
+            >
+              <ListItemText 
+                primary="Gallery" 
+                primaryTypographyProps={{ 
+                  fontFamily: BODY_FONT, 
+                  fontWeight: 400, 
+                  color: 'white',
+                  fontSize: { xs: '0.95rem', sm: '1rem' }
+                }} 
+              />
+            </ListItemButton>
+          </ListItem>
+          
+          <ListItem disablePadding>
+            <ListItemButton 
+              component={RouterLink} 
+              to="/contact-us"
+              sx={{ 
+                py: 1.5,
+                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.15)' }
+              }}
+            >
+              <ListItemText 
+                primary="Contact Us" 
+                primaryTypographyProps={{ 
+                  fontFamily: BODY_FONT, 
+                  fontWeight: 600, 
+                  color: 'white',
+                  fontSize: { xs: '0.95rem', sm: '1rem' }
+                }} 
+              />
+            </ListItemButton>
+          </ListItem>
+        </List>
+        
+        <Box sx={{ p: 2, mt: 2 }}>
+          <Button 
+            component={RouterLink} 
+            to="/instant-quote"
+            variant="contained" 
+            fullWidth
+            sx={{
+              backgroundColor: RED_COLOR,
+              color: 'white',
+              fontFamily: HEADING_FONT,
+              fontWeight: 500,
+              py: 1,
+              borderRadius: 1,
+              transition: '0.3s',
+              fontSize: { xs: '0.9rem', sm: '1rem' },
+              '&:hover': {
+                backgroundColor: '#c50000',
+                transform: 'translateY(-2px)',
+                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)'
+              }
+            }}
+          >
+            Get a Quote
+          </Button>
+        </Box>
+      </Drawer>
     </PageWrapper>
   );
 };
