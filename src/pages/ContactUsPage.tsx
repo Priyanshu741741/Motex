@@ -772,7 +772,7 @@ const ContactUsPage = () => {
                               fontFamily: BODY_FONT,
                               fontSize: { xs: '13px', md: '14px' }
                             }}>
-                              3 Hornsey Street Rozelle 2039, Australia
+                              Rozelle NSW 2039, Australia
                             </Typography>
                           </Box>
                         </Box>
@@ -1031,7 +1031,7 @@ const ContactUsPage = () => {
                   fontWeight: 300,
                   fontSize: { xs: '0.75rem', sm: '0.8rem', md: '0.875rem' } 
                 }}>
-                  3 Hornsey Street Rozelle 2039, Australia
+                  Rozelle N2039, Australia
                 </Typography>
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>

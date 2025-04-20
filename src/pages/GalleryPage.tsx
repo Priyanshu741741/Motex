@@ -559,7 +559,7 @@ const GalleryPage = () => {
                   fontWeight: 300,
                   fontSize: { xs: '0.8rem', sm: '0.85rem', md: '0.875rem' } 
                 }}>
-                  3 Hornsey Street Rozelle 2039, Australia
+                  Rozelle NSW 2039, Australia
                 </Typography>
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>

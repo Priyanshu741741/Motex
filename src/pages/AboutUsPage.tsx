@@ -1189,7 +1189,7 @@ const AboutUsPage = () => {
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                   <LocationIcon sx={{ color: RED_COLOR, mr: 1.5 }} />
                   <Typography variant="body2" sx={{ color: 'white', opacity: 0.8, fontFamily: '"Poppins", sans-serif', fontWeight: 300 }}>
-                    3 Hornsey Street Rozelle 2039, Australia
+                    Rozelle NSW 2039, Australia
                   </Typography>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
