@@ -223,7 +223,7 @@ const ContactUsPage = () => {
     email: false,
     message: false,
   });
-  
+
   useEffect(() => {
     // Set loaded after a short delay to trigger animations
     const timer = setTimeout(() => {
@@ -330,21 +330,21 @@ const ContactUsPage = () => {
       
       console.log('Email sent to admin');
       
-      setLoading(false);
+        setLoading(false);
       
-      // Reset form
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        subject: '',
-        message: ''
-      });
+        // Reset form
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          subject: '',
+          message: ''
+        });
       
-      alert('Thank you for your message! We will get back to you soon.');
+        alert('Thank you for your message! We will get back to you soon.');
     } catch (error) {
       console.error('Email error:', error);
-      setLoading(false);
+        setLoading(false);
       alert('There was an error sending your message. Please try again. Error: ' + (error instanceof Error ? error.message : 'Unknown error'));
     }
   };
@@ -823,7 +823,7 @@ const ContactUsPage = () => {
                               sx={{
                                 color: 'white',
                                 fontSize: '16px',
-                                fontFamily: BODY_FONT,
+                              fontFamily: BODY_FONT,
                                 fontWeight: 300,
                                 opacity: 0.8,
                                 mb: 0.5,
@@ -1050,10 +1050,10 @@ const ContactUsPage = () => {
                 <EmailIcon sx={{ color: RED_COLOR, mr: 1.5, fontSize: { xs: '0.9rem', md: '1.2rem' }, flexShrink: 0 }} />
                 <Typography
                   sx={{
-                    color: 'white',
+                  color: 'white', 
                     fontSize: '16px',
-                    fontFamily: BODY_FONT,
-                    fontWeight: 300,
+                  fontFamily: BODY_FONT, 
+                  fontWeight: 300,
                     opacity: 0.8,
                     mb: 0.5,
                   }}

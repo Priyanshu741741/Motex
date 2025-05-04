@@ -877,7 +877,7 @@ const LandingPage = () => {
           backgroundRepeat: 'no-repeat',
           position: 'relative',
           display: 'flex',
-          alignItems: 'center',
+          alignItems: 'flex-start',
           justifyContent: 'center',
           minHeight: { xs: '40.47vh', md: '55vh' },
           overflow: 'hidden',
@@ -894,7 +894,7 @@ const LandingPage = () => {
           }
         }}
       >
-        <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2 }}>
+        <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2, pt: 2 }}>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -902,7 +902,7 @@ const LandingPage = () => {
             style={{ 
               display: 'flex', 
               flexDirection: 'column',
-              justifyContent: 'center', 
+              justifyContent: 'flex-start', 
               alignItems: 'center' 
             }}
           >
@@ -912,10 +912,13 @@ const LandingPage = () => {
               sx={{ 
                 mb: 1,
                 fontWeight: 800,
-                color: RED_COLOR,
+                color: 'transparent',
                 fontFamily: '"Bebas Neue", sans-serif',
                 fontSize: { xs: '45px', sm: '55px', md: '85px', lg: '95px' },
-                letterSpacing: { xs: '1px', sm: '2px', md: '3px' }
+                letterSpacing: { xs: '1px', sm: '2px', md: '3px' },
+                WebkitTextStroke: { xs: `0.5px ${RED_COLOR}`, sm: `1.5px ${RED_COLOR}`, md: `2px ${RED_COLOR}` },
+                textStroke: { xs: `0.5px ${RED_COLOR}`, sm: `1.5px ${RED_COLOR}`, md: `2px ${RED_COLOR}` },
+                mt: 0
               }}
             >
               <TextFade direction="down" staggerChildren={0.03}>
