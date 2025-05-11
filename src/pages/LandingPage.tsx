@@ -1022,7 +1022,7 @@ const LandingPage = () => {
           <motion.div
             initial={{ opacity: 1 }}
             animate={{ opacity: 0 }}
-            transition={{ delay: 5, duration: 1 }}
+            transition={{ delay: 3.8, duration: 1 }}
             style={{ 
               display: 'flex', 
               flexDirection: 'column',
