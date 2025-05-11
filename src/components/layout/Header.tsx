@@ -91,18 +91,30 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
         <Box sx={{ flexGrow: 1 }} />
         
         <Button 
-          variant="contained" 
-          startIcon={<AddIcon />}
-          sx={{ mr: 2 }}
+          variant="text" 
+          sx={{ 
+            mr: 2,
+            color: 'text.primary',
+            '&:hover': {
+              backgroundColor: 'rgba(0, 0, 0, 0.04)'
+            }
+          }}
         >
-          New Table
+          Chauffeur Services
         </Button>
-        
-        <IconButton size="large" color="inherit">
-          <Badge badgeContent={4} color="error">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
+
+        <Button 
+          variant="text" 
+          sx={{ 
+            mr: 2,
+            color: 'text.primary',
+            '&:hover': {
+              backgroundColor: 'rgba(0, 0, 0, 0.04)'
+            }
+          }}
+        >
+          Logistics Services
+        </Button>
       </Toolbar>
     </AppBar>
   );

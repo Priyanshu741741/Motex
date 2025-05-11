@@ -1,5 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import HeroCarousel from '../components/HeroCarousel';
 import SplashScreen from '../components/SplashScreen';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import { 
@@ -356,11 +357,7 @@ const MobileServiceCarousel = ({ onServiceClick }: { onServiceClick: (serviceTit
 };
 
 const LandingPage = () => {
-  const handleServiceClick = (serviceTitle: string) => {
-    // Navigate to the instant quote page with the selected service
-    navigate('/instant-quote', { state: { selectedService: serviceTitle } });
-    window.scrollTo(0, 0);
-  };
+  // Removed duplicate handleServiceClick function
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -368,6 +365,21 @@ const LandingPage = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [currentTranslate, setCurrentTranslate] = useState(0);
+  const [logisticsMenuAnchor, setLogisticsMenuAnchor] = useState<null | HTMLElement>(null);
+  
+  const handleLogisticsMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setLogisticsMenuAnchor(event.currentTarget);
+  };
+
+  const handleLogisticsMenuClose = () => {
+    setLogisticsMenuAnchor(null);
+  };
+
+  const handleServiceClick = (serviceMode: string) => {
+    handleLogisticsMenuClose();
+    navigate('/instant-quote', { state: { selectedService: serviceMode } });
+    window.scrollTo(0, 0);
+  };
   const carouselRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   
@@ -685,7 +697,7 @@ const LandingPage = () => {
       <AppBar position="fixed" color="transparent" elevation={0} sx={{ py: 1, backgroundColor: 'rgba(0, 0, 0, 0.85)', backdropFilter: 'blur(8px)', zIndex: 1100 }}>
         <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
           {/* Logo on the left */}
-          <Box sx={{ display: 'flex', alignItems: 'center', width: '20%' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', width: isMobile ? '50%' : '20%' }}>
             <Box 
               component="button"
               onClick={() => handleNavigation('/')}
@@ -739,12 +751,12 @@ const LandingPage = () => {
                 >
                   Home
                 </Link>
-                <Link 
-                  component="button" 
-                  onClick={() => handleNavigation('/services')}
-                  color="inherit" 
-                  underline="none" 
-                  sx={{ 
+                <Link
+                  component="button"
+                  onClick={() => handleServiceClick('Chauffeur')}
+                  color="inherit"
+                  underline="none"
+                  sx={{
                     '&:hover': { color: RED_COLOR },
                     fontFamily: '"Poppins", sans-serif',
                     fontSize: '16px',
@@ -752,8 +764,50 @@ const LandingPage = () => {
                     fontWeight: 400
                   }}
                 >
-                  Services
+                  Chauffeur
                 </Link>
+                <Box
+                  onMouseEnter={(e) => handleLogisticsMenuOpen(e)}
+                  sx={{ display: 'inline-block' }}
+                >
+                  <Link
+                    component="button"
+                    color="inherit"
+                    underline="none"
+                    sx={{
+                      '&:hover': { color: RED_COLOR },
+                      fontFamily: '"Poppins", sans-serif',
+                      fontSize: '16px',
+                      lineHeight: '29px',
+                      fontWeight: 400
+                    }}
+                  >
+                    Logistics Services
+                  </Link>
+                  <Menu
+                    anchorEl={logisticsMenuAnchor}
+                    open={Boolean(logisticsMenuAnchor)}
+                    onClose={handleLogisticsMenuClose}
+                    PaperProps={{
+                      onMouseLeave: handleLogisticsMenuClose
+                    }}
+                    sx={{
+                      '& .MuiPaper-root': {
+                        bgcolor: 'rgba(0, 0, 0, 0.85)',
+                        backdropFilter: 'blur(8px)',
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        borderRadius: '8px',
+                        mt: 1
+                      }
+                    }}
+                  >
+                    <MenuItem onClick={() => handleServiceClick('Parcel Delivery')} sx={{ color: 'white', '&:hover': { color: RED_COLOR } }}>Parcel Delivery</MenuItem>
+                    <MenuItem onClick={() => handleServiceClick('Fragile Freight')} sx={{ color: 'white', '&:hover': { color: RED_COLOR } }}>Fragile Freight</MenuItem>
+                    <MenuItem onClick={() => handleServiceClick('Interstate Delivery')} sx={{ color: 'white', '&:hover': { color: RED_COLOR } }}>Interstate Delivery</MenuItem>
+                    <MenuItem onClick={() => handleServiceClick('Door to Door Service')} sx={{ color: 'white', '&:hover': { color: RED_COLOR } }}>Door to Door Service</MenuItem>
+                    <MenuItem onClick={() => handleServiceClick('Same Day Delivery')} sx={{ color: 'white', '&:hover': { color: RED_COLOR } }}>Same Day Delivery</MenuItem>
+                  </Menu>
+                </Box>
                 <Link 
                   component="button" 
                   onClick={() => handleNavigation('/about-us')}
@@ -818,8 +872,72 @@ const LandingPage = () => {
             </Box>
           )}
           
-          {/* Get A Quote button on the right */}
-          <Box sx={{ display: 'flex', width: '20%', justifyContent: 'flex-end' }}>
+          {/* Get A Quote button on the right and Mobile Menu */}
+          <Box sx={{ display: 'flex', width: isMobile ? '50%' : '20%', justifyContent: 'flex-end', alignItems: 'center' }}>
+            {/* Mobile Chauffeur and Logistics buttons */}
+            {isMobile && (
+              <>
+                <Button
+                  component="button"
+                  onClick={() => handleServiceClick('Chauffeur')}
+                  sx={{
+                    color: 'white',
+                    fontSize: '0.8rem',
+                    mr: 1,
+                    px: 1,
+                    py: 0.5,
+                    minWidth: 'auto',
+                    textTransform: 'none',
+                    fontFamily: '"Poppins", sans-serif',
+                    '&:hover': { color: RED_COLOR },
+                    whiteSpace: 'nowrap'
+                  }}
+                >
+                  Chauffeur
+                </Button>
+                <Box sx={{ position: 'relative' }}>
+                  <Button
+                    component="button"
+                    onClick={(e) => handleLogisticsMenuOpen(e)}
+                    sx={{
+                      color: 'white',
+                      fontSize: '0.8rem',
+                      mr: 1.5,
+                      px: 1,
+                      py: 0.5,
+                      minWidth: 'auto',
+                      textTransform: 'none',
+                      fontFamily: '"Poppins", sans-serif',
+                      '&:hover': { color: RED_COLOR },
+                      whiteSpace: 'nowrap'
+                    }}
+                  >
+                    Logistics
+                  </Button>
+                  <Menu
+                    anchorEl={logisticsMenuAnchor}
+                    open={Boolean(logisticsMenuAnchor)}
+                    onClose={handleLogisticsMenuClose}
+                    PaperProps={{
+                      sx: {
+                        bgcolor: 'rgba(0, 0, 0, 0.85)',
+                        backdropFilter: 'blur(8px)',
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        borderRadius: '8px',
+                        mt: 1
+                      }
+                    }}
+                  >
+                    <MenuItem onClick={() => handleServiceClick('Parcel Delivery')} sx={{ color: 'white', '&:hover': { color: RED_COLOR } }}>Parcel Delivery</MenuItem>
+                    <MenuItem onClick={() => handleServiceClick('Fragile Freight')} sx={{ color: 'white', '&:hover': { color: RED_COLOR } }}>Fragile Freight</MenuItem>
+                    <MenuItem onClick={() => handleServiceClick('Interstate Delivery')} sx={{ color: 'white', '&:hover': { color: RED_COLOR } }}>Interstate Delivery</MenuItem>
+                    <MenuItem onClick={() => handleServiceClick('Door to Door Service')} sx={{ color: 'white', '&:hover': { color: RED_COLOR } }}>Door to Door Service</MenuItem>
+                    <MenuItem onClick={() => handleServiceClick('Same Day Delivery')} sx={{ color: 'white', '&:hover': { color: RED_COLOR } }}>Same Day Delivery</MenuItem>
+                  </Menu>
+                </Box>
+              </>
+            )}
+            
             {!isMobile && (
               <Button 
                 component="button" 
@@ -871,10 +989,6 @@ const LandingPage = () => {
       {/* Update the Hero section to fix mobile text cropping */}
       <Box 
         sx={{ 
-          backgroundImage: 'url("/PHOTO-2025-03-22-21-36-54_1.jpg")',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
           position: 'relative',
           display: 'flex',
           alignItems: 'flex-start',
@@ -894,16 +1008,28 @@ const LandingPage = () => {
           }
         }}
       >
+        <HeroCarousel 
+          images={[
+            '/chauffeur-4.jpg',
+            '/PHOTO-2025-03-22-21-36-54_1.jpg',
+            '/chauffeur-5.jpg'
+            // '/chauffeur-3.jpg'
+          ]}
+          interval={5000}
+        />
+      
         <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2, pt: 2 }}>
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            initial={{ opacity: 1 }}
+            animate={{ opacity: 0 }}
+            transition={{ delay: 2, duration: 1 }}
             style={{ 
               display: 'flex', 
               flexDirection: 'column',
-              justifyContent: 'flex-start', 
-              alignItems: 'center' 
+              justifyContent: 'center', 
+              alignItems: 'center',
+              minHeight: '40vh',
+              width: '100%'
             }}
           >
             <Typography 

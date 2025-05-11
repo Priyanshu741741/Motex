@@ -238,6 +238,7 @@ const InstantQuotePage = () => {
   const [successDialogOpen, setSuccessDialogOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [logisticsMenuAnchor, setLogisticsMenuAnchor] = useState<null | HTMLElement>(null);
   
   // Initialize EmailJS
   useEffect(() => {
@@ -255,6 +256,23 @@ const InstantQuotePage = () => {
   
   const handleMenuClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleLogisticsMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setLogisticsMenuAnchor(event.currentTarget);
+  };
+
+  const handleLogisticsMenuClose = () => {
+    setLogisticsMenuAnchor(null);
+  };
+
+  const handleServiceClick = (serviceMode: string) => {
+    handleLogisticsMenuClose();
+    setFormData({
+      ...formData,
+      service_mode: serviceMode
+    });
+    window.scrollTo(0, 0);
   };
   
   // Handle navigation with scroll to top
@@ -433,7 +451,7 @@ const InstantQuotePage = () => {
         <AppBar position="fixed" color="transparent" elevation={0} sx={{ py: 1, backgroundColor: 'rgba(0, 0, 0, 0.85)', backdropFilter: 'blur(8px)', zIndex: 1100 }}>
           <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
             {/* Logo on the left */}
-            <Box sx={{ display: 'flex', alignItems: 'center', width: '20%' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', width: isMobile ? '50%' : '20%' }}>
               <Box 
                 component={RouterLink}
                 to="/"
@@ -563,7 +581,72 @@ const InstantQuotePage = () => {
             )}
             
             {/* Get A Quote button on the right */}
-            <Box sx={{ display: 'flex', width: '20%', justifyContent: 'flex-end' }}>
+            <Box sx={{ display: 'flex', width: isMobile ? '50%' : '20%', justifyContent: 'flex-end', alignItems: 'center' }}>
+              {/* Mobile Chauffeur and Logistics buttons */}
+              {isMobile && (
+                <>
+                  <Button
+                    component="button"
+                    onClick={() => handleServiceClick('Chauffeur')}
+                    sx={{
+                      color: 'white',
+                      fontSize: '0.8rem',
+                      mr: 1,
+                      px: 1,
+                      py: 0.5,
+                      minWidth: 'auto',
+                      textTransform: 'none',
+                      fontFamily: BODY_FONT,
+                      '&:hover': { color: RED_COLOR },
+                      whiteSpace: 'nowrap'
+                    }}
+                  >
+                    Chauffeur
+                  </Button>
+                  <Box sx={{ position: 'relative' }}>
+                    <Button
+                      component="button"
+                      onClick={(e) => handleLogisticsMenuOpen(e)}
+                      sx={{
+                        color: 'white',
+                        fontSize: '0.8rem',
+                        mr: 1.5,
+                        px: 1,
+                        py: 0.5,
+                        minWidth: 'auto',
+                        textTransform: 'none',
+                        fontFamily: BODY_FONT,
+                        '&:hover': { color: RED_COLOR },
+                        whiteSpace: 'nowrap'
+                      }}
+                    >
+                      Logistics
+                    </Button>
+                    <Menu
+                      anchorEl={logisticsMenuAnchor}
+                      open={Boolean(logisticsMenuAnchor)}
+                      onClose={handleLogisticsMenuClose}
+                      PaperProps={{
+                        sx: {
+                          bgcolor: 'rgba(0, 0, 0, 0.85)',
+                          backdropFilter: 'blur(8px)',
+                          border: '1px solid rgba(255, 255, 255, 0.1)',
+                          borderRadius: '8px',
+                          mt: 1
+                        }
+                      }}
+                    >
+                      <MenuItem onClick={() => handleServiceClick('Parcel Delivery')} sx={{ color: 'white', '&:hover': { color: RED_COLOR } }}>Parcel Delivery</MenuItem>
+                      <MenuItem onClick={() => handleServiceClick('Fragile Freight')} sx={{ color: 'white', '&:hover': { color: RED_COLOR } }}>Fragile Freight</MenuItem>
+                      <MenuItem onClick={() => handleServiceClick('Interstate Delivery')} sx={{ color: 'white', '&:hover': { color: RED_COLOR } }}>Interstate Delivery</MenuItem>
+                      <MenuItem onClick={() => handleServiceClick('Door to Door Service')} sx={{ color: 'white', '&:hover': { color: RED_COLOR } }}>Door to Door Service</MenuItem>
+                      <MenuItem onClick={() => handleServiceClick('Same Day Delivery')} sx={{ color: 'white', '&:hover': { color: RED_COLOR } }}>Same Day Delivery</MenuItem>
+                    </Menu>
+                  </Box>
+                </>
+              )}
+              
+              {/* Desktop Get A Quote button */}
               {!isMobile && (
                 <Button 
                   variant="contained"
