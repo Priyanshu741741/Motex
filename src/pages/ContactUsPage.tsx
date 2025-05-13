@@ -979,7 +979,7 @@ const ContactUsPage = () => {
                                 mb: 0.5,
                               }}
                             >
-                              motextransportau@gmail.com
+                              roy@motextransport.com.au
                             </Typography>
                           </Box>
                         </Box>
@@ -1208,7 +1208,7 @@ const ContactUsPage = () => {
                     mb: 0.5,
                   }}
                 >
-                  motextransportau@gmail.com
+                  roy@motextransport.com.au
                 </Typography>
               </Box>
             </Grid>

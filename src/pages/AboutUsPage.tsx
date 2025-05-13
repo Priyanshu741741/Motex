@@ -1345,7 +1345,7 @@ const AboutUsPage = () => {
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                   <EmailIcon sx={{ color: RED_COLOR, mr: 1.5 }} />
                   <Typography variant="body2" sx={{ color: 'white', opacity: 0.8, fontFamily: '"Poppins", sans-serif', fontWeight: 300 }}>
-                    motextransportau@gmail.com
+                    roy@motextransport.com.au
                   </Typography>
                 </Box>
               </Grid>
