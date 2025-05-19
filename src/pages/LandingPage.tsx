@@ -776,7 +776,7 @@ const LandingPage = () => {
             borderBottom: '1px solid rgba(255, 255, 255, 0.2)',
             boxShadow: '0 4px 20px rgba(222, 31, 39, 0.4)',
             py: 1.2,
-            px: { xs: 1.5, sm: 3 },
+            px: { xs: 1, sm: 3 },
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -792,7 +792,7 @@ const LandingPage = () => {
             }
           }}
         >
-          <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', pl: { xs: 0, sm: 1 } }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', width: { xs: '70%', sm: '80%' }, pl: { xs: 0, sm: 1 } }}>
             <IconButton 
               onClick={closeAppBanner}
               size="small"
@@ -818,13 +818,13 @@ const LandingPage = () => {
                 padding: '4px'
               }} 
             />
-            <Box sx={{ flexShrink: 1, minWidth: 0 }}>
+            <Box sx={{ flexShrink: 1, minWidth: 0, maxWidth: { xs: 'calc(100% - 40px)', sm: '100%' } }}>
               <Typography 
                 variant="subtitle1" 
                 sx={{ 
                   fontWeight: 700, 
                   color: 'white',
-                  fontSize: { xs: '0.85rem', sm: '0.95rem' },
+                  fontSize: { xs: '0.8rem', sm: '0.95rem' },
                   fontFamily: '"Poppins", sans-serif',
                   textShadow: '0 1px 3px rgba(0,0,0,0.5)',
                   whiteSpace: 'nowrap',
@@ -838,7 +838,7 @@ const LandingPage = () => {
                 variant="body2" 
                 sx={{ 
                   color: 'rgba(255, 255, 255, 0.9)',
-                  fontSize: { xs: '0.7rem', sm: '0.8rem' },
+                  fontSize: { xs: '0.65rem', sm: '0.8rem' },
                   fontFamily: '"Poppins", sans-serif',
                   textShadow: '0 1px 2px rgba(0,0,0,0.4)',
                   whiteSpace: 'nowrap',
@@ -857,12 +857,13 @@ const LandingPage = () => {
               background: 'linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%)',
               color: RED_COLOR,
               fontWeight: 700,
-              px: { xs: 2.5, sm: 3.5 },
+              px: { xs: 1.8, sm: 3.5 },
               py: 0.75,
-              ml: { xs: 1, sm: 2 },
-              minWidth: { xs: '90px', sm: '100px' },
+              ml: { xs: 0.5, sm: 2 },
+              minWidth: { xs: '80px', sm: '100px' },
+              maxWidth: { xs: '85px', sm: 'none' },
               borderRadius: '50px',
-              fontSize: { xs: '0.8rem', sm: '0.9rem' },
+              fontSize: { xs: '0.75rem', sm: '0.9rem' },
               animation: `${pulseAnimation} 2s infinite ease-in-out`,
               '&:hover': { 
                 background: 'linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%)',
