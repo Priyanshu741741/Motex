@@ -36,7 +36,9 @@ import {
   LinkedIn as LinkedInIcon,
   WhatsApp as WhatsAppIcon,
   Menu as MenuIcon,
-  Close as CloseIcon
+  Close as CloseIcon,
+  Apple as AppleIcon,
+  Android as AndroidIcon
 } from '@mui/icons-material';
 import PageTransition from '../components/PageTransition';
 import GlobalStyles from '@mui/material/GlobalStyles';
@@ -187,6 +189,33 @@ const AboutUsPage = () => {
     handleLogisticsMenuClose();
     navigate('/instant-quote', { state: { selectedService: serviceMode } });
     window.scrollTo(0, 0);
+  };
+  
+  // Function to handle app download
+  const handleAppDownload = (platform: 'apple' | 'android') => {
+    window.open('https://pwa-final-101.vercel.app/', '_blank');
+    setIsMobileMenuOpen(false);
+    // Close the app menu after clicking a download option
+    const appMenu = document.getElementById('app-download-menu');
+    if (appMenu) {
+      appMenu.style.display = 'none';
+    }
+  };
+  
+  // Function to close the app download menu when clicking outside
+  const closeAppMenu = (e: MouseEvent) => {
+    const appMenu = document.getElementById('app-download-menu');
+    const installButton = document.getElementById('install-app-button');
+    
+    // Close only if clicking outside both the menu and button
+    if (appMenu && 
+        e.target instanceof Node && 
+        !appMenu.contains(e.target) && 
+        installButton && 
+        !installButton.contains(e.target)) {
+      appMenu.style.display = 'none';
+      document.removeEventListener('click', closeAppMenu);
+    }
   };
   
   // Function to handle navigation with scroll to top
@@ -567,6 +596,93 @@ const AboutUsPage = () => {
                 >
                   Chauffeur
                 </Button>
+                <Box sx={{ position: 'relative' }}>
+                  <Button
+                    id="install-app-button"
+                    component="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      const appMenu = document.getElementById('app-download-menu');
+                      if (appMenu?.style.display === 'block') {
+                        appMenu.style.display = 'none';
+                      } else if (appMenu) {
+                        appMenu.style.display = 'block';
+                        // Add event listener to close menu when clicking outside
+                        document.addEventListener('click', closeAppMenu);
+                      }
+                    }}
+                    sx={{
+                      color: 'white',
+                      fontSize: '0.8rem',
+                      mr: 1,
+                      px: 1,
+                      py: 0.5,
+                      minWidth: 'auto',
+                      textTransform: 'none',
+                      fontFamily: '"Poppins", sans-serif',
+                      '&:hover': { color: RED_COLOR },
+                      whiteSpace: 'nowrap'
+                    }}
+                  >
+                    Install the App
+                  </Button>
+                  <Box
+                    id="app-download-menu"
+                    onClick={(e) => e.stopPropagation()}
+                    sx={{
+                      display: 'none',
+                      position: 'absolute',
+                      top: '100%',
+                      left: '50%',
+                      transform: 'translateX(-50%)',
+                      mt: 1,
+                      zIndex: 1000,
+                      bgcolor: 'rgba(0, 0, 0, 0.85)',
+                      backdropFilter: 'blur(8px)',
+                      border: '1px solid rgba(255, 255, 255, 0.1)',
+                      borderRadius: '8px',
+                      p: 1,
+                      width: '150px'
+                    }}
+                  >
+                    <Button
+                      onClick={() => handleAppDownload('apple')}
+                      startIcon={<AppleIcon />}
+                      sx={{
+                        color: 'white',
+                        textTransform: 'none',
+                        py: 1,
+                        width: '100%',
+                        display: 'flex',
+                        justifyContent: 'flex-start',
+                        fontFamily: '"Poppins", sans-serif',
+                        fontWeight: 400,
+                        fontSize: '0.9rem',
+                        '&:hover': { color: RED_COLOR }
+                      }}
+                    >
+                      Apple
+                    </Button>
+                    <Button
+                      onClick={() => handleAppDownload('android')}
+                      startIcon={<AndroidIcon />}
+                      sx={{
+                        color: 'white',
+                        textTransform: 'none',
+                        py: 1,
+                        width: '100%',
+                        display: 'flex',
+                        justifyContent: 'flex-start',
+                        fontFamily: '"Poppins", sans-serif',
+                        fontWeight: 400,
+                        fontSize: '0.9rem',
+                        '&:hover': { color: RED_COLOR }
+                      }}
+                    >
+                      Android
+                    </Button>
+                  </Box>
+                </Box>
                 <Box sx={{ position: 'relative' }}>
                   <Button
                     component="button"
@@ -1523,6 +1639,68 @@ const AboutUsPage = () => {
               />
             </ListItemButton>
           </ListItem>
+          
+          {/* Install the App option in hamburger menu */}
+          <ListItem disablePadding>
+            <ListItemButton 
+              sx={{ 
+                py: 1.5,
+                '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.05)' }
+              }}
+            >
+              <ListItemText 
+                primary="Install the App" 
+                primaryTypographyProps={{ 
+                  fontFamily: '"Poppins", sans-serif', 
+                  fontWeight: 400, 
+                  color: 'white',
+                  fontSize: { xs: '0.95rem', sm: '1rem' }
+                }} 
+              />
+            </ListItemButton>
+          </ListItem>
+          
+          {/* App Download Options */}
+          <Box sx={{ pl: 1.98, pr: 2, mb: 2 }}>
+            <Button
+              onClick={() => handleAppDownload('apple')}
+              startIcon={<AppleIcon />}
+              sx={{
+                color: 'white',
+                textTransform: 'none',
+                py: 1,
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'flex-start',
+                pl: 0,
+                fontFamily: '"Poppins", sans-serif',
+                fontWeight: 400,
+                fontSize: '0.9rem',
+                '&:hover': { color: RED_COLOR }
+              }}
+            >
+              Apple
+            </Button>
+            <Button
+              onClick={() => handleAppDownload('android')}
+              startIcon={<AndroidIcon />}
+              sx={{
+                color: 'white',
+                textTransform: 'none',
+                py: 1,
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'flex-start',
+                pl: 0,
+                fontFamily: '"Poppins", sans-serif',
+                fontWeight: 400,
+                fontSize: '0.9rem',
+                '&:hover': { color: RED_COLOR }
+              }}
+            >
+              Android
+            </Button>
+          </Box>
         </List>
         
         <Box sx={{ p: 2, mt: 2 }}>

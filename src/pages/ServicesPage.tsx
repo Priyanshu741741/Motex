@@ -45,7 +45,9 @@ import {
   Apartment as ApartmentIcon,
   EventAvailable as EventAvailableIcon,
   ArrowForward as ArrowForwardIcon,
-  Close as CloseIcon
+  Close as CloseIcon,
+  Apple as AppleIcon,
+  Android as AndroidIcon
 } from '@mui/icons-material';
 import React from 'react';
 
@@ -330,6 +332,33 @@ const ServicesPage = () => {
     handleLogisticsMenuClose();
     navigate('/instant-quote', { state: { selectedService: serviceMode } });
     window.scrollTo(0, 0);
+  };
+  
+  // Function to handle app download
+  const handleAppDownload = (platform: 'apple' | 'android') => {
+    window.open('https://pwa-final-101.vercel.app/', '_blank');
+    setIsMobileMenuOpen(false);
+    // Close the app menu after clicking a download option
+    const appMenu = document.getElementById('app-download-menu');
+    if (appMenu) {
+      appMenu.style.display = 'none';
+    }
+  };
+  
+  // Function to close the app download menu when clicking outside
+  const closeAppMenu = (e: MouseEvent) => {
+    const appMenu = document.getElementById('app-download-menu');
+    const installButton = document.getElementById('install-app-button');
+    
+    // Close only if clicking outside both the menu and button
+    if (appMenu && 
+        e.target instanceof Node && 
+        !appMenu.contains(e.target) && 
+        installButton && 
+        !installButton.contains(e.target)) {
+      appMenu.style.display = 'none';
+      document.removeEventListener('click', closeAppMenu);
+    }
   };
   
   // Testimonial carousel state
