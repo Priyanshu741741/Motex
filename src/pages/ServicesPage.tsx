@@ -428,6 +428,8 @@ const ServicesPage = () => {
     window.scrollTo(0, 0);
   };
   
+  // This function is already defined above
+  
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setIsMobileMenuOpen(true);
   };
@@ -1610,6 +1612,80 @@ const ServicesPage = () => {
               />
             </ListItemButton>
           </ListItem>
+          
+          {/* Install the App option in hamburger menu */}
+          <ListItem disablePadding>
+            <ListItemButton 
+              sx={{ 
+                py: 1.5,
+                '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.05)' }
+              }}
+            >
+              <ListItemText 
+                primary="Install the App" 
+                primaryTypographyProps={{ 
+                  fontFamily: '"Poppins", sans-serif', 
+                  fontWeight: 400, 
+                  color: 'white',
+                  fontSize: { xs: '0.95rem', sm: '1rem' }
+                }} 
+              />
+            </ListItemButton>
+          </ListItem>
+          
+          {/* App Download Options - Side by Side */}
+          <Box sx={{ pl: 1.98, pr: 2, mb: 2, display: 'flex', justifyContent: 'space-between' }}>
+            <Button
+              onClick={() => handleAppDownload('apple')}
+              sx={{
+                color: 'white',
+                textTransform: 'none',
+                py: 1,
+                width: '48%',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontFamily: '"Poppins", sans-serif',
+                fontWeight: 500,
+                fontSize: '0.8rem',
+                backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                borderRadius: '6px',
+                '&:hover': { 
+                  backgroundColor: 'rgba(222, 31, 39, 0.15)',
+                  color: RED_COLOR 
+                }
+              }}
+            >
+              <AppleIcon sx={{ fontSize: '1.5rem', mb: 0.3 }} />
+              Apple
+            </Button>
+            <Button
+              onClick={() => handleAppDownload('android')}
+              sx={{
+                color: 'white',
+                textTransform: 'none',
+                py: 1,
+                width: '48%',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontFamily: '"Poppins", sans-serif',
+                fontWeight: 500,
+                fontSize: '0.8rem',
+                backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                borderRadius: '6px',
+                '&:hover': { 
+                  backgroundColor: 'rgba(222, 31, 39, 0.15)',
+                  color: RED_COLOR 
+                }
+              }}
+            >
+              <AndroidIcon sx={{ fontSize: '1.5rem', mb: 0.3 }} />
+              Android
+            </Button>
+          </Box>
         </List>
         
         <Box sx={{ p: 2, mt: 2 }}>

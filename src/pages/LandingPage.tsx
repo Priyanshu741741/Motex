@@ -29,7 +29,7 @@ import {
   ListItemText
 } from '@mui/material';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { styled } from '@mui/material/styles';
+import { styled, Theme, keyframes } from '@mui/material/styles';
 import { 
   LocalShipping as LocalShippingIcon,
   LocationOn as LocationIcon,
@@ -359,16 +359,18 @@ const MobileServiceCarousel = ({ onServiceClick }: { onServiceClick: (serviceTit
 };
 
 const LandingPage = () => {
-  // Removed duplicate handleServiceClick function
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const [isLoaded, setIsLoaded] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [logisticsMenuAnchor, setLogisticsMenuAnchor] = useState<null | HTMLElement>(null);
+  const [showAppBanner, setShowAppBanner] = useState(true);
+  const navigate = useNavigate();
   const [activeSlide, setActiveSlide] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [currentTranslate, setCurrentTranslate] = useState(0);
-  const [logisticsMenuAnchor, setLogisticsMenuAnchor] = useState<null | HTMLElement>(null);
-  
+
   const handleLogisticsMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setLogisticsMenuAnchor(event.currentTarget);
   };
@@ -382,16 +384,52 @@ const LandingPage = () => {
     navigate('/instant-quote', { state: { selectedService: serviceMode } });
     window.scrollTo(0, 0);
   };
-
+  
   const handleAppDownload = (platform: 'apple' | 'android') => {
     window.open('https://pwa-final-101.vercel.app/', '_blank');
     setIsMobileMenuOpen(false);
-    // Close the app menu after clicking a download option
-    const appMenu = document.getElementById('app-download-menu');
-    if (appMenu) {
-      appMenu.style.display = 'none';
-    }
+    setShowAppBanner(false);
   };
+  
+  const closeAppBanner = () => {
+    setShowAppBanner(false);
+  };
+  
+  // Auto-dismiss banner after 15 seconds
+  useEffect(() => {
+    if (showAppBanner) {
+      const timer = setTimeout(() => {
+        setShowAppBanner(false);
+      }, 15000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [showAppBanner]);
+  
+  // Define keyframes for animations
+  const pulseAnimation = keyframes`
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  `;
+  
+  const glowAnimation = keyframes`
+    0% { box-shadow: 0 0 5px rgba(222, 31, 39, 0.3); }
+    50% { box-shadow: 0 0 15px rgba(222, 31, 39, 0.5); }
+    100% { box-shadow: 0 0 5px rgba(222, 31, 39, 0.3); }
+  `;
+  
+  const shimmerAnimation = keyframes`
+    0% { filter: brightness(1) drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
+    50% { filter: brightness(1.3) drop-shadow(0 2px 8px rgba(222, 31, 39, 0.5)); }
+    100% { filter: brightness(1) drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
+  `;
+  
+  const gradientShiftAnimation = keyframes`
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  `;
   
   // Function to close the app download menu when clicking outside
   const closeAppMenu = (e: MouseEvent) => {
@@ -410,8 +448,7 @@ const LandingPage = () => {
   };
 
   const carouselRef = useRef<HTMLDivElement>(null);
-  const navigate = useNavigate();
-  
+
   // Add mouse position state for gradient light effect
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isMoving, setIsMoving] = useState(false);
@@ -723,7 +760,139 @@ const LandingPage = () => {
           },
         }}
       />
-      <AppBar position="fixed" color="transparent" elevation={0} sx={{ py: 1, backgroundColor: 'rgba(0, 0, 0, 0.85)', backdropFilter: 'blur(8px)', zIndex: 1100 }}>
+      {/* App Download Banner - Only shown in mobile view */}
+      {showAppBanner && isMobile && (
+        <Box
+          sx={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            zIndex: 1200,
+            background: `linear-gradient(135deg, ${RED_COLOR} 0%, #9e1118 40%, #c41922 60%, ${RED_COLOR} 100%)`,
+            backgroundSize: '300% 100%',
+            animation: `${gradientShiftAnimation} 10s infinite ease-in-out, slideDown 0.5s ease-out`,
+            backdropFilter: 'blur(8px)',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.2)',
+            boxShadow: '0 4px 20px rgba(222, 31, 39, 0.4)',
+            py: 1.2,
+            px: { xs: 1.5, sm: 3 },
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            '&::after': {
+              content: '""',
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              width: '100%',
+              height: '2px',
+              background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent)',
+              animation: `${glowAnimation} 3s infinite ease-in-out`
+            }
+          }}
+        >
+          <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', pl: { xs: 0, sm: 1 } }}>
+            <IconButton 
+              onClick={closeAppBanner}
+              size="small"
+              sx={{ 
+                color: 'white', 
+                mr: 1.5,
+                ml: -1.5,
+                '&:hover': { color: 'rgba(255, 255, 255, 0.8)' }
+              }}
+            >
+              <CloseIcon fontSize="small" />
+            </IconButton>
+            <Box 
+              component="img" 
+              src="/MOTEX+Logo.png" 
+              alt="MOTEX Logo" 
+              sx={{ 
+                height: 36, 
+                mr: 1.5, 
+                borderRadius: '8px',
+                animation: `${shimmerAnimation} 4s infinite ease-in-out`,
+                backgroundColor: 'black',
+                padding: '4px'
+              }} 
+            />
+            <Box sx={{ flexShrink: 1, minWidth: 0 }}>
+              <Typography 
+                variant="subtitle1" 
+                sx={{ 
+                  fontWeight: 700, 
+                  color: 'white',
+                  fontSize: { xs: '0.85rem', sm: '0.95rem' },
+                  fontFamily: '"Poppins", sans-serif',
+                  textShadow: '0 1px 3px rgba(0,0,0,0.5)',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis'
+                }}
+              >
+                Download The App
+              </Typography>
+              <Typography 
+                variant="body2" 
+                sx={{ 
+                  color: 'rgba(255, 255, 255, 0.9)',
+                  fontSize: { xs: '0.7rem', sm: '0.8rem' },
+                  fontFamily: '"Poppins", sans-serif',
+                  textShadow: '0 1px 2px rgba(0,0,0,0.4)',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis'
+                }}
+              >
+                Most convenient way to schedule bookings
+              </Typography>
+            </Box>
+          </Box>
+          <Button
+            variant="contained"
+            onClick={() => handleAppDownload('apple')}
+            sx={{
+              background: 'linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%)',
+              color: RED_COLOR,
+              fontWeight: 700,
+              px: { xs: 2.5, sm: 3.5 },
+              py: 0.75,
+              ml: { xs: 1, sm: 2 },
+              minWidth: { xs: '90px', sm: '100px' },
+              borderRadius: '50px',
+              fontSize: { xs: '0.8rem', sm: '0.9rem' },
+              animation: `${pulseAnimation} 2s infinite ease-in-out`,
+              '&:hover': { 
+                background: 'linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%)',
+                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
+                animation: 'none'
+              },
+              fontFamily: '"Poppins", sans-serif',
+              textTransform: 'none',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
+              whiteSpace: 'nowrap'
+            }}
+          >
+            GET APP
+          </Button>
+        </Box>
+      )}
+      
+      <AppBar 
+        position="fixed" 
+        color="transparent" 
+        elevation={0} 
+        sx={{ 
+          py: 1, 
+          backgroundColor: 'rgba(0, 0, 0, 0.85)', 
+          backdropFilter: 'blur(8px)', 
+          zIndex: 1100,
+          top: (showAppBanner && isMobile) ? '64px' : 0,
+          transition: 'top 0.3s ease-in-out'
+        }}>
+      
         <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
           {/* Logo on the left */}
           <Box sx={{ display: 'flex', alignItems: 'center', width: isMobile ? '50%' : '20%' }}>
@@ -926,91 +1095,6 @@ const LandingPage = () => {
                 </Button>
                 <Box sx={{ position: 'relative' }}>
                   <Button
-                    id="install-app-button"
-                    component="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      const appMenu = document.getElementById('app-download-menu');
-                      if (appMenu?.style.display === 'block') {
-                        appMenu.style.display = 'none';
-                      } else if (appMenu) {
-                        appMenu.style.display = 'block';
-                        // Add event listener to close menu when clicking outside
-                        document.addEventListener('click', closeAppMenu);
-                      }
-                    }}
-                    sx={{
-                      color: 'white',
-                      fontSize: '0.8rem',
-                      mr: 1,
-                      px: 1,
-                      py: 0.5,
-                      minWidth: 'auto',
-                      textTransform: 'none',
-                      fontFamily: '"Poppins", sans-serif',
-                      '&:hover': { color: RED_COLOR },
-                      whiteSpace: 'nowrap'
-                    }}
-                  >
-                    Install the App
-                  </Button>
-                  <Box
-                    id="app-download-menu"
-                    onClick={(e) => e.stopPropagation()}
-                    sx={{
-                      display: 'none',
-                      position: 'absolute',
-                      top: '100%',
-                      left: '50%',
-                      transform: 'translateX(-50%)',
-                      mt: 1,
-                      zIndex: 1000,
-                      bgcolor: 'rgba(0, 0, 0, 0.85)',
-                      backdropFilter: 'blur(8px)',
-                      border: '1px solid rgba(255, 255, 255, 0.1)',
-                      borderRadius: '8px',
-                      p: 1,
-                      width: '150px'
-                    }}
-                  >
-                    <Button
-                      onClick={() => handleAppDownload('apple')}
-                      startIcon={<AppleIcon />}
-                      sx={{
-                        color: 'white',
-                        textTransform: 'none',
-                        justifyContent: 'flex-start',
-                        py: 1,
-                        width: '100%',
-                        fontFamily: '"Poppins", sans-serif',
-                        fontWeight: 400,
-                        fontSize: '0.9rem',
-                        '&:hover': { color: RED_COLOR }
-                      }}
-                    >
-                      Apple
-                    </Button>
-                    <Button
-                      onClick={() => handleAppDownload('android')}
-                      startIcon={<AndroidIcon />}
-                      sx={{
-                        color: 'white',
-                        textTransform: 'none',
-                        justifyContent: 'flex-start',
-                        py: 1,
-                        width: '100%',
-                        fontFamily: '"Poppins", sans-serif',
-                        fontWeight: 400,
-                        fontSize: '0.9rem',
-                        '&:hover': { color: RED_COLOR }
-                      }}
-                    >
-                      Android
-                    </Button>
-                  </Box>
-                </Box>
-                <Box sx={{ position: 'relative' }}>
-                  <Button
                     component="button"
                     onClick={(e) => handleLogisticsMenuOpen(e)}
                     sx={{
@@ -1097,8 +1181,8 @@ const LandingPage = () => {
         </Toolbar>
       </AppBar>
       
-      {/* Toolbar spacer to prevent content from being hidden under fixed AppBar */}
-      <Box sx={{ height: '64px' }} />
+      {/* Toolbar spacer to prevent content from being hidden under fixed AppBar and banner */}
+      <Box sx={{ height: showAppBanner ? '128px' : '64px', transition: 'height 0.3s ease-in-out' }} />
       
       {/* Update the Hero section to fix mobile text cropping */}
       <Box 
@@ -3137,44 +3221,56 @@ const LandingPage = () => {
             </ListItemButton>
           </ListItem>
           
-          {/* App Download Options */}
-          <Box sx={{ pl: 1.98, pr: 2, mb: 2 }}>
+          {/* App Download Options - Side by Side */}
+          <Box sx={{ pl: 1.98, pr: 2, mb: 2, display: 'flex', justifyContent: 'space-between' }}>
             <Button
               onClick={() => handleAppDownload('apple')}
-              startIcon={<AppleIcon />}
               sx={{
                 color: 'white',
                 textTransform: 'none',
-                py: 1,
-                width: '100%',
+                py: 1.5,
+                width: '48%',
                 display: 'flex',
-                justifyContent: 'flex-start',
-                pl: 0,
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
                 fontFamily: '"Poppins", sans-serif',
-                fontWeight: 400,
+                fontWeight: 500,
                 fontSize: '0.9rem',
-                '&:hover': { color: RED_COLOR }
+                backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                borderRadius: '8px',
+                '&:hover': { 
+                  backgroundColor: 'rgba(222, 31, 39, 0.15)',
+                  color: RED_COLOR 
+                }
               }}
             >
+              <AppleIcon sx={{ fontSize: '1.5rem', mb: 0.3 }} />
               Apple
             </Button>
             <Button
               onClick={() => handleAppDownload('android')}
-              startIcon={<AndroidIcon />}
               sx={{
                 color: 'white',
                 textTransform: 'none',
-                py: 1,
-                width: '100%',
+                py: 1.5,
+                width: '48%',
                 display: 'flex',
-                justifyContent: 'flex-start',
-                pl: 0,
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
                 fontFamily: '"Poppins", sans-serif',
-                fontWeight: 400,
+                fontWeight: 500,
                 fontSize: '0.9rem',
-                '&:hover': { color: RED_COLOR }
+                backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                borderRadius: '8px',
+                '&:hover': { 
+                  backgroundColor: 'rgba(222, 31, 39, 0.15)',
+                  color: RED_COLOR 
+                }
               }}
             >
+              <AndroidIcon sx={{ fontSize: '1.5rem', mb: 0.3 }} />
               Android
             </Button>
           </Box>

@@ -1660,44 +1660,56 @@ const AboutUsPage = () => {
             </ListItemButton>
           </ListItem>
           
-          {/* App Download Options */}
-          <Box sx={{ pl: 1.98, pr: 2, mb: 2 }}>
+          {/* App Download Options - Side by Side */}
+          <Box sx={{ pl: 1.98, pr: 2, mb: 2, display: 'flex', justifyContent: 'space-between' }}>
             <Button
               onClick={() => handleAppDownload('apple')}
-              startIcon={<AppleIcon />}
               sx={{
                 color: 'white',
                 textTransform: 'none',
                 py: 1,
-                width: '100%',
+                width: '48%',
                 display: 'flex',
-                justifyContent: 'flex-start',
-                pl: 0,
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
                 fontFamily: '"Poppins", sans-serif',
-                fontWeight: 400,
-                fontSize: '0.9rem',
-                '&:hover': { color: RED_COLOR }
+                fontWeight: 500,
+                fontSize: '0.8rem',
+                backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                borderRadius: '6px',
+                '&:hover': { 
+                  backgroundColor: 'rgba(222, 31, 39, 0.15)',
+                  color: RED_COLOR 
+                }
               }}
             >
+              <AppleIcon sx={{ fontSize: '1.5rem', mb: 0.3 }} />
               Apple
             </Button>
             <Button
               onClick={() => handleAppDownload('android')}
-              startIcon={<AndroidIcon />}
               sx={{
                 color: 'white',
                 textTransform: 'none',
                 py: 1,
-                width: '100%',
+                width: '48%',
                 display: 'flex',
-                justifyContent: 'flex-start',
-                pl: 0,
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
                 fontFamily: '"Poppins", sans-serif',
-                fontWeight: 400,
-                fontSize: '0.9rem',
-                '&:hover': { color: RED_COLOR }
+                fontWeight: 500,
+                fontSize: '0.8rem',
+                backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                borderRadius: '6px',
+                '&:hover': { 
+                  backgroundColor: 'rgba(222, 31, 39, 0.15)',
+                  color: RED_COLOR 
+                }
               }}
             >
+              <AndroidIcon sx={{ fontSize: '1.5rem', mb: 0.3 }} />
               Android
             </Button>
           </Box>
