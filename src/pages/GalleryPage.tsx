@@ -94,8 +94,8 @@ const GalleryImage = styled('img')({
 const galleryItems = [
   { 
     id: 1, 
-    src: '/gallery 10.jpg', 
-    title: 'Freight Fleet', 
+    src: '/gallery-9.jpg', 
+    title: 'Founder', 
     description: 'Our diverse fleet of vehicles ready to transport your goods across Australia.'
   },
   { 
@@ -112,19 +112,19 @@ const galleryItems = [
   },
   { 
     id: 4, 
-    src: '/PHOTO-2025-03-22-21-36-58.jpg', 
+    src: '/gallery-8.jpg', 
     title: 'Vehicle Fleet', 
     description: 'Our range of transport solutions parked at our logistics center.'
   },
   { 
     id: 5, 
-    src: '/gallery 5.jpeg', 
+    src: '/gallery-5.jpg', 
     title: 'Prime Movers', 
     description: 'Heavy-duty prime movers ready for long-haul transport operations.'
   },
   { 
     id: 6, 
-    src: '/gallery 6.jpeg', 
+    src: '/gallery-2.jpg', 
     title: 'Curtain-Sider Truck', 
     description: 'Curtain-sided truck with loaded cargo ready for delivery.'
   },
@@ -142,7 +142,7 @@ const galleryItems = [
   },
   { 
     id: 9, 
-    src: '/gallery 3.jpg', 
+    src: '/gallery-6.jpg', 
     title: 'Mercedes Sprinter Vans', 
     description: 'Mercedes Sprinter vans for smaller, time-sensitive deliveries.'
   },
